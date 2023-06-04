@@ -3,6 +3,7 @@ import { RecoilRoot } from "recoil";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Suspense, lazy } from "react";
 import "./App.css";
+import MyPage from "./pages/MyPage";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -15,7 +16,11 @@ export const queryClient = new QueryClient({
 const App = () => {
   return (
     <>
-      <QueryClientProvider client={queryClient}></QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+        <Routes>
+          <Route path="/" element={<MyPage />} />
+        </Routes>
+      </QueryClientProvider>
     </>
   );
 };
