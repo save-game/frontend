@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useState } from "react";
 import styled, { css } from "styled-components";
 import tw from "twin.macro";
@@ -41,6 +42,12 @@ const MyPage = () => {
   type NavMenu = keyof typeof icons;
   const navMenu: NavMenu[] = ["홈", "챌린지", "가계부", "마이페이지"];
 
+=======
+import styled from 'styled-components';
+import tw from 'twin.macro';
+
+export default function MyPage() {
+>>>>>>> 0be3c8d88cf1084793cd58f07d6d13339fbaa30b
   return (
     <>
       <Header>
@@ -62,7 +69,16 @@ const MyPage = () => {
       </main>
     </>
   );
+<<<<<<< HEAD
 };
 export default MyPage;
 
 //w-11/12
+=======
+}
+
+const Button = styled.button`
+  padding: 8px;
+  ${tw`font-bold text-accent`};
+`;
+>>>>>>> 0be3c8d88cf1084793cd58f07d6d13339fbaa30b
