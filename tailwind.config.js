@@ -6,7 +6,7 @@ export default {
     colors: {},
     extend: {
       colors: {
-        "base-color": "#efeae6",
+        "light-color": "#f0f8f6",
       },
     },
     screens: {

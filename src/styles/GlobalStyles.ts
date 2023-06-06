@@ -5,6 +5,7 @@ const GlobalStyles = createGlobalStyle`
 
 main{
   min-height: calc(100vh - 64px);
+  /* background-color: #85D3C4; */
 }
 `;
 
