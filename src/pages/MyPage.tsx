@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import styled, { css } from "styled-components";
 import tw from "twin.macro";
 import { BsPersonFill } from "react-icons/Bs";
-import { MdPhotoCamera } from "react-icons/Md";
 import ProfileImageEdit from "../components/ProfileImageEdit";
 
 const Container = styled.div`
@@ -10,6 +9,8 @@ const Container = styled.div`
 `;
 
 const MyPage = () => {
+  const userImage: string | null =
+    "https://firebasestorage.googleapis.com/v0/b/javatime-6eaed.appspot.com/o/user%2FJFRkuYjomQVLmW148zv8YXpL3Zi1?alt=media&token=90894058-d360-4451-82b7-cb9e643553f9";
   return (
     <>
       <main className="relative">
@@ -17,24 +18,16 @@ const MyPage = () => {
           <div className="flex items-center justify-between w-full p-2 pb-4 border-b border-accent-focus/60">
             <div className="relative">
               <div className="w-20 h-20  rounded-full overflow-hidden bg-[#f0f8f6] text-accent shadow-lg">
-                {true ? (
-                  <img
-                    src={
-                      "https://firebasestorage.googleapis.com/v0/b/javatime-6eaed.appspot.com/o/user%2FJFRkuYjomQVLmW148zv8YXpL3Zi1?alt=media&token=90894058-d360-4451-82b7-cb9e643553f9"
-                    }
-                    className="w-full"
-                    alt="프로필이미지"
-                  />
+                {userImage ? (
+                  <img src={userImage} className="w-full" alt="프로필이미지" />
                 ) : (
                   <BsPersonFill size={64} className="mt-2" />
                 )}
               </div>
-              <div className="absolute flex items-center justify-center bg-base-100 rounded-full w-8 h-8 shadow bottom-0 right-0 -m-1.5">
-                <MdPhotoCamera size={20} />
-              </div>
+              <ProfileImageEdit img={userImage} />
             </div>
 
-            <div className="w-6/12 px-2">닉네임</div>
+            <div className="w-6/12 px-2 ">닉네임</div>
             <div>
               <button className="btn btn-sm btn-ghost bg-light-color hover:bg-[#dff1ed] shadow mr-2">
                 수정
@@ -60,7 +53,6 @@ const MyPage = () => {
             </button>
           </div>
         </Container>
-        <ProfileImageEdit />
       </main>
     </>
   );
