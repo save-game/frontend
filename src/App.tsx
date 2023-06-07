@@ -5,6 +5,7 @@ import "./App.css";
 import LoginPage from "./pages/LoginPage";
 import MyPage from "./pages/MyPage";
 import Header from "./components/Header";
+import SignUp from "./pages/SignUpPage";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -25,6 +26,7 @@ const App = () => {
             <Route path="/challenge" element={<div>challenge</div>} />
             <Route path="/account" element={<div>account</div>} />
             <Route path="/mypage" element={<MyPage />} />
+            <Route path="/signup" element={<SignUp />} />
           </Routes>
           <Header />
         </RecoilRoot>
