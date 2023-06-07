@@ -6,6 +6,7 @@ import LoginPage from "./pages/LoginPage";
 import MyPage from "./pages/MyPage";
 import Header from "./components/Header";
 import SignUp from "./pages/SignUpPage";
+import Home from "./pages/HomePage";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -22,7 +23,7 @@ const App = () => {
         <RecoilRoot>
           <Routes>
             <Route path="/" element={<LoginPage />} />
-            <Route path="/home" element={<div>home</div>} />
+            <Route path="/home" element={<Home />} />
             <Route path="/challenge" element={<div>challenge</div>} />
             <Route path="/account" element={<div>account</div>} />
             <Route path="/mypage" element={<MyPage />} />
