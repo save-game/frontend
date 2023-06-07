@@ -53,6 +53,10 @@ const ProfileImageEdit = ({ img }: Props) => {
     }
   };
 
+  const handleProfileImageUpload = () => {
+    //storage올리고 url따서 서버에 업데이트
+  };
+
   return (
     <div>
       <div
@@ -97,7 +101,12 @@ const ProfileImageEdit = ({ img }: Props) => {
             onChange={handleImage}
             className="hidden"
           />
-          <button className="btn btn-sm btn-accent w-full">수정 완료</button>
+          <button
+            onClick={handleProfileImageUpload}
+            className="btn btn-sm btn-accent w-full"
+          >
+            수정 완료
+          </button>
           <button id="close" className="absolute top-5 right-5">
             <IoCloseOutline size={26} />
           </button>

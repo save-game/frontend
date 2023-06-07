@@ -30,7 +30,7 @@ interface Menu {
 
 const Header = () => {
   const { pathname } = useLocation();
-  const path = pathname !== "/" ? true : false;
+  const path = pathname !== "/" && pathname !== "/signup" ? true : false;
   const navigate = useNavigate();
   const [selectedMenu, setSelectedMenu] = useState("홈");
   const menuList: Menu[] = [
