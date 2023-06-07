@@ -77,7 +77,7 @@ const ProfileImageEdit = ({ img }: Props) => {
               <button
                 type="button"
                 onClick={() => setImgFile(null)}
-                className="w-5 h-5 border rounded-full  flex justify-center items-center bg-base-100 text-accent absolute top-1 right-1"
+                className="w-5 h-5 border outline-none rounded-full  flex justify-center items-center bg-base-100 text-accent absolute top-1 right-1"
               >
                 <IoCloseOutline size={17} />
               </button>
