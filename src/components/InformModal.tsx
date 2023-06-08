@@ -1,4 +1,4 @@
-import React, { RefObject, useEffect, useRef } from "react";
+import { RefObject } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { CgSpinner } from "react-icons/Cg";
@@ -7,7 +7,7 @@ const Dialog = styled.dialog`
   ::backdrop {
     background: transparent;
   }
-  ${tw`w-10/12 py-20 rounded-lg bg-medium-color shadow-lg text-neutral-600 `}
+  ${tw`w-10/12 py-20 rounded-lg bg-light-color shadow-lg text-neutral-600 outline-none`}
 `;
 
 interface Props {
@@ -15,6 +15,8 @@ interface Props {
   loading: boolean;
   inform: string;
 }
+
+//loading은 useQuery등을 통해 loading값이 있을때 넘겨준다.
 
 const InformModal = ({ dialogRef, loading, inform }: Props) => {
   return (
@@ -27,14 +29,6 @@ const InformModal = ({ dialogRef, loading, inform }: Props) => {
         ) : (
           <div>{inform}</div>
         )}
-
-        <button id="popupClose" className="hidden">
-          close
-        </button>
-        <label
-          htmlFor="popupClose"
-          className="fixed top-0 bottom-0 left-0 right-0 -z-10"
-        ></label>
       </form>
     </Dialog>
   );

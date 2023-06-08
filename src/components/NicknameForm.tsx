@@ -1,25 +1,25 @@
-import React, {
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import InformModal from "./InformModal";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 interface Props {
-  inputEditor: Dispatch<SetStateAction<boolean>>;
+  formEditor: Dispatch<SetStateAction<boolean>>;
 }
 
-const NicknameForm = ({ inputEditor }: Props) => {
-  const [duplicationCheck, setDuplicationCheck] = useState(false);
+// 취소버튼 필요하지 않나싶다
+
+const NicknameForm = ({ formEditor }: Props) => {
+  const [duplicationCheck, setDuplicationCheck] = useState({
+    check: false,
+    result: false,
+  });
   const nicknameSchema = Yup.object({
     nickname: Yup.string()
+      .min(1, "입력된 내용이 없습니다.")
       .max(10, "10자 이내로 작성해주세요.")
-      .test("isDuplicated", "중복 확인해주세요.", () => duplicationCheck)
+      .test("isDuplicated", "중복 확인해주세요.", () => duplicationCheck.result)
       .required("변경할 닉네임을 입력해주세요."),
   });
   type NicknameFormData = Yup.InferType<typeof nicknameSchema>;
@@ -37,16 +37,28 @@ const NicknameForm = ({ inputEditor }: Props) => {
   const nicknameInput = watch("nickname");
 
   useEffect(() => {
-    setDuplicationCheck(false);
+    setDuplicationCheck({
+      check: false,
+      result: false,
+    });
   }, [nicknameInput]);
 
   const handleNicknameCheck = () => {
+    if (nicknameInput === "") return;
     //서버와중복체크
     const isPassed = true;
     if (isPassed) {
-      setDuplicationCheck(true);
-      clearErrors("nickname");
+      setDuplicationCheck({
+        check: true,
+        result: true,
+      });
+    } else {
+      setDuplicationCheck({
+        check: true,
+        result: false,
+      });
     }
+    clearErrors("nickname");
   };
 
   const handleNicknameChange = () => {
@@ -58,7 +70,7 @@ const NicknameForm = ({ inputEditor }: Props) => {
         if (dialogRef.current) {
           dialogRef.current.close();
         }
-        inputEditor(false);
+        formEditor(false);
       }, 1000);
     }
   };
@@ -75,10 +87,18 @@ const NicknameForm = ({ inputEditor }: Props) => {
             className="outline-none pl-2 h-10 my-1 placeholder:text-xs placeholder:font-light"
             {...register("nickname")}
           />
-          {duplicationCheck ? (
-            <p className="absolute right-3 bottom-0.5 text-[11px] font-light text-success text-center bg-base-100">
-              사용가능한 닉네임입니다.
-            </p>
+          {duplicationCheck.check ? (
+            <div>
+              {duplicationCheck.result ? (
+                <p className="absolute right-3 bottom-0.5 text-[11px] font-light text-success text-center bg-base-100">
+                  사용가능한 닉네임입니다.
+                </p>
+              ) : (
+                <p className="absolute right-3 bottom-0.5 text-[11px] font-light text-error text-center bg-base-100">
+                  중복된 닉네임입니다.
+                </p>
+              )}
+            </div>
           ) : null}
           {errors ? (
             <p className="absolute right-3 bottom-0.5 text-[11px] font-light text-error text-center bg-base-100">
@@ -86,7 +106,7 @@ const NicknameForm = ({ inputEditor }: Props) => {
             </p>
           ) : null}
         </div>
-        <div className="flex flex-col space-y-3">
+        <div className="flex flex-col space-y-2.5">
           <button
             type="button"
             onClick={handleNicknameCheck}
@@ -102,7 +122,7 @@ const NicknameForm = ({ inputEditor }: Props) => {
       <InformModal
         dialogRef={dialogRef}
         loading={false}
-        inform="등록되었습니다!"
+        inform="닉네임이 변경되었습니다!"
       />
     </>
   );

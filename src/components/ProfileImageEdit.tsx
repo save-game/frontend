@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { MdPhotoCamera } from "react-icons/Md";
@@ -103,7 +103,7 @@ const ProfileImageEdit = ({ img }: Props) => {
           />
           <button
             onClick={handleProfileImageUpload}
-            className="btn btn-sm btn-accent w-full"
+            className="btn btn-sm btn-accent w-full text-base-100"
           >
             수정 완료
           </button>
