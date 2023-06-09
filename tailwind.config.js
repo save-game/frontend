@@ -8,6 +8,9 @@ export default {
         "light-color": "#f0f8f6",
         "medium-color": "#d6f7f3",
       },
+      fontFamily: {
+        sans: ["GmarketSansMedium"],
+      },
     },
     screens: {
       sm: "480px",
