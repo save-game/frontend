@@ -1,0 +1,30 @@
+[
+  {
+    "category": "식비",
+    "amount": 100000
+  },
+  {
+    "category": "교통비",
+    "amount": 100000
+  },
+  {
+    "category": "문화생활",
+    "amount": 50000
+  },
+  {
+    "category": "생필품",
+    "amount": 23000
+  },
+  {
+    "category": "의류",
+    "amount": 200000
+  },
+  {
+    "category": "미용",
+    "amount": 50000
+  },
+  {
+    "category": "의료/건강",
+    "amount": 25000
+  }
+]
