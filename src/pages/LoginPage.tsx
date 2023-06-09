@@ -24,7 +24,7 @@ export default function LoginPage() {
   return (
     <>
       <div className=" w-11/12 ml-auto mr-auto flex flex-col justify-center items-center mt-10">
-        <img className=" rounded-lg" src={Logo} />
+        <img className="w-9/12 rounded-lg" src={Logo} />
         <form
           onSubmit={handleLogin}
           className="w-full flex flex-col justify-center items-center mt-10 mb-4"
