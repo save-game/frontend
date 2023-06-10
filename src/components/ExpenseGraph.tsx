@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Chart as ChartJS, ArcElement, Tooltip } from "chart.js";
+import { Chart, ArcElement, Tooltip, TooltipItem } from "chart.js";
 import { Pie } from "react-chartjs-2";
 
-ChartJS.register(ArcElement, Tooltip);
+Chart.register(ArcElement, Tooltip);
 
 interface ExpenseData {
   category: string;
@@ -12,10 +12,16 @@ interface ExpenseData {
 
 export default function ExpenseGraph() {
   const [monthlyExpenseData, setMonthlyExpenseData] = useState<ExpenseData[]>();
+  const [monthlyTotalAmount, setMonthlyTotalAmount] = useState<number>(0);
 
   const getMonthlyExpenseData = async () => {
     try {
       const response = await axios.get("./src/test/graphTest.json");
+      setMonthlyTotalAmount(
+        response.data.reduce((acc: number, cur: ExpenseData) => {
+          return acc + cur.amount;
+        }, 0)
+      );
       setMonthlyExpenseData(response.data);
     } catch (error) {
       console.error(error);
@@ -41,7 +47,27 @@ export default function ExpenseGraph() {
   const options = {
     plugins: {
       tooltip: {
-        callbacks: {},
+        titleFont: {
+          size: 16,
+        },
+        bodyFont: {
+          size: 14,
+        },
+        callbacks: {
+          title: (tooltipItems: TooltipItem<"pie">[]) => {
+            const dataIndex = tooltipItems[0].dataIndex;
+            return monthlyExpenseData && monthlyExpenseData[dataIndex].category;
+          },
+          label: (tooltipItem: TooltipItem<"pie">) => {
+            const dataIndex = tooltipItem.dataIndex;
+            const amount =
+              monthlyExpenseData && monthlyExpenseData[dataIndex].amount;
+            if (!amount) {
+              return;
+            }
+            return `${Math.floor((amount / monthlyTotalAmount) * 100)}%`;
+          },
+        },
       },
       legend: {
         display: false,
