@@ -35,46 +35,6 @@ export default function ExpenseGraphContainer() {
     getMonthlyExpenseData();
   }, []);
 
-  const data = {
-    datasets: [
-      {
-        data: monthlyExpenseData,
-        backgroundColor: bgColor,
-        borderColor: bdColor,
-        borderWidth: 1,
-        hoverOffset: 10,
-      },
-    ],
-  };
-
-  const options = {
-    plugins: {
-      tooltip: {
-        callbacks: {
-          title: function () {
-            return 2;
-          },
-          label: function () {
-            return 3;
-          },
-        },
-      },
-      legend: {
-        display: false,
-      },
-      hoverOffset: 20,
-    },
-    parsing: {
-      key: "amount",
-    },
-    layout: {
-      autoPadding: true,
-      padding: 20,
-    },
-    maintainAspectRatio: false,
-    responsive: false,
-  };
-
   return (
     <>
       <div className="relative w-full">
