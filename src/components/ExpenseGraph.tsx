@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { Chart, ArcElement, Tooltip, TooltipItem } from "chart.js";
 import { Pie } from "react-chartjs-2";
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+Chart.register(ArcElement, Tooltip);
 
 interface ExpenseData {
   category: string;
@@ -11,11 +11,8 @@ interface ExpenseData {
 }
 
 export default function ExpenseGraph() {
-  const [monthlyExpenseData, setMonthlyExpenseData] = useState<ExpenseData[]>(
-    []
-  );
+  const [monthlyExpenseData, setMonthlyExpenseData] = useState<ExpenseData[]>();
   const [monthlyTotalAmount, setMonthlyTotalAmount] = useState<number>(0);
-  const currentMonth: number = new Date().getMonth() + 1;
 
   const getMonthlyExpenseData = async () => {
     try {
@@ -33,7 +30,6 @@ export default function ExpenseGraph() {
 
   useEffect(() => {
     getMonthlyExpenseData();
-    console.log(monthlyTotalAmount);
   }, []);
 
   const data = {
@@ -50,35 +46,46 @@ export default function ExpenseGraph() {
 
   const options = {
     plugins: {
-      toolTip: {
-        titleFont: { size: 40, color: "#000" },
-        bodyFont: { size: 40, color: "#000" },
+      tooltip: {
+        titleFont: {
+          size: 16,
+        },
+        bodyFont: {
+          size: 14,
+        },
+        callbacks: {
+          title: (tooltipItems: TooltipItem<"pie">[]) => {
+            const dataIndex = tooltipItems[0].dataIndex;
+            return monthlyExpenseData && monthlyExpenseData[dataIndex].category;
+          },
+          label: (tooltipItem: TooltipItem<"pie">) => {
+            const dataIndex = tooltipItem.dataIndex;
+            const amount =
+              monthlyExpenseData && monthlyExpenseData[dataIndex].amount;
+            if (!amount) {
+              return;
+            }
+            return `${Math.floor((amount / monthlyTotalAmount) * 100)}%`;
+          },
+        },
       },
       legend: {
         display: false,
       },
+      hoverOffset: 20,
     },
     parsing: {
       key: "amount",
     },
     layout: {
       autoPadding: true,
-      padding: 40,
+      padding: 20,
     },
+    maintainAspectRatio: false,
+    responsive: false,
   };
 
-  return (
-    <>
-      <div className="relative w-full overflow-visible">
-        <Pie data={data} options={options} />
-        <div className="absolute top-10">
-          <p>{currentMonth}월 지출</p>
-          <p>{monthlyTotalAmount.toLocaleString()}원</p>
-        </div>
-      </div>
-      <button className="btn btn-accent w-full ">지출입력</button>
-    </>
-  );
+  return <Pie data={data} options={options} width={300} height={300} />;
 }
 
 const bgColor = [
