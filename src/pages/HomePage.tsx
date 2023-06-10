@@ -2,7 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
 
-import ExpenseGraph from "../components/ExpenseGraph";
+import ExpenseGraphContainer from "../components/ExpenseGraphContainer";
 
 export default function Home() {
   const [imgSrc, setImgSrc] = useState("https://picsum.photos/70");
@@ -15,7 +15,8 @@ export default function Home() {
           <ProfileImg src={imgSrc} />
           <p className="ml-4 text-accent text-lg">{nickName}</p>
         </ProfileContainer>
-        <ExpenseGraph />
+        <ExpenseGraphContainer />
+        <button className="btn btn-accent w-full">지출입력</button>
       </Container>
     </>
   );
