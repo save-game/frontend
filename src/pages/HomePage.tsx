@@ -7,6 +7,7 @@ import ExpenseGraphContainer from "../components/ExpenseGraphContainer";
 import MyChallengeCard from "../components/MyChallengeCard";
 
 interface MyChallengeList {
+  challengeId: number;
   title: string;
   endDate: string;
 }
