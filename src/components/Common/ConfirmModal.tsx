@@ -1,7 +1,6 @@
-import { ReactNode, RefObject, useRef } from "react";
+import { RefObject } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
-import { IoCloseOutline } from "react-icons/Io5";
 
 const Dialog = styled.dialog`
   ${tw`relative w-10/12 py-16 rounded-lg shadow-lg text-neutral-600 `}

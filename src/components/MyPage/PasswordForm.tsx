@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useRef } from "react";
 import { useForm } from "react-hook-form";
-import InformModal from "./InformModal";
+import InformModal from "../Common/InformModal";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
