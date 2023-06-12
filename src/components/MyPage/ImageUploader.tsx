@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from "react";
 
 export interface Imagefile {
   file: File | null;
-  thumnail: string;
+  thumbnail: string;
   name: string;
 }
 
@@ -18,7 +18,7 @@ const ImageUploader = ({ dispatch, img }: Props) => {
       const url = URL.createObjectURL(fileList[0]);
       dispatch({
         file: fileList[0],
-        thumnail: url,
+        thumbnail: url,
         name: fileList[0].name,
       });
     }
@@ -47,7 +47,7 @@ const ImageUploader = ({ dispatch, img }: Props) => {
         </label>
         <div className="w-36 h-36 z-[888] flex justify-center items-center rounded-r-lg shadow bg-[#fff] overflow-hidden relative">
           {img ? (
-            <img src={img.thumnail} alt={img.name} className="inline-block" />
+            <img src={img.thumbnail} alt={img.name} className="inline-block" />
           ) : (
             <div className="text-xs font-thin text-neutral-400">
               <p>선택된 사진이</p>

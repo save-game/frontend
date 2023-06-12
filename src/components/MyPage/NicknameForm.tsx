@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import InformModal from "./InformModal";
+import InformModal from "../Common/InformModal";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
@@ -110,11 +110,11 @@ const NicknameForm = ({ formEditor }: Props) => {
           <button
             type="button"
             onClick={handleNicknameCheck}
-            className="btn btn-xs btn-ghost text-xs px-1 bg-light-color hover:bg-[#dff1ed] shadow mr-2"
+            className="btn btn-xs btn-ghost text-xs px-1 bg-light-color hover:bg-[#dff1ed] shadow"
           >
             중복확인
           </button>
-          <button className="btn btn-xs btn-accent text-base-100 text-xs px-1  shadow mr-2">
+          <button className="btn btn-xs btn-accent text-base-100 text-xs px-1  shadow">
             수정완료
           </button>
         </div>

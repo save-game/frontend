@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import "./App.css";
 import LoginPage from "./pages/LoginPage";
 import MyPage from "./pages/MyPage";
-import Header from "./components/Header";
+import Header from "./components/Common/Header";
 import SignUp from "./pages/SignUpPage";
 import Home from "./pages/HomePage";
 

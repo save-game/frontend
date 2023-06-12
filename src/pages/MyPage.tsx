@@ -2,12 +2,13 @@ import { useRef, useState } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { BsPersonFill } from "react-icons/Bs";
-import ProfileImageEdit from "../components/ProfileImageEdit";
-import NicknameForm from "../components/NicknameForm";
-import PasswordForm from "../components/PasswordForm";
+import ProfileImageEdit from "../components/MyPage/ProfileImageEdit";
+import NicknameForm from "../components/MyPage/NicknameForm";
+import PasswordForm from "../components/MyPage/PasswordForm";
 import { useNavigate } from "react-router-dom";
-import InformModal from "../components/InformModal";
-import ConfirmModal from "../components/ConfirmModal";
+import InformModal from "../components/Common/InformModal";
+import ConfirmModal from "../components/Common/ConfirmModal";
+import ExpensesForm from "../components/ExpensesForm";
 
 const Container = styled.div`
   ${tw`mx-auto w-11/12 pt-8 text-neutral-500 font-bold text-sm`}

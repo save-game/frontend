@@ -5,6 +5,7 @@ import axios from "axios";
 
 import ExpenseGraphContainer from "../components/ExpenseGraphContainer";
 import MyChallengeCard from "../components/MyChallengeCard";
+import ExpenseFormButton from "../components/ExpenseFormButton";
 
 interface MyChallengeList {
   challengeId: number;
@@ -38,7 +39,7 @@ export default function Home() {
           <p className="ml-4 text-accent text-lg">{nickName}</p>
         </ProfileContainer>
         <ExpenseGraphContainer />
-        <button className="btn btn-accent w-full">지출 입력</button>
+        <ExpenseFormButton />
         {myChallengeList ? (
           <div className="mt-6 w-full mb-16 text-black">
             도전 중인 챌린지
