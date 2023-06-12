@@ -3,12 +3,12 @@ import { dDayCalculator } from "../helpers/helper";
 export default function MyChallengeCard({
   myChallenge,
 }: {
-  myChallenge: { title: string; endDate: string };
+  myChallenge: { challengeId: number; title: string; endDate: string };
 }) {
   const daysDiff = dDayCalculator(myChallenge.endDate);
 
   const handleClickCard = () => {
-    console.log("챌린지 홈으로 이동");
+    console.log(myChallenge.challengeId);
   };
 
   return (
