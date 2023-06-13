@@ -215,13 +215,13 @@ export default function SignUp() {
           <div className="flex w-full join justify-center items-center mt-4">
             <button
               type="submit"
-              className="h-8 rounded-lg btn-accent w-1/5 mr-10 text-base shadow-lg"
+              className="h-8 rounded-lg btn-accent w-1/6 mr-10 text-base shadow-lg"
             >
               회원가입
             </button>
             <button
               type="button"
-              className="h-8 rounded-lg btn-accent w-1/5 text-base shadow-lg"
+              className="h-8 rounded-lg btn-accent w-1/6 text-base shadow-lg"
             >
               취소
             </button>
