@@ -1,11 +1,4 @@
-import {
-  ChangeEvent,
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -27,11 +20,11 @@ const ErrorNotice = styled.p`
 `;
 
 interface Props {
+  formStatus: boolean;
   formEditor: Dispatch<SetStateAction<boolean>>;
 }
 
-// 아래에서 위로 올라오는걸로 바꿀까..
-const ExpensesForm = ({ formEditor }: Props) => {
+const ExpensesForm = ({ formStatus, formEditor }: Props) => {
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
     null
@@ -105,7 +98,11 @@ const ExpensesForm = ({ formEditor }: Props) => {
   };
 
   return (
-    <section className="fixed top-0 left-0 right-0 bottom-0 bg-base-100 z-[999] py-4 shadow-lg text-neutral-600">
+    <section
+      className={`fixed top-0 left-0 right-0 bottom-0 transition-transform bg-base-100 z-[999] py-4 shadow-lg text-neutral-600 ${
+        formStatus ? `translate-y-0` : `translate-y-full`
+      }`}
+    >
       <Container>
         <form
           onSubmit={onSubmit(handleExpenseSubmit)}
