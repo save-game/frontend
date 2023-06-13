@@ -83,7 +83,6 @@ const PasswordForm = ({ formEditor }: Props) => {
             placeholder="숫자+영문자+특수문자 조합으로 8자리 이상 입력해주세요."
             maxLength={25}
             spellCheck={false}
-            autoFocus
             className="outline-none w-full h-10 my-1 placeholder:text-xs placeholder:font-light "
             {...register("newPassword")}
           />
@@ -101,7 +100,6 @@ const PasswordForm = ({ formEditor }: Props) => {
             placeholder="변경할 비밀번호를 다시 한번 입력해주세요."
             maxLength={25}
             spellCheck={false}
-            autoFocus
             className="outline-none w-full h-10 my-1 placeholder:text-xs placeholder:font-light "
             {...register("confirmPassword")}
           />
