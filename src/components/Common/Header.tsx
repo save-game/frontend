@@ -24,8 +24,8 @@ const icons = {
 type NavMenu = keyof typeof icons;
 
 interface Menu {
-  name: NavMenu;
-  pathname: string;
+  readonly name: NavMenu;
+  readonly pathname: string;
 }
 
 const menuList: Menu[] = [
