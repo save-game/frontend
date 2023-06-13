@@ -28,17 +28,17 @@ interface Menu {
   pathname: string;
 }
 
+const menuList: Menu[] = [
+  { name: "홈", pathname: "/home" },
+  { name: "챌린지", pathname: "/challenge" },
+  { name: "가계부", pathname: "/account" },
+  { name: "마이페이지", pathname: "/mypage" },
+];
 const Header = () => {
   const { pathname } = useLocation();
   const path = pathname !== "/" && pathname !== "/signup" ? true : false;
   const navigate = useNavigate();
   const [selectedMenu, setSelectedMenu] = useState("홈");
-  const menuList: Menu[] = [
-    { name: "홈", pathname: "/home" },
-    { name: "챌린지", pathname: "/challenge" },
-    { name: "가계부", pathname: "/account" },
-    { name: "마이페이지", pathname: "/mypage" },
-  ];
 
   useEffect(() => {
     const path = menuList.find((item) => item.pathname === pathname);

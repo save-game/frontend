@@ -33,7 +33,7 @@ const ProfileImageEdit = ({ img }: Props) => {
         name: "prevImg",
       });
     }
-  }, []);
+  }, [img]);
 
   const openModal = () => {
     if (dialogRef.current) {

@@ -19,7 +19,7 @@ import Calendar from "./Calendar";
 import { Category, categoryList } from "../constants/expenseCategory";
 
 const Container = styled.div`
-  ${tw`mx-auto w-11/12 pt-8 text-neutral-500 font-bold text-sm`}
+  ${tw`mx-auto w-11/12 pt-8 text-neutral-600 font-bold text-sm`}
 `;
 
 const ErrorNotice = styled.p`
@@ -48,7 +48,7 @@ const ExpensesForm = ({ formEditor }: Props) => {
       .required("지출금액을 입력해주세요."),
     payType: Yup.string().required("카드나 현금 중 선택해주세요."),
     category: Yup.string().required("카테고리를 선택해주세요."),
-    shop: Yup.string().required("거래처를 입력해주세요."),
+    paidFor: Yup.string().required("거래처를 입력해주세요."),
     useDate: Yup.string().required("사용날짜를 선택해주세요."),
     memo: Yup.string().max(20, "20자 이내로 작성해주세요."),
   });
@@ -63,11 +63,6 @@ const ExpensesForm = ({ formEditor }: Props) => {
     resolver: yupResolver(expenseSchema),
     mode: "onSubmit",
   });
-
-  useEffect(() => {
-    const stringDate = selectedDate.toLocaleDateString();
-    setValue("useDate", stringDate);
-  }, [selectedDate]);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
@@ -85,8 +80,17 @@ const ExpensesForm = ({ formEditor }: Props) => {
     setSelectModal(false);
   };
 
+  const handleDate = (date: Date) => {
+    setSelectedDate(date);
+    const stringDate = selectedDate.toLocaleDateString("ko-KR");
+    setValue("useDate", stringDate);
+  };
+
   const handleExpenseSubmit = (formdata: ExpensesFormData) => {
     console.log(formdata);
+    //amount는 숫자로 바꿔서 서버로 보내야함
+    //날짜 포맷 확인 필요
+
     //서버에 지출등록
     //onsuccess에
     if (dialogRef.current) {
@@ -134,7 +138,7 @@ const ExpensesForm = ({ formEditor }: Props) => {
               />
               <label
                 htmlFor="card"
-                className="peer-checked/card:bg-light-color peer-checked/card:text-neutral-500 w-1/2 h-12 border border-r-[0.4px] border-neutral-400 rounded-l-xl flex justify-center items-center"
+                className="peer-checked/card:bg-light-color peer-checked/card:text-neutral-600 w-1/2 h-12 border border-r-[0.4px] border-neutral-400 rounded-l-xl flex justify-center items-center"
               >
                 카드
               </label>
@@ -147,7 +151,7 @@ const ExpensesForm = ({ formEditor }: Props) => {
               />
               <label
                 htmlFor="cash"
-                className="peer-checked/cash:bg-light-color peer-checked/cash:text-neutral-500 w-1/2 h-12 border border-l-[0.4px] border-neutral-400 rounded-r-xl flex justify-center items-center"
+                className="peer-checked/cash:bg-light-color peer-checked/cash:text-neutral-600 w-1/2 h-12 border border-l-[0.4px] border-neutral-400 rounded-r-xl flex justify-center items-center"
               >
                 현금
               </label>
@@ -167,11 +171,11 @@ const ExpensesForm = ({ formEditor }: Props) => {
               {selectedCategory ? (
                 <div>
                   <div
-                    className={`${selectedCategory.color} w-9 h-9 text-base-100 rounded-full flex justify-center items-center`}
+                    className={`${selectedCategory.color} w-9 h-9 mx-auto text-base-100 rounded-full flex justify-center items-center`}
                   >
                     {selectedCategory.icon}
                   </div>
-                  <p className="font-normal text-xs text-neutral-500 text-center">
+                  <p className="font-normal text-xs text-neutral-600 text-center">
                     {selectedCategory.name}
                   </p>
                 </div>
@@ -211,15 +215,15 @@ const ExpensesForm = ({ formEditor }: Props) => {
               autoComplete="off"
               spellCheck="false"
               className="placeholder:text-center border border-neutral-400 outline-2 outline-neutral-400 rounded-lg w-full h-12 text-center"
-              {...register("shop")}
+              {...register("paidFor")}
             />
-            <ErrorNotice>{errors?.shop?.message ?? null}</ErrorNotice>
+            <ErrorNotice>{errors?.paidFor?.message ?? null}</ErrorNotice>
           </div>
           <div className="relative pb-3">
             <div className="mb-1 indent-2">지출일자</div>
             <Calendar
               selectedDate={selectedDate}
-              setSelectedDate={setSelectedDate}
+              handleSelectedDate={handleDate}
             />
           </div>
           <div className="relative">

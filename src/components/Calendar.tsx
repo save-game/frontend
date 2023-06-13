@@ -1,4 +1,3 @@
-import { Dispatch, SetStateAction } from "react";
 import DatePicker from "react-datepicker";
 import { ko } from "date-fns/esm/locale";
 import styled from "styled-components";
@@ -11,10 +10,10 @@ const StyledDatePicker = styled(DatePicker)`
 
 export interface Props {
   readonly selectedDate: Date;
-  readonly setSelectedDate: Dispatch<SetStateAction<Date>>;
+  readonly handleSelectedDate: (date: Date) => void;
 }
 
-const Calendar = ({ selectedDate, setSelectedDate }: Props) => {
+const Calendar = ({ selectedDate, handleSelectedDate }: Props) => {
   return (
     <DatePickerWrapper>
       <StyledDatePicker
@@ -22,7 +21,7 @@ const Calendar = ({ selectedDate, setSelectedDate }: Props) => {
         locale={ko}
         shouldCloseOnSelect
         selected={selectedDate}
-        onChange={(date: Date) => setSelectedDate(date)}
+        onChange={(date: Date) => handleSelectedDate(date)}
         onChangeRaw={(e) => e.preventDefault()}
         showPopperArrow={false}
       />

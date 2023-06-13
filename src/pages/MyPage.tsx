@@ -8,10 +8,9 @@ import PasswordForm from "../components/MyPage/PasswordForm";
 import { useNavigate } from "react-router-dom";
 import InformModal from "../components/Common/InformModal";
 import ConfirmModal from "../components/Common/ConfirmModal";
-import ExpensesForm from "../components/ExpensesForm";
 
 const Container = styled.div`
-  ${tw`mx-auto w-11/12 pt-8 text-neutral-500 font-bold text-sm`}
+  ${tw`mx-auto w-11/12 pt-8 text-neutral-600 font-bold text-sm`}
 `;
 
 const MyPage = () => {
