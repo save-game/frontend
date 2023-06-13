@@ -9,7 +9,7 @@ const StyledDatePicker = styled(DatePicker)`
   ${tw`border border-neutral-400 outline-2 outline-neutral-400 rounded-lg w-full h-12 text-center`};
 `;
 
-interface Props {
+export interface Props {
   readonly selectedDate: Date;
   readonly setSelectedDate: Dispatch<SetStateAction<Date>>;
 }

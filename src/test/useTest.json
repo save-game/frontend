@@ -1,0 +1,114 @@
+[
+  {
+    "recordId": 14,
+    "useDate": "2023-06-12",
+    "category": "식비",
+    "paidFor": "아웃백",
+    "memo": "맛이변했음",
+    "amount": "148000"
+  },
+  {
+    "recordId": 13,
+    "useDate": "2023-06-10",
+    "category": "반려동물",
+    "paidFor": "야옹아멍멍해봐",
+    "memo": "뚱이간식",
+    "amount": "46000"
+  },
+  {
+    "recordId": 12,
+    "useDate": "2023-06-07",
+    "category": "통신",
+    "paidFor": "kt",
+    "memo": "매달가져가네",
+    "amount": "58000"
+  },
+  {
+    "recordId": 11,
+    "useDate": "2023-06-03",
+    "category": "경조사",
+    "paidFor": "결혼식",
+    "memo": "잘살아라",
+    "amount": "100000"
+  },
+  {
+    "recordId": 10,
+    "useDate": "2023-06-01",
+    "category": "교통",
+    "paidFor": "카카오택시",
+    "memo": "지각...",
+    "amount": "8900"
+  },
+  {
+    "recordId": 9,
+    "useDate": "2023-05-30",
+    "category": "식비",
+    "paidFor": "현고대닭발",
+    "memo": "역시 오리지널",
+    "amount": "18000"
+  },
+  {
+    "recordId": 8,
+    "useDate": "2023-05-22",
+    "category": "의류",
+    "paidFor": "지그재그",
+    "memo": "슬랙스구매",
+    "amount": "27000"
+  },
+  {
+    "recordId": 7,
+    "useDate": "2023-05-13",
+    "category": "뷰티",
+    "paidFor": "올리브영",
+    "memo": "선크림구매",
+    "amount": "24800"
+  },
+  {
+    "recordId": 6,
+    "useDate": "2023-05-08",
+    "category": "식비",
+    "paidFor": "하와이안브라더스",
+    "memo": "엄마랑데이트",
+    "amount": "34500"
+  },
+  {
+    "recordId": 5,
+    "useDate": "2023-05-07",
+    "category": "통신",
+    "paidFor": "kt",
+    "memo": "매달가져가네",
+    "amount": "58000"
+  },
+  {
+    "recordId": 4,
+    "useDate": "2023-05-01",
+    "category": "교육",
+    "paidFor": "너도할수있어영어회화",
+    "memo": "영어회화공부용인강",
+    "amount": "270000"
+  },
+  {
+    "recordId": 3,
+    "useDate": "2023-04-22",
+    "category": "교통",
+    "paidFor": "코레일",
+    "memo": "ktx-부산여행",
+    "amount": "57000"
+  },
+  {
+    "recordId": 2,
+    "useDate": "2023-04-14",
+    "category": "생활",
+    "paidFor": "CU편의점",
+    "memo": "밅크티존맛",
+    "amount": "3300"
+  },
+  {
+    "recordId": 1,
+    "useDate": "2023-04-07",
+    "category": "통신",
+    "paidFor": "kt",
+    "memo": "매달가져가네",
+    "amount": "58000"
+  }
+]
