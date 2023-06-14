@@ -7,6 +7,7 @@ import MyPage from "./pages/MyPage";
 import Header from "./components/Common/Header";
 import SignUp from "./pages/SignUpPage";
 import Home from "./pages/HomePage";
+import Account from "./pages/AccountPage";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -25,7 +26,7 @@ const App = () => {
             <Route path="/" element={<LoginPage />} />
             <Route path="/home" element={<Home />} />
             <Route path="/challenge" element={<div>challenge</div>} />
-            <Route path="/account" element={<div>account</div>} />
+            <Route path="/account" element={<Account />} />
             <Route path="/mypage" element={<MyPage />} />
             <Route path="/signup" element={<SignUp />} />
           </Routes>
