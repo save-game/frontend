@@ -21,3 +21,20 @@ export const dateRangeCalculator = (start: string, end: string) => {
   }
   return dateRange;
 };
+export function getDay(day: string, num: number) {
+  const year = new Date(day).getFullYear().toString().substring(2);
+  const month = new Date(day).getMonth() + 1;
+  const date = new Date(day).getDate();
+  const week = ["일", "월", "화", "수", "목", "금", "토"];
+  const weekDay = week[new Date(day).getDay()];
+  if (num === 1) {
+    return `${year}년 ${month}월 지출`;
+  } else {
+    return `${month}월 ${date}일 ${weekDay}요일`;
+  }
+}
+
+export const addComma = (price: number) => {
+  const returnStr = price?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return returnStr;
+};
