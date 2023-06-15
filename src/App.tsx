@@ -1,20 +1,14 @@
 import { Route, Routes } from "react-router-dom";
 import { RecoilRoot } from "recoil";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClientProvider } from "react-query";
 import "./App.css";
 import LoginPage from "./pages/LoginPage";
 import MyPage from "./pages/MyPage";
 import Header from "./components/Common/Header";
 import SignUp from "./pages/SignUpPage";
 import Home from "./pages/HomePage";
-
-export const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: Infinity,
-    },
-  },
-});
+import ChallengeRoom from "./pages/ChallengeRoom";
+import { queryClient } from "./constants/queryClient";
 
 const App = () => {
   return (
@@ -25,6 +19,7 @@ const App = () => {
             <Route path="/" element={<LoginPage />} />
             <Route path="/home" element={<Home />} />
             <Route path="/challenge" element={<div>challenge</div>} />
+            <Route path="/challenge/:challengeId" element={<ChallengeRoom />} />
             <Route path="/account" element={<div>account</div>} />
             <Route path="/mypage" element={<MyPage />} />
             <Route path="/signup" element={<SignUp />} />
