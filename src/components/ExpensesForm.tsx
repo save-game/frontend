@@ -1,5 +1,5 @@
 import { ChangeEvent, Dispatch, SetStateAction, useRef, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import InformModal from "./Common/InformModal";
@@ -38,6 +38,10 @@ const ExpensesForm = ({ formStatus, formEditor }: Props) => {
         const valueInNumber = Number(value);
         return valueInNumber > 0;
       })
+      .test("maximum", "금액은 9자리 이내의 숫자로 입력해주세요.", (value) => {
+        const valueInNumber = Number(value);
+        return valueInNumber < 999999999;
+      })
       .required("지출금액을 입력해주세요."),
     payType: Yup.string().required("카드나 현금 중 선택해주세요."),
     category: Yup.string().required("카테고리를 선택해주세요."),
@@ -52,6 +56,8 @@ const ExpensesForm = ({ formStatus, formEditor }: Props) => {
     formState: { errors },
     handleSubmit: onSubmit,
     setValue,
+    control,
+    reset,
   } = useForm<ExpensesFormData>({
     resolver: yupResolver(expenseSchema),
     mode: "onSubmit",
@@ -75,17 +81,25 @@ const ExpensesForm = ({ formStatus, formEditor }: Props) => {
 
   const handleDate = (date: Date) => {
     setSelectedDate(date);
-    const stringDate = selectedDate.toLocaleDateString("ko-KR");
+    const stringDate = selectedDate.toLocaleDateString("en-US");
     setValue("useDate", stringDate);
+  };
+
+  const handleClose = () => {
+    formEditor(false);
+    reset();
+    setSelectedCategory(null);
   };
 
   const handleExpenseSubmit = (formdata: ExpensesFormData) => {
     console.log(formdata);
+
     //amount는 숫자로 바꿔서 서버로 보내야함
     //날짜 포맷 확인 필요
 
     //서버에 지출등록
     //onsuccess에
+    // reset();
     if (dialogRef.current) {
       dialogRef.current.showModal();
       setTimeout(() => {
@@ -97,10 +111,12 @@ const ExpensesForm = ({ formStatus, formEditor }: Props) => {
     }
   };
 
+  //
+
   return (
     <section
-      className={`fixed top-0 left-0 right-0 bottom-0 transition-transform bg-base-100 z-[999] py-4 shadow-lg text-neutral-600 ${
-        formStatus ? `translate-y-0` : `translate-y-full`
+      className={`fixed top-0 left-0 right-0 bottom-0  transition-transform bg-base-100 z-[999] py-4 shadow-lg text-neutral-600 ${
+        formStatus ? ` translate-y-0 ` : `translate-y-full`
       }`}
     >
       <Container>
@@ -113,6 +129,7 @@ const ExpensesForm = ({ formStatus, formEditor }: Props) => {
             <input
               type="text"
               autoFocus
+              maxLength={12}
               autoComplete="off"
               className="border border-neutral-400 outline-2 outline-neutral-400 rounded-lg w-full h-12 pr-4 text-right"
               {...register("amount")}
@@ -187,17 +204,24 @@ const ExpensesForm = ({ formStatus, formEditor }: Props) => {
                     key={item.category}
                     className="inline-block w-1/5 py-2 px-2"
                   >
-                    <button
-                      onClick={() => handleSelectCategory(item)}
-                      className="btn btn-ghost hover:bg-transparent w-full p-0 block"
-                    >
-                      <div
-                        className={`${item.color} w-4/5 mx-auto text-base-100 mb-1 flex justify-center items-center h-10 rounded-full`}
-                      >
-                        {item.icon}
-                      </div>
-                      <p className="text-xs font-normal">{item.name}</p>
-                    </button>
+                    <Controller
+                      name="category"
+                      control={control}
+                      render={() => (
+                        <button
+                          type="button"
+                          onClick={() => handleSelectCategory(item)}
+                          className="btn btn-ghost hover:bg-transparent w-full p-0 block"
+                        >
+                          <div
+                            className={`${item.color} w-4/5 mx-auto text-base-100 mb-1 flex justify-center items-center h-10 rounded-full`}
+                          >
+                            {item.icon}
+                          </div>
+                          <p className="text-xs font-normal">{item.name}</p>
+                        </button>
+                      )}
+                    />
                   </div>
                 ))}
               </div>
@@ -218,9 +242,16 @@ const ExpensesForm = ({ formStatus, formEditor }: Props) => {
           </div>
           <div className="relative pb-3">
             <div className="mb-1 indent-2">지출일자</div>
-            <Calendar
-              selectedDate={selectedDate}
-              handleSelectedDate={handleDate}
+            <Controller
+              name="useDate"
+              control={control}
+              defaultValue={selectedDate.toLocaleDateString("en-US")}
+              render={() => (
+                <Calendar
+                  selectedDate={selectedDate}
+                  handleSelectedDate={handleDate}
+                />
+              )}
             />
           </div>
           <div className="relative">
@@ -244,10 +275,7 @@ const ExpensesForm = ({ formStatus, formEditor }: Props) => {
           </button>
         </form>
       </Container>
-      <button
-        onClick={() => formEditor(false)}
-        className="absolute top-5 right-5"
-      >
+      <button onClick={handleClose} className="absolute top-5 right-5">
         <IoCloseOutline size={26} />
       </button>
       <InformModal
