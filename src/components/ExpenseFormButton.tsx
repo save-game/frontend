@@ -11,7 +11,7 @@ const ExpenseFormButton = () => {
       >
         지출등록
       </button>
-      {expensesForm ? <ExpensesForm formEditor={setExpensesForm} /> : null}
+      <ExpensesForm formStatus={expensesForm} formEditor={setExpensesForm} />
     </>
   );
 };

@@ -11,9 +11,9 @@ const Dialog = styled.dialog`
 `;
 
 interface Props {
-  dialogRef: RefObject<HTMLDialogElement>;
-  loading: boolean;
-  inform: string;
+  readonly dialogRef: RefObject<HTMLDialogElement>;
+  readonly loading: boolean;
+  readonly inform: string;
 }
 
 //loading은 useQuery등을 통해 loading값이 있을때 넘겨준다.

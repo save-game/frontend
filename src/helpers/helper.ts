@@ -7,6 +7,20 @@ export const dDayCalculator = (date: string) => {
   return daysDiff;
 };
 
+export const dateRangeCalculator = (start: string, end: string) => {
+  const startDate = new Date(start);
+  const endDate = new Date(end);
+  const timeDiff = endDate.getTime() - startDate.getTime();
+  const daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24)) + 1;
+
+  const dateRange = [];
+  for (let i = 0; i < daysDiff; i++) {
+    const date = new Date(startDate);
+    date.setDate(startDate.getDate() + i);
+    dateRange.push(date.toLocaleDateString("en-US"));
+  }
+  return dateRange;
+};
 export function getDay(day: string, num: number) {
   const year = new Date(day).getFullYear().toString().substring(2);
   const month = new Date(day).getMonth() + 1;
@@ -21,6 +35,6 @@ export function getDay(day: string, num: number) {
 }
 
 export const addComma = (price: number) => {
-  let returnStr = price?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  const returnStr = price?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   return returnStr;
 };

@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 interface Props {
-  formEditor: Dispatch<SetStateAction<boolean>>;
+  readonly formEditor: Dispatch<SetStateAction<boolean>>;
 }
 
 const PasswordForm = ({ formEditor }: Props) => {

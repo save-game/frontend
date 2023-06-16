@@ -7,9 +7,9 @@ const Dialog = styled.dialog`
 `;
 
 interface Props {
-  dialogRef: RefObject<HTMLDialogElement>;
-  confirm: string;
-  onConfirm: () => void;
+  readonly dialogRef: RefObject<HTMLDialogElement>;
+  readonly confirm: string;
+  readonly onConfirm: () => void;
 }
 
 const ConfirmModal = ({ dialogRef, confirm, onConfirm }: Props) => {

@@ -7,6 +7,7 @@ export default {
       colors: {
         "light-color": "#f0f8f6",
         "medium-color": "#d6f7f3",
+        "base-color": "#f4f4f4",
       },
       fontFamily: {
         sans: ["GmarketSansMedium"],

@@ -6,12 +6,12 @@ import { IoCloseOutline } from "react-icons/Io5";
 import { BsPersonFill } from "react-icons/Bs";
 
 interface Props {
-  img: string | null;
+  readonly img: string | null;
 }
 interface Imagefile {
-  file: File | null;
-  thumnail: string;
-  name: string;
+  readonly file: File | null;
+  readonly thumbnail: string;
+  readonly name: string;
 }
 
 const Dialog = styled.dialog`
@@ -29,7 +29,7 @@ const ProfileImageEdit = ({ img }: Props) => {
     if (img) {
       setImgFile({
         file: null,
-        thumnail: img,
+        thumbnail: img,
         name: "prevImg",
       });
     }
@@ -47,7 +47,7 @@ const ProfileImageEdit = ({ img }: Props) => {
       const url = URL.createObjectURL(fileList[0]);
       setImgFile({
         file: fileList[0],
-        thumnail: url,
+        thumbnail: url,
         name: fileList[0].name,
       });
     }
@@ -71,7 +71,7 @@ const ProfileImageEdit = ({ img }: Props) => {
             <div className="w-28 h-28 z-[888] flex justify-center items-center rounded-lg shadow bg-base-200  overflow-hidden relative mb-4">
               {imgFile ? (
                 <img
-                  src={imgFile.thumnail}
+                  src={imgFile.thumbnail}
                   alt={imgFile.name}
                   className="inline-block"
                 />
