@@ -22,6 +22,7 @@ export const FilteredDataForm = () => {
   const [data, setData] = useState<ExpenseData[]>([]);
   const [, setFilterForm] = useRecoilState(filterFormState);
   const [, setIsSubmit] = useRecoilState(isSubmitState);
+
   const navigate = useNavigate();
 
   const start = `${startDate?.getFullYear()}/${
@@ -69,7 +70,7 @@ export const FilteredDataForm = () => {
   };
   const onClickClosed = () => {
     setIsSubmit(false);
-    navigate("/test");
+    setFilterForm(false);
   };
 
   return (
