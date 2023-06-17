@@ -21,7 +21,7 @@ export const dateRangeCalculator = (start: string, end: string) => {
   }
   return dateRange;
 };
-export function getDay(day: string, num: number) {
+export function getDayFunc(day: string, num: number) {
   const year = new Date(day).getFullYear().toString().substring(2);
   const month = new Date(day).getMonth() + 1;
   const date = new Date(day).getDate();

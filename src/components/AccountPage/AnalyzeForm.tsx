@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import ExpenseGraph from "./ExpenseGraph";
-import { ExpenseData, axiosData } from "../pages/AccountPage";
-import { addComma } from "../helpers/helper";
+import ExpenseGraph from "../ExpenseGraph";
+import { ExpenseData, axiosData } from "../../pages/AccountPage";
+import { addComma } from "../../helpers/helper";
 
 interface Props {
   analyze: Dispatch<SetStateAction<boolean>>;

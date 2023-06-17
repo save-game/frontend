@@ -5,7 +5,8 @@
     "category": "식비",
     "paidFor": "아웃백",
     "memo": "맛이변했음",
-    "amount": "148000"
+    "amount": "148000",
+    "payType": "cash"
   },
   {
     "recordId": 13,
@@ -13,7 +14,8 @@
     "category": "반려동물",
     "paidFor": "야옹아멍멍해봐",
     "memo": "뚱이간식",
-    "amount": "46000"
+    "amount": "46000",
+    "payType": "card"
   },
   {
     "recordId": 12,
@@ -21,7 +23,8 @@
     "category": "통신",
     "paidFor": "kt",
     "memo": "매달가져가네",
-    "amount": "58000"
+    "amount": "58000",
+    "payType": "cash"
   },
   {
     "recordId": 11,
@@ -29,7 +32,8 @@
     "category": "경조사",
     "paidFor": "결혼식",
     "memo": "잘살아라",
-    "amount": "100000"
+    "amount": "100000",
+    "payType": "card"
   },
   {
     "recordId": 10,
@@ -37,7 +41,8 @@
     "category": "교통",
     "paidFor": "카카오택시",
     "memo": "지각...",
-    "amount": "8900"
+    "amount": "8900",
+    "payType": "card"
   },
   {
     "recordId": 9,
@@ -45,7 +50,8 @@
     "category": "식비",
     "paidFor": "현고대닭발",
     "memo": "역시 오리지널",
-    "amount": "18000"
+    "amount": "18000",
+    "payType": "cash"
   },
   {
     "recordId": 8,
@@ -53,7 +59,8 @@
     "category": "의류",
     "paidFor": "지그재그",
     "memo": "슬랙스구매",
-    "amount": "27000"
+    "amount": "27000",
+    "payType": "card"
   },
   {
     "recordId": 7,
@@ -61,7 +68,8 @@
     "category": "뷰티",
     "paidFor": "올리브영",
     "memo": "선크림구매",
-    "amount": "24800"
+    "amount": "24800",
+    "payType": "card"
   },
   {
     "recordId": 6,
@@ -69,7 +77,8 @@
     "category": "식비",
     "paidFor": "하와이안브라더스",
     "memo": "엄마랑데이트",
-    "amount": "34500"
+    "amount": "34500",
+    "payType": "cash"
   },
   {
     "recordId": 5,
@@ -77,7 +86,8 @@
     "category": "통신",
     "paidFor": "kt",
     "memo": "매달가져가네",
-    "amount": "58000"
+    "amount": "58000",
+    "payType": "cash"
   },
   {
     "recordId": 4,
@@ -85,7 +95,8 @@
     "category": "교육",
     "paidFor": "너도할수있어영어회화",
     "memo": "영어회화공부용인강",
-    "amount": "270000"
+    "amount": "270000",
+    "payType": "card"
   },
   {
     "recordId": 3,
@@ -93,7 +104,8 @@
     "category": "교통",
     "paidFor": "코레일",
     "memo": "ktx-부산여행",
-    "amount": "57000"
+    "amount": "57000",
+    "payType": "card"
   },
   {
     "recordId": 2,
@@ -101,7 +113,8 @@
     "category": "생활",
     "paidFor": "CU편의점",
     "memo": "밅크티존맛",
-    "amount": "3300"
+    "amount": "3300",
+    "payType": "cash"
   },
   {
     "recordId": 1,
@@ -109,6 +122,7 @@
     "category": "통신",
     "paidFor": "kt",
     "memo": "매달가져가네",
-    "amount": "58000"
+    "amount": "58000",
+    "payType": "card"
   }
 ]
