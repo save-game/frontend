@@ -222,6 +222,7 @@ export default function SignUp() {
             <button
               type="button"
               className="h-8 rounded-lg btn-accent w-1/6 text-base shadow-lg"
+              onClick={() => navigate(-1)}
             >
               취소
             </button>

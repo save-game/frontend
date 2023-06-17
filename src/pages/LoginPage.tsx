@@ -4,8 +4,10 @@ import KakaoIcon from "../assets/kakao_icon.png";
 import NaverIcon from "../assets/naver_icon.png";
 import GoogleIcon from "../assets/google_icon.svg";
 import Logo from "../assets/savegame_512x512.png";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -48,7 +50,10 @@ export default function LoginPage() {
             로그인
           </button>
         </form>
-        <button className="h-10 rounded-lg border border-accent w-full text-xl shadow-lg focus:bg-accent mb-4">
+        <button
+          className="h-10 rounded-lg border border-accent w-full text-xl shadow-lg focus:bg-accent mb-4"
+          onClick={() => navigate("/signup")}
+        >
           회원가입
         </button>
         <div className="flex w-2/3 justify-around">
