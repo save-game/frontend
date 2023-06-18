@@ -1,0 +1,79 @@
+{
+  "title": "한달 식비 50만원으로 해결하기",
+  "content": "식비를 좀 줄여봅시다",
+  "challenge_status": 1,
+  "start_date": "2023-06-01",
+  "end_date": "2023-06-30",
+  "goal_amount": 500000,
+  "category": "FOOD",
+  "challengeMemberList": [
+    {
+      "memberId": 1,
+      "nickName": "nickName1",
+      "color": "#e787d5",
+      "status": 1,
+      "recordList": [
+        {
+          "date": "2023-06-01",
+          "amount": 10000
+        },
+        {
+          "date": "2023-06-02",
+          "amount": 80000
+        },
+        {
+          "date": "2023-06-08",
+          "amount": 20000
+        }
+      ]
+    },
+    {
+      "memberId": 2,
+      "nickName": "nickName2",
+      "color": "#348bdc",
+      "status": 1,
+      "recordList": [
+        {
+          "date": "2023-06-02",
+          "amount": 10000
+        },
+        {
+          "date": "2023-06-03",
+          "amount": 10000
+        },
+        {
+          "date": "2023-06-07",
+          "amount": 10000
+        },
+        {
+          "date": "2023-06-08",
+          "amount": 20000
+        }
+      ]
+    },
+    {
+      "memberId": 3,
+      "nickName": "nickName3",
+      "color": "#c4dc6f",
+      "status": 0,
+      "recordList": [
+        {
+          "date": "2023-06-02",
+          "amount": 10000
+        },
+        {
+          "date": "2023-06-03",
+          "amount": 150000
+        },
+        {
+          "date": "2023-06-07",
+          "amount": 300000
+        },
+        {
+          "date": "2023-06-11",
+          "amount": 200000
+        }
+      ]
+    }
+  ]
+}
