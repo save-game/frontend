@@ -15,10 +15,10 @@ import { addComma, getDayFunc } from "../../helpers/helper.js";
 import MonthPicker from "../../components/AccountPage/MonthPicker.js";
 import AnalyzeForm from "../../components/AccountPage/AnalyzeForm.js";
 import FilterBtn from "../../components/AccountPage/FilterBtn.js";
-import ExpensesForm from "../../components/ExpensesForm.js";
 import { categoryList } from "../../constants/expenseCategory.js";
 import { FilteredDataForm } from "../../components/AccountPage/FilterDataForm.js";
 import { useTest } from "../../components/AccountPage/getApi.js";
+import ExpenseFormButton from "../ExpenseFormButton.js";
 
 export interface ExpenseData {
   recordId: number;
@@ -36,7 +36,6 @@ export default function Account() {
   const [, setEndDate] = useRecoilState(endDateState);
   const [, setStartDate] = useRecoilState(startDateState);
   const [, setCategoryList] = useRecoilState(checkedListState);
-  const [expensesForm, setExpensesForm] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [analyze, setAnalyze] = useState(false);
   const [data, setData] = useState<ExpenseData[]>([]);
@@ -132,13 +131,9 @@ export default function Account() {
                   <FilterBtn onClick={() => setFilterForm(true)}>
                     필터선택
                   </FilterBtn>
-                  <FilterBtn onClick={() => setExpensesForm(true)}>
-                    지출등록
-                  </FilterBtn>
-                  <ExpensesForm
-                    formStatus={expensesForm}
-                    formEditor={setExpensesForm}
-                  />
+                  <div className="w-32">
+                    <ExpenseFormButton size={"small"} />
+                  </div>
                 </div>
 
                 <div className="w-full">
