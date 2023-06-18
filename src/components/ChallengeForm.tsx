@@ -8,8 +8,7 @@ import tw from "twin.macro";
 import { RangeCalendarStart, RangeCalendarEnd } from "./Calendar";
 import InformModal from "./Common/InformModal";
 import { addOneMonth } from "../helpers/helper";
-
-const SHOW_WARNING_MODAL_DELAY = 1500;
+import { SHOW_WARNING_MODAL_DELAY } from "../constants/modalTime";
 
 export default function ChallengeForm() {
   const [memberCount, setMemberCount] = useState<number>(2);

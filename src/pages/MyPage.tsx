@@ -8,6 +8,7 @@ import PasswordForm from "../components/MyPage/PasswordForm";
 import { useNavigate } from "react-router-dom";
 import InformModal from "../components/Common/InformModal";
 import ConfirmModal from "../components/Common/ConfirmModal";
+import { SHOW_MODAL_DELAY } from "../constants/modalTime";
 
 const Container = styled.div`
   ${tw`mx-auto w-11/12 pt-8 text-neutral-600 font-bold text-sm`}
@@ -41,15 +42,14 @@ const MyPage = () => {
   const handleWithdrawal = () => {
     //서버에 탈퇴요청
     //onSuccess에
-    if (informDialogRef.current) {
-      informDialogRef.current.showModal();
-      setTimeout(() => {
-        if (informDialogRef.current) {
-          informDialogRef.current.close();
-        }
-        navigate("/");
-      }, 1000);
-    }
+    if (!informDialogRef.current) return;
+
+    informDialogRef.current.showModal();
+    setTimeout(() => {
+      if (!informDialogRef.current) return;
+      informDialogRef.current.close();
+      navigate("/");
+    }, SHOW_MODAL_DELAY);
   };
 
   return (

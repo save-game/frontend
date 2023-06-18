@@ -10,6 +10,7 @@ import { BiWon } from "react-icons/Bi";
 import { IoCloseOutline } from "react-icons/Io5";
 import Calendar from "./Calendar";
 import { Category, categoryList } from "../constants/expenseCategory";
+import { SHOW_MODAL_DELAY } from "../constants/modalTime";
 
 const Container = styled.div`
   ${tw`mx-auto w-11/12 pt-8 text-neutral-600 font-bold text-sm`}
@@ -93,22 +94,21 @@ const ExpensesForm = ({ formStatus, formEditor }: Props) => {
 
   const handleExpenseSubmit = (formdata: ExpensesFormData) => {
     console.log(formdata);
-
+    if (!dialogRef.current) return;
     //amount는 숫자로 바꿔서 서버로 보내야함
     //날짜 포맷 확인 필요
 
     //서버에 지출등록
     //onsuccess에
     // reset();
-    if (dialogRef.current) {
-      dialogRef.current.showModal();
-      setTimeout(() => {
-        if (dialogRef.current) {
-          dialogRef.current.close();
-        }
-        navigate("/account");
-      }, 1000);
-    }
+
+    dialogRef.current.showModal();
+    setTimeout(() => {
+      if (!dialogRef.current) return;
+      dialogRef.current.close();
+
+      navigate("/account");
+    }, SHOW_MODAL_DELAY);
   };
 
   //

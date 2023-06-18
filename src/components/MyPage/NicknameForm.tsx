@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import InformModal from "../Common/InformModal";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { SHOW_MODAL_DELAY } from "../../constants/modalTime";
 
 interface Props {
   readonly formEditor: Dispatch<SetStateAction<boolean>>;
@@ -64,15 +65,15 @@ const NicknameForm = ({ formEditor }: Props) => {
   const handleNicknameChange = () => {
     //서버에 닉넴수정 요청 useMutation으로
     //onSuccess에 완료모달
-    if (dialogRef.current) {
-      dialogRef.current.showModal();
-      setTimeout(() => {
-        if (dialogRef.current) {
-          dialogRef.current.close();
-        }
-        formEditor(false);
-      }, 1000);
-    }
+    if (!dialogRef.current) return;
+
+    dialogRef.current.showModal();
+    setTimeout(() => {
+      if (!dialogRef.current) return;
+      dialogRef.current.close();
+
+      formEditor(false);
+    }, SHOW_MODAL_DELAY);
   };
   return (
     <>

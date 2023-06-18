@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import InformModal from "../Common/InformModal";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { SHOW_MODAL_DELAY } from "../../constants/modalTime";
 
 interface Props {
   readonly formEditor: Dispatch<SetStateAction<boolean>>;
@@ -40,17 +41,15 @@ const PasswordForm = ({ formEditor }: Props) => {
 
   const handlePasswordChange = () => {
     //비번변경 서버에 요청
-
+    if (!dialogRef.current) return;
     //onSuccess에
-    if (dialogRef.current) {
-      dialogRef.current.showModal();
-      setTimeout(() => {
-        if (dialogRef.current) {
-          dialogRef.current.close();
-        }
-        formEditor(false);
-      }, 1000);
-    }
+
+    dialogRef.current.showModal();
+    setTimeout(() => {
+      if (!dialogRef.current) return;
+      dialogRef.current.close();
+      formEditor(false);
+    }, SHOW_MODAL_DELAY);
   };
 
   return (
