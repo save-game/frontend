@@ -3,10 +3,11 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import DateFilter from "./DateFilter";
 import CategoryFilter from "./CategoryFilter";
 import { FiMeh } from "react-icons/fi";
-import { addComma, getDay, getDayFunc } from "../../helpers/helper";
+import { addComma, getDayFunc } from "../../helpers/helper";
 
 import { categoryList } from "../../constants/expenseCategory";
-import { ExpenseData, useTest } from "../../pages/AccountPage";
+import { ExpenseData } from "./Account";
+import { useTest } from "./getApi";
 
 interface Props {
   setFilterForm: Dispatch<SetStateAction<boolean>>;
@@ -23,9 +24,7 @@ export default function FilterForm({
 }: Props) {
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [endDate, setEndDate] = useState<Date | null>(new Date());
-  const [checkedList, setCheckedList] = useState<string[]>([]);
-  const [isChecked, setIsChecked] = useState(false);
-  // const [isSubmit, setIsSubmit] = useState(true);
+  const [checkedList] = useState<string[]>([]);
   const [data, setData] = useState<ExpenseData[]>([]);
 
   const start = `${startDate?.getFullYear()}/${
@@ -82,18 +81,8 @@ export default function FilterForm({
       {filterForm && isSubmit ? (
         <div className="fixed top-0 left-0 right-0 bottom-0 bg-base-100 z-[999] py-4 shadow-lg text-neutral-600">
           <div className="w-full">
-            <DateFilter
-              setStartDate={setStartDate}
-              startDate={startDate}
-              setEndDate={setEndDate}
-              endDate={endDate}
-            />
-            <CategoryFilter
-              checkedList={checkedList}
-              setCheckedList={setCheckedList}
-              isChecked={isChecked}
-              setIsChecked={setIsChecked}
-            />
+            <DateFilter />
+            <CategoryFilter />
             <div className="flex justify-center items-center m-12">
               <button
                 onClick={onSubmit}
