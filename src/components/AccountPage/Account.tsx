@@ -18,7 +18,7 @@ import FilterBtn from "../../components/AccountPage/FilterBtn.js";
 import { categoryList } from "../../constants/expenseCategory.js";
 import { FilteredDataForm } from "../../components/AccountPage/FilterDataForm.js";
 import { useTest } from "../../components/AccountPage/getApi.js";
-import ExpenseFormButton from "../ExpenseFormButton.js";
+import ExpenseFormButton from "../Expenses/ExpenseFormButton.js";
 
 export interface ExpenseData {
   recordId: number;

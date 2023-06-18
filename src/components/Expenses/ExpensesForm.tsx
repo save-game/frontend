@@ -2,15 +2,15 @@ import { ChangeEvent, Dispatch, SetStateAction, useRef, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import InformModal from "./Common/InformModal";
+import InformModal from "../Common/InformModal";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { BiWon } from "react-icons/Bi";
 import { IoCloseOutline } from "react-icons/Io5";
-import Calendar from "./Calendar";
-import { Category, categoryList } from "../constants/expenseCategory";
-import { SHOW_MODAL_DELAY } from "../constants/modalTime";
+import Calendar from "../Common/Calendar";
+import { Category, categoryList } from "../../constants/expenseCategory";
+import { SHOW_MODAL_DELAY } from "../../constants/modalTime";
 
 const Container = styled.div`
   ${tw`mx-auto w-11/12 pt-8 text-neutral-600 font-bold text-sm`}

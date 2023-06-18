@@ -5,7 +5,7 @@ import tw, { styled } from "twin.macro";
 
 const ArticleContainer = styled.article`
   ${tw`pt-3 pb-20 bg-base-color`};
-  min-height: calc(100vh - 104px);
+  min-height: calc(100vh - 168px);
 `;
 
 interface Props {

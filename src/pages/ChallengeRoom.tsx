@@ -4,8 +4,9 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { dDayCalculator } from "../helpers/helper";
-import ChallengeStatus from "../components/ChallengeRoom/ChallengeStatus";
 import { ChallengeData, ChallengeMemberData } from "../interface/interface";
+import ChallengeStatus from "../components/Challenge/ChallengeStatus";
+import ChallengeResult from "../components/Challenge/ChallengeResult";
 
 const Container = styled.div`
   ${tw`mx-auto pt-8 text-neutral-600 font-bold text-sm text-center`}
@@ -37,6 +38,10 @@ const ChallengeRoom = () => {
             return Number(nbr.replace(/,/g, ""));
           };
           return toNumber(a.ttlAmount) - toNumber(b.ttlAmount);
+        })
+        .map((info: ChallengeMemberData, idx: number) => {
+          const ranking = idx === 0 && info.status === 1 ? true : false;
+          return { ...info, isFirst: ranking };
         });
       const daysDiff = dDayCalculator(data.end_date);
       const addedData = {
@@ -101,7 +106,7 @@ const ChallengeRoom = () => {
             )}
           </>
         ) : (
-          <div> 도전종료</div>
+          <ChallengeResult />
         )}
       </Container>
     </main>

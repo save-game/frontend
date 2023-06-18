@@ -1,4 +1,4 @@
-import ChallengeForm from "../components/ChallengeForm";
+import ChallengeForm from "../components/Challenge/ChallengeForm";
 
 export default function ChallengeHome() {
   return (

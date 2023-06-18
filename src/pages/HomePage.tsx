@@ -3,9 +3,9 @@ import styled from "styled-components";
 import tw from "twin.macro";
 import axios from "axios";
 
-import ExpenseGraphContainer from "../components/ExpenseGraphContainer";
-import MyChallengeCard from "../components/MyChallengeCard";
-import ExpenseFormButton from "../components/ExpenseFormButton";
+import ExpenseGraphContainer from "../components/Expenses/ExpenseGraphContainer";
+import MyChallengeCard from "../components/Challenge/MyChallengeCard";
+import ExpenseFormButton from "../components/Expenses/ExpenseFormButton";
 
 interface MyChallengeList {
   challengeId: number;

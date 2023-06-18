@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { dDayCalculator } from "../helpers/helper";
+import { dDayCalculator } from "../../helpers/helper";
 
 export default function MyChallengeCard({
   myChallenge,

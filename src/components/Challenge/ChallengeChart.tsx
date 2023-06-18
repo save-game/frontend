@@ -105,8 +105,8 @@ const ChallengeChart = ({ challengeData }: Props) => {
         };
         return dailyAmount;
       }),
-      borderColor: bgColor[idx],
-      backgroundColor: bgColor[idx],
+      borderColor: data.color,
+      backgroundColor: data.color,
     };
 
     return dataset;
@@ -131,13 +131,13 @@ const ChallengeChart = ({ challengeData }: Props) => {
         <div className="mr-1">참가자 : </div>
         <div>{expenseData.length} 명</div>
       </div>
-      <div className="bg-base-100 rounded-lg mt-3 text-xs p-2 font-light">
+      <ul className="bg-base-100 rounded-lg mt-3 text-xs p-2 font-light">
         {challengeData.challengeMemberList.map((challengersData) => (
-          <div key={challengersData.memberId}>
+          <li key={challengersData.memberId}>
             <MembersStatus data={challengersData} />
-          </div>
+          </li>
         ))}
-      </div>
+      </ul>
     </>
   );
 };

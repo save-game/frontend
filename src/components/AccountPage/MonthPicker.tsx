@@ -1,6 +1,6 @@
 import DatePicker, { registerLocale } from "react-datepicker";
 import { ko } from "date-fns/esm/locale";
-import { Props } from "../Calendar";
+import { Props } from "../Common/Calendar";
 
 const MonthPicker = ({ selectedDate, handleSelectedDate }: Props) => {
   registerLocale("ko", ko);

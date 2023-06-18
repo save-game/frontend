@@ -1,4 +1,4 @@
-import ChallengeForm from "../components/ChallengeForm";
+import ChallengeForm from "../components/Challenge/ChallengeForm";
 
 interface ExpenseRecord {
   readonly date: string;
@@ -12,6 +12,7 @@ export interface ChallengeMemberData {
   readonly status: 0 | 1;
   readonly recordList: ExpenseRecord[];
   readonly ttlAmount?: string;
+  readonly isFirst: boolean;
 }
 
 export interface ChallengeData {
