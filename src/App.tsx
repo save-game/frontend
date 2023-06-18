@@ -5,12 +5,13 @@ import "./App.css";
 import LoginPage from "./pages/LoginPage";
 import MyPage from "./pages/MyPage";
 import Header from "./components/Common/Header";
-import SignUp from "./pages/SignUpPage";
 import Home from "./pages/HomePage";
 // import ChallengeRoom from "./pages/ChallengeRoom";
-import Account from "./pages/AccountPage";
+
 import ChallengeHome from "./pages/ChallengeHomePage";
 import { queryClient } from "./constants/queryClient";
+import SignUpPage from "./pages/SignUpPage";
+import AccountPage from "./pages/AccountPage";
 
 const App = () => {
   return (
@@ -22,9 +23,9 @@ const App = () => {
             <Route path="/home" element={<Home />} />
             <Route path="/challenge" element={<ChallengeHome />} />
             {/* <Route path="/challenge/:challengeId" element={<ChallengeRoom />} /> */}
-            <Route path="/account" element={<Account />} />
+            <Route path="/account" element={<AccountPage />} />
             <Route path="/mypage" element={<MyPage />} />
-            <Route path="/signup" element={<SignUp />} />
+            <Route path="/signup" element={<SignUpPage />} />
           </Routes>
           <Header />
         </RecoilRoot>
