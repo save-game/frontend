@@ -12,8 +12,8 @@ import { addComma, getDayFunc } from "../../helpers/helper";
 import { categoryList } from "../../constants/expenseCategory";
 import { FiMeh } from "react-icons/fi";
 import FilterBtn from "../AccountPage/FilterBtn";
-import { useNavigate } from "react-router-dom";
-import { ExpenseData, useTest } from "../../pages/AccountPage";
+import { ExpenseData } from "./Account";
+import { useTest } from "./getApi";
 
 export const FilteredDataForm = () => {
   const [startDate, setStartDate] = useRecoilState(startDateState);
@@ -22,8 +22,6 @@ export const FilteredDataForm = () => {
   const [data, setData] = useState<ExpenseData[]>([]);
   const [, setFilterForm] = useRecoilState(filterFormState);
   const [, setIsSubmit] = useRecoilState(isSubmitState);
-
-  const navigate = useNavigate();
 
   const start = `${startDate?.getFullYear()}/${
     Number(startDate?.getMonth()) + 1
