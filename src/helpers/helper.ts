@@ -38,3 +38,9 @@ export const addComma = (price: number) => {
   const returnStr = price?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   return returnStr;
 };
+
+export const addOneMonth = (date: Date) => {
+  return new Date(
+    `${date.getFullYear()}-${date.getMonth() + 2}-${date.getDate()}`
+  );
+};
