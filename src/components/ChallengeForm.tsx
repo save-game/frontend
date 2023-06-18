@@ -1,34 +1,36 @@
-import React, { useRef, useState } from "react";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import React, { useRef, useState, useEffect } from "react";
+import { Controller, FieldValues, useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import styled from "styled-components";
 import tw from "twin.macro";
 
-import Calendar from "./Calendar";
+import Calendar, { RangeCalendarStart, RangeCalendarEnd } from "./Calendar";
 import InformModal from "./Common/InformModal";
-
-interface Imagefile {
-  file: File | null;
-  thumnail: string;
-  name: string;
-}
+import { addOneMonth } from "../helpers/helper";
 
 export default function ChallengeForm() {
-  const [challengeTitle, setChallengeTitle] = useState<string>("");
-  const [memberCount, setMemberCount] = useState<number>(0);
+  const [memberCount, setMemberCount] = useState<number>(2);
   const [startDate, setStartDate] = useState<Date>(new Date());
-  const [endDate, setEndDate] = useState<Date>(new Date());
+  const [endDate, setEndDate] = useState<Date>(addOneMonth(new Date()));
 
-  const dialogRef = useRef<HTMLDialogElement>(null);
+  const memberCountWarningRef = useRef<HTMLDialogElement>(null);
+  const goalAmountWarningRef = useRef<HTMLDialogElement>(null);
+  const titleInputRef = useRef<HTMLInputElement>(null);
+  const contentInputRef = useRef<HTMLInputElement>(null);
+  const goalAmountInputRef = useRef<HTMLInputElement>(null);
 
-  const challengeSchema = Yup.object({});
+  const challengeSchema = Yup.object({
+    title: Yup.string().required("필수 입력 항목입니다."),
+    goal_amount: Yup.number().required("필수 입력 항목입니다."),
+  });
 
   const {
     formState: { errors },
     handleSubmit,
     setValue,
-    watch,
+    control,
+    reset,
   } = useForm({
     resolver: yupResolver(challengeSchema),
     mode: "onSubmit",
@@ -45,59 +47,85 @@ export default function ChallengeForm() {
       });
     }
   };
-  const handleTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setChallengeTitle(e.target.value);
-    setValue("title", challengeTitle);
+
+  const handleOnblurCount = (e: React.FocusEvent<HTMLInputElement>) => {
+    if (e.target.value === "") {
+      return;
+    }
+    if (isNaN(Number(e.target.value))) {
+      e.target.value = "";
+      setValue("goal_amount", 0);
+      if (!goalAmountWarningRef.current) {
+        return;
+      }
+      goalAmountWarningRef.current.showModal();
+      setTimeout(() => {
+        if (goalAmountWarningRef.current) {
+          goalAmountWarningRef.current.close();
+        }
+      }, 1500);
+      return;
+    }
+    const formattedValue = Number(e.target.value).toLocaleString("ko-KR");
+    e.target.value = formattedValue;
   };
 
-  const handleStartDate = (date: Date) => {
-    setStartDate(date);
-    const stringDate = startDate.toLocaleDateString("ko-KR");
-    setValue("start_date", stringDate);
-  };
-  const handleEndDate = (date: Date) => {
-    setEndDate(date);
-    const stringDate = endDate.toLocaleDateString("ko-KR");
-    setValue("end_date", stringDate);
+  const handleOnFocusCount = (e: React.FocusEvent<HTMLInputElement>) => {
+    const formattedValue = e.target.value.replace(/[^0-9]/g, "");
+    e.target.value = formattedValue;
   };
 
   const handleMemberCount: (updown: string) => void = (updown) => {
     switch (updown) {
       case "up":
         if (memberCount >= 10) {
-          if (dialogRef.current) {
-            dialogRef.current.showModal();
+          if (!memberCountWarningRef.current) {
+            return;
           }
+          memberCountWarningRef.current.showModal();
           setTimeout(() => {
-            if (dialogRef.current) {
-              dialogRef.current.close();
+            if (memberCountWarningRef.current) {
+              memberCountWarningRef.current.close();
             }
-          }, 2000);
+          }, 1500);
           return;
         }
         setMemberCount(memberCount + 1);
         break;
       case "down":
-        if (memberCount <= 0) {
+        if (memberCount <= 2) {
           return;
         }
         setMemberCount(memberCount - 1);
         break;
     }
-    setValue("member_count", memberCount);
   };
 
-  const handleSubmitChallenge = () => {
+  const handleSubmitChallenge = async (data: FieldValues) => {
     try {
-      console.log(watch("title"));
-      console.log(watch("image"));
-      console.log(watch("start_date"));
-      console.log(watch("end_date"));
-      console.log(watch("member_count"));
+      console.log(data);
     } catch (error) {
-      console.log(error);
+      console.log(`[handleSubmitChallenge] ${new Date()}: ${error}`);
     }
   };
+
+  const handleResetForm = () => {
+    if (
+      !titleInputRef.current ||
+      !contentInputRef.current ||
+      !goalAmountInputRef.current
+    ) {
+      return;
+    }
+    reset();
+    titleInputRef.current.value = "";
+    contentInputRef.current.value = "";
+    goalAmountInputRef.current.value = "";
+  };
+
+  useEffect(() => {
+    setValue("member_count", memberCount);
+  }, [memberCount, setValue]);
 
   return (
     <>
@@ -108,30 +136,44 @@ export default function ChallengeForm() {
             <label
               htmlFor="challenge_form"
               className="btn btn-ghost absolute top-4 right-2"
+              onClick={handleResetForm}
             >
               X
             </label>
             <h3 className="font-bold text-2xl mt-4 mb-4">챌린지 등록하기</h3>
             <form
               className="w-full h-full flex flex-col items-center"
-              onSubmit={handleSubmitChallenge}
+              onSubmit={handleSubmit(handleSubmitChallenge)}
               onSubmitCapture={(e) => {
                 e.preventDefault();
               }}
             >
-              <div className="form-control w-full justify-around items-center h-96">
-                <div className=" flex w-full justify-between items-center">
-                  <label htmlFor="title" className="label-text text-lg">
-                    제목
-                  </label>
-                  <input
-                    id="title"
-                    type="text"
-                    placeholder="제목을 입력해주세요."
-                    className="text-lg input h-10 w-9/12 max-w-xs border border-l-[0.4px] border-neutral-400"
-                    onChange={handleTitle}
-                  />
-                </div>
+              <div className="form-control w-full justify-evenly items-center h-96">
+                <Controller
+                  name="title"
+                  control={control}
+                  render={({ field }) => (
+                    <div className=" flex w-full justify-between items-center">
+                      <label htmlFor="title" className="label-text text-lg">
+                        제목
+                      </label>
+                      <input
+                        id="title"
+                        type="text"
+                        defaultValue={field.value}
+                        placeholder="제목을 입력해주세요."
+                        className="text-lg input h-10 w-9/12 max-w-xs border border-l-[0.4px] border-neutral-400"
+                        onChange={(e) => field.onChange(e.target.value)}
+                        ref={titleInputRef}
+                      />
+                    </div>
+                  )}
+                />
+                {errors.title && (
+                  <span className="message text-xs text-error text-center">
+                    {`${errors.title.message}`}
+                  </span>
+                )}
                 <div className="w-full">
                   <label
                     htmlFor="image_input"
@@ -147,45 +189,98 @@ export default function ChallengeForm() {
                     className="hidden"
                   />
                 </div>
-                <div className="flex w-full justify-between items-center">
-                  <label htmlFor="title" className="label-text text-lg">
-                    부제
-                  </label>
-                  <input
-                    id="subtitle"
-                    type="text"
-                    placeholder="제목을 입력해주세요."
-                    className="text-lg input h-10 w-9/12 max-w-xs border border-l-[0.4px] border-neutral-400"
-                  />
-                </div>
+                <Controller
+                  name="content"
+                  control={control}
+                  render={({ field }) => (
+                    <div className=" flex w-full justify-between items-center">
+                      <label htmlFor="content" className="label-text text-lg">
+                        부제
+                      </label>
+                      <input
+                        id="content"
+                        type="text"
+                        defaultValue={field.value}
+                        placeholder="부제를 입력해주세요."
+                        className="text-lg input h-10 w-9/12 max-w-xs border border-l-[0.4px] border-neutral-400"
+                        onChange={(e) => field.onChange(e.target.value)}
+                        ref={contentInputRef}
+                      />
+                    </div>
+                  )}
+                />
                 <div className="relative flex w-full justify-between items-center">
                   <label htmlFor="title" className="label-text text-lg w-14">
                     기간
                   </label>
                   <div className="w-9/12 flex">
-                    <Calendar
-                      selectedDate={startDate}
-                      handleSelectedDate={handleStartDate}
+                    <Controller
+                      name="start_date"
+                      control={control}
+                      defaultValue={startDate.toLocaleDateString("ko-KR")}
+                      render={({ field }) => (
+                        <RangeCalendarStart
+                          startDate={startDate}
+                          endDate={endDate}
+                          handleSelectedDate={(date) => {
+                            field.onChange(date.toLocaleDateString("ko-KR"));
+                            setStartDate(date);
+                          }}
+                        />
+                      )}
                     />
-                    <Calendar
-                      selectedDate={endDate}
-                      handleSelectedDate={handleEndDate}
+                    <Controller
+                      name="end_date"
+                      control={control}
+                      defaultValue={endDate.toLocaleDateString("ko-KR")}
+                      render={({ field }) => (
+                        <RangeCalendarEnd
+                          startDate={startDate}
+                          endDate={endDate}
+                          handleSelectedDate={(date) => {
+                            field.onChange(date.toLocaleDateString("ko-KR"));
+                            setEndDate(date);
+                          }}
+                        />
+                      )}
                     />
                   </div>
                 </div>
+                <Controller
+                  name="goal_amount"
+                  control={control}
+                  render={({ field }) => (
+                    <div className=" flex w-full justify-between items-center">
+                      <label
+                        htmlFor="goal_amount"
+                        className="label-text text-lg"
+                      >
+                        금액
+                      </label>
+                      <input
+                        id="goal_amount"
+                        type="text"
+                        defaultValue={field.value}
+                        placeholder="목표 금액을 입력해주세요."
+                        className="text-lg input h-10 w-9/12 max-w-xs border border-l-[0.4px] border-neutral-400 pr-10"
+                        onChange={(e) =>
+                          field.onChange(e.target.value.replace(/[^0-9]/g, ""))
+                        }
+                        onBlur={handleOnblurCount}
+                        onFocus={handleOnFocusCount}
+                        ref={goalAmountInputRef}
+                      />
+                      <span className="absolute text-lg right-8">원</span>
+                    </div>
+                  )}
+                />
+                {errors.goal_amount && (
+                  <span className="message text-xs text-error text-center">
+                    {`${errors.goal_amount.message}`}
+                  </span>
+                )}
                 <div className=" flex w-full justify-between items-center">
-                  <label htmlFor="title" className="label-text text-lg">
-                    금액
-                  </label>
-                  <input
-                    id="title"
-                    type="text"
-                    placeholder="목표 금액을 입력해주세요."
-                    className="text-lg input h-10 w-9/12 max-w-xs border border-l-[0.4px] border-neutral-400"
-                  />
-                </div>
-                <div className=" flex w-full justify-between items-center">
-                  <label htmlFor="title" className="label-text text-lg">
+                  <label htmlFor="member_count" className="label-text text-lg">
                     모집인원
                   </label>
                   <div className="w-9/12 flex items-center justify-center">
@@ -200,10 +295,8 @@ export default function ChallengeForm() {
                     </button>
                     <input
                       id="title"
-                      type="text"
-                      defaultValue={0}
+                      type="member_count"
                       value={memberCount}
-                      placeholder=""
                       disabled
                       className="text-lg h-10 w-20 text-center border border-l-[0.4px] border-neutral-400"
                     />
@@ -220,17 +313,19 @@ export default function ChallengeForm() {
                   </div>
                 </div>
               </div>
-              <button
-                // htmlFor="challenge_form"
-                className="btn btn-accent w-full my-4"
-              >
+              <button className="btn btn-accent w-full my-4 mt-auto">
                 챌린지 등록
               </button>
             </form>
             <InformModal
-              dialogRef={dialogRef}
+              dialogRef={memberCountWarningRef}
               loading={false}
               inform="최대 모집 인원 수는 10명입니다."
+            />
+            <InformModal
+              dialogRef={goalAmountWarningRef}
+              loading={false}
+              inform="숫자만 입력 가능합니다."
             />
           </Container>
         </div>
