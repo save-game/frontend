@@ -11,9 +11,9 @@ import { addComma, getDayFunc } from "../helpers/helper.js";
 import MonthPicker from "../components/AccountPage/MonthPicker.js";
 import AnalyzeForm from "../components/AccountPage/AnalyzeForm.js";
 import FilterBtn from "../components/AccountPage/FilterBtn.js";
-import ExpensesForm from "../components/ExpensesForm.js";
 import { categoryList } from "../constants/expenseCategory.js";
 import { FilteredDataForm } from "../components/AccountPage/FilterDataForm.js";
+import ExpenseFormButton from "../components/ExpenseFormButton.js";
 
 export interface ExpenseData {
   recordId: number;
@@ -30,7 +30,6 @@ export const useTest = axios.get("./src/test/useTest.json");
 export default function Account() {
   const [isSubmit] = useRecoilState(isSubmitState);
   const [, setFilterForm] = useRecoilState(filterFormState);
-  const [expensesForm, setExpensesForm] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [analyze, setAnalyze] = useState(false);
   const [data, setData] = useState<ExpenseData[]>([]);
@@ -122,19 +121,9 @@ export default function Account() {
                   <FilterBtn onClick={() => setFilterForm(true)}>
                     필터선택
                   </FilterBtn>
-                  <button
-                    type="button"
-                    onClick={() => setExpensesForm(true)}
-                    className="w-32 btn btn-sm btn-accent text-base-100"
-                  >
-                    지출등록
-                  </button>
-                  {expensesForm ? (
-                    <ExpensesForm
-                      formEditor={setExpensesForm}
-                      formStatus={false}
-                    />
-                  ) : null}
+                  <div className="w-32">
+                    <ExpenseFormButton size={"small"} />
+                  </div>
                 </div>
 
                 <div className="w-full">
