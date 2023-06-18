@@ -1,4 +1,5 @@
-import { dDayCalculator } from "../helpers/helper";
+import { useNavigate } from "react-router-dom";
+import { dDayCalculator } from "../../helpers/helper";
 
 export default function MyChallengeCard({
   myChallenge,
@@ -6,9 +7,11 @@ export default function MyChallengeCard({
   myChallenge: { challengeId: number; title: string; endDate: string };
 }) {
   const daysDiff = dDayCalculator(myChallenge.endDate);
+  const navigate = useNavigate();
 
   const handleClickCard = () => {
     console.log(myChallenge.challengeId);
+    navigate(`/challenge/${myChallenge.challengeId}`);
   };
 
   return (

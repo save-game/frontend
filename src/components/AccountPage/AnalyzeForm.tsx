@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import ExpenseGraph from "../ExpenseGraph";
+import ExpenseGraph from "../Expenses/ExpenseGraph";
 import { ExpenseData } from "./Account";
 import { addComma } from "../../helpers/helper";
 import { axiosData } from "./getApi";

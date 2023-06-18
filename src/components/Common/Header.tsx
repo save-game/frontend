@@ -41,7 +41,7 @@ const Header = () => {
   const [selectedMenu, setSelectedMenu] = useState("홈");
 
   useEffect(() => {
-    const path = menuList.find((item) => item.pathname === pathname);
+    const path = menuList.find((item) => pathname.includes(item.pathname));
     if (path) {
       setSelectedMenu(path.name);
     }

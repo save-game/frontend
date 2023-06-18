@@ -1,0 +1,2 @@
+export const SHOW_MODAL_DELAY = 1000;
+export const SHOW_WARNING_MODAL_DELAY = 1500;
