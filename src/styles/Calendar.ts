@@ -40,4 +40,8 @@ export const DatePickerWrapper = styled.div`
   .react-datepicker__day--outside-month {
     ${tw`text-neutral-300`}
   }
+
+  .react-datepicker__day--in-selecting-range {
+    ${tw`text-base-100 bg-accent rounded-full`}
+  }
 `;

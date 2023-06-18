@@ -1,3 +1,5 @@
+import ChallengeForm from "../components/ChallengeForm";
+
 interface ExpenseRecord {
   readonly date: string;
   readonly amount: number;
@@ -20,4 +22,10 @@ export interface ChallengeData {
   readonly category: string;
   readonly d_day: number;
   readonly challengeMemberList: ChallengeMemberData[];
+}
+
+export interface RangeCalendarProps {
+  readonly startDate: Date;
+  readonly endDate: Date;
+  readonly handleSelectedDate: (date: Date) => void;
 }
