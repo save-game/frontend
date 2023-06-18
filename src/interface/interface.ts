@@ -3,11 +3,13 @@ interface ExpenseRecord {
   readonly amount: number;
 }
 
-interface ChallengeMemberData {
+export interface ChallengeMemberData {
   readonly memberId: number;
   readonly nickName: string;
+  readonly color: string;
   readonly status: 0 | 1;
   readonly recordList: ExpenseRecord[];
+  readonly ttlAmount?: string;
 }
 
 export interface ChallengeData {
@@ -20,4 +22,10 @@ export interface ChallengeData {
   readonly category: string;
   readonly d_day: number;
   readonly challengeMemberList: ChallengeMemberData[];
+}
+
+export interface UserInfo {
+  readonly email: string;
+  readonly nickname: string;
+  readonly imageUrl: string;
 }
