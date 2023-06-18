@@ -5,9 +5,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import styled from "styled-components";
 import tw from "twin.macro";
 
-import Calendar, { RangeCalendarStart, RangeCalendarEnd } from "./Calendar";
+import { RangeCalendarStart, RangeCalendarEnd } from "./Calendar";
 import InformModal from "./Common/InformModal";
 import { addOneMonth } from "../helpers/helper";
+
+const SHOW_WARNING_MODAL_DELAY = 1500;
 
 export default function ChallengeForm() {
   const [memberCount, setMemberCount] = useState<number>(2);
@@ -63,7 +65,7 @@ export default function ChallengeForm() {
         if (goalAmountWarningRef.current) {
           goalAmountWarningRef.current.close();
         }
-      }, 1500);
+      }, SHOW_WARNING_MODAL_DELAY);
       return;
     }
     const formattedValue = Number(e.target.value).toLocaleString("ko-KR");
@@ -87,7 +89,7 @@ export default function ChallengeForm() {
             if (memberCountWarningRef.current) {
               memberCountWarningRef.current.close();
             }
-          }, 1500);
+          }, SHOW_WARNING_MODAL_DELAY);
           return;
         }
         setMemberCount(memberCount + 1);
