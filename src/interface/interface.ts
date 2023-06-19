@@ -1,6 +1,4 @@
-import ChallengeForm from "../components/Challenge/ChallengeForm";
-
-interface ExpenseRecord {
+export interface ExpenseRecord {
   readonly date: string;
   readonly amount: number;
 }
