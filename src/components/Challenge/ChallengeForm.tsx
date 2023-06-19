@@ -37,18 +37,6 @@ export default function ChallengeForm() {
     mode: "onSubmit",
   });
 
-  const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const fileList = e.target.files;
-    if (fileList && fileList[0]) {
-      const url = URL.createObjectURL(fileList[0]);
-      setValue("image", {
-        file: fileList[0],
-        thumnail: url,
-        name: fileList[0].name,
-      });
-    }
-  };
-
   const handleOnblurCount = (e: React.FocusEvent<HTMLInputElement>) => {
     if (e.target.value === "") {
       return;
@@ -106,7 +94,9 @@ export default function ChallengeForm() {
     try {
       console.log(data);
     } catch (error) {
-      console.log(`[handleSubmitChallenge] ${new Date()}: ${error}`);
+      console.error(
+        `handleSubmitChallenge Error: Time(${new Date()}) ERROR ${error}`
+      );
     }
   };
 
@@ -175,21 +165,6 @@ export default function ChallengeForm() {
                     {`${errors.title.message}`}
                   </span>
                 )}
-                <div className="w-full">
-                  <label
-                    htmlFor="image_input"
-                    className="btn btn-outline text-lg btn-ghost w-full shadow-md btn-sm"
-                  >
-                    배경 이미지 넣기+
-                  </label>
-                  <input
-                    id="image_input"
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImage}
-                    className="hidden"
-                  />
-                </div>
                 <Controller
                   name="content"
                   control={control}
@@ -218,13 +193,13 @@ export default function ChallengeForm() {
                     <Controller
                       name="start_date"
                       control={control}
-                      defaultValue={startDate.toLocaleDateString("ko-KR")}
+                      defaultValue={startDate.toLocaleDateString("en-US")}
                       render={({ field }) => (
                         <RangeCalendarStart
                           startDate={startDate}
                           endDate={endDate}
                           handleSelectedDate={(date) => {
-                            field.onChange(date.toLocaleDateString("ko-KR"));
+                            field.onChange(date.toLocaleDateString("en-US"));
                             setStartDate(date);
                           }}
                         />
@@ -233,13 +208,13 @@ export default function ChallengeForm() {
                     <Controller
                       name="end_date"
                       control={control}
-                      defaultValue={endDate.toLocaleDateString("ko-KR")}
+                      defaultValue={endDate.toLocaleDateString("en-US")}
                       render={({ field }) => (
                         <RangeCalendarEnd
                           startDate={startDate}
                           endDate={endDate}
                           handleSelectedDate={(date) => {
-                            field.onChange(date.toLocaleDateString("ko-KR"));
+                            field.onChange(date.toLocaleDateString("en-US"));
                             setEndDate(date);
                           }}
                         />
