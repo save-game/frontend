@@ -12,11 +12,6 @@ export interface ChallengeMemberResultData {
 }
 
 export interface ChallengeMemberData extends ChallengeMemberResultData {
-  // readonly memberId: number;
-  // readonly nickName: string;
-  // readonly color: string;
-  // readonly status: 0 | 1;
-  // readonly total_amount: number;
   readonly recordList: ExpenseRecord[];
   readonly isFirst: boolean;
 }
