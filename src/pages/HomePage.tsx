@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
 import axios from "axios";
+import { useNavigate } from "react-router";
 
 import ExpenseGraphContainer from "../components/Expenses/ExpenseGraphContainer";
 import MyChallengeCard from "../components/Challenge/MyChallengeCard";
@@ -18,12 +19,20 @@ export default function Home() {
   const [nickName, setNickName] = useState("닉네임(기본값)");
   const [myChallengeList, setMyChallengeList] = useState<MyChallengeList[]>();
 
+  const navigate = useNavigate();
+
+  const handleMoveChallengeHome = () => {
+    navigate("/challenge");
+  };
+
   const getMyChallengeList = async () => {
     try {
       const response = await axios.get("./src/test/challengeHomeTest.json");
       setMyChallengeList(response.data);
     } catch (error) {
-      console.error(error);
+      console.error(
+        `getMyChallengeList Error: Time(${new Date()}) ERROR ${error}`
+      );
     }
   };
 
@@ -54,7 +63,10 @@ export default function Home() {
         ) : (
           <div className="text-black mt-10 w-full">
             <p className="mb-4">새로운 챌린지에 도전해 보세요!</p>
-            <button className="btn btn-accent w-full h-20 ">
+            <button
+              className="btn btn-accent w-full h-20 "
+              onClick={handleMoveChallengeHome}
+            >
               챌린지 둘러보러 가기
             </button>
           </div>
