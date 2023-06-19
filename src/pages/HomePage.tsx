@@ -70,7 +70,7 @@ const Container = styled.div`
 
 const ProfileContainer = styled.div`
   font-weight: 300;
-  ${tw`h-20 w-full flex items-center mt-10 px-4 pb-2 shadow-md rounded-md`}
+  ${tw`h-20 w-full flex items-center px-4 pb-2 shadow-md rounded-md`}
 `;
 
 const ProfileImg = styled.img`
