@@ -5,13 +5,21 @@ interface ExpenseRecord {
   readonly amount: number;
 }
 
-export interface ChallengeMemberData {
+export interface ChallengeMemberResultData {
   readonly memberId: number;
   readonly nickName: string;
   readonly color: string;
   readonly status: 0 | 1;
+  readonly total_amount: number;
+}
+
+export interface ChallengeMemberData extends ChallengeMemberResultData {
+  // readonly memberId: number;
+  // readonly nickName: string;
+  // readonly color: string;
+  // readonly status: 0 | 1;
+  // readonly total_amount: number;
   readonly recordList: ExpenseRecord[];
-  readonly ttlAmount?: string;
   readonly isFirst: boolean;
 }
 
@@ -25,6 +33,16 @@ export interface ChallengeData {
   readonly category: string;
   readonly d_day: number;
   readonly challengeMemberList: ChallengeMemberData[];
+}
+export interface ChallengeResultData {
+  readonly title: string;
+  readonly content: string;
+  readonly challenge_status: 0 | 1;
+  readonly start_date: string;
+  readonly end_date: string;
+  readonly goal_amount: number;
+  readonly category: string;
+  readonly challengeMemberList: ChallengeMemberResultData[];
 }
 
 export interface UserInfo {

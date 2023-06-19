@@ -4,9 +4,16 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { dDayCalculator } from "../helpers/helper";
-import { ChallengeData, ChallengeMemberData } from "../interface/interface";
+import {
+  ChallengeData,
+  ChallengeMemberData,
+  ChallengeMemberResultData,
+  ChallengeResultData,
+} from "../interface/interface";
 import ChallengeStatus from "../components/Challenge/ChallengeStatus";
 import ChallengeResult from "../components/Challenge/ChallengeResult";
+import { BiWon } from "react-icons/Bi";
+import { GiTwoCoins } from "react-icons/Gi";
 
 const Container = styled.div`
   ${tw`mx-auto pt-8 text-neutral-600 font-bold text-sm text-center`}
@@ -14,43 +21,55 @@ const Container = styled.div`
 
 const ChallengeRoom = () => {
   const { challengeId } = useParams();
-  const [challengeData, setChallengeDate] = useState<ChallengeData | null>(
-    null
-  );
+  const [challengeData, setChallengeData] = useState<
+    ChallengeData | ChallengeResultData | null
+  >(null);
   const [isOpen, setIsOpen] = useState(false);
   const [tabMenu, setTabMenu] = useState("챌린지 현황");
+  const goalAmount = challengeData?.goal_amount.toLocaleString("ko-KR");
 
   // challengeId로 정보 서버에서 받아오기
   const getMyChallengeList = async () => {
     try {
       const { data } = await axios.get("/src/test/challengeStatus.json");
-      const listWithTotalAmount = data.challengeMemberList
-        .map((info: ChallengeMemberData) => {
-          const ttlAmount = info.recordList
-            .map((record) => record.amount)
-            .reduce((pre, cur) => pre + cur)
-            .toLocaleString("ko-KR");
-          return { ...info, ttlAmount: ttlAmount };
-        })
-        .sort((a: ChallengeMemberData, b: ChallengeMemberData) => {
-          if (!a.ttlAmount || !b.ttlAmount) return;
-          const toNumber = (nbr: string) => {
-            return Number(nbr.replace(/,/g, ""));
-          };
-          return toNumber(a.ttlAmount) - toNumber(b.ttlAmount);
-        })
-        .map((info: ChallengeMemberData, idx: number) => {
-          const ranking = idx === 0 && info.status === 1 ? true : false;
-          return { ...info, isFirst: ranking };
-        });
-      const daysDiff = dDayCalculator(data.end_date);
-      const addedData = {
-        ...data,
-        d_day: daysDiff,
-        challengeMemberList: listWithTotalAmount,
-      };
-      setChallengeDate(addedData);
-      console.log(addedData);
+      if (data.challenge_status === 1) {
+        const listWithTotalAmount = data.challengeMemberList
+          .map((info: ChallengeMemberData) => {
+            const ttlAmount = info.recordList
+              .map((record) => record.amount)
+              .reduce((pre, cur) => pre + cur);
+            return { ...info, total_amount: ttlAmount };
+          })
+          .sort((a: ChallengeMemberData, b: ChallengeMemberData) => {
+            if (!a.total_amount || !b.total_amount) return;
+            return a.total_amount - b.total_amount;
+          })
+          .map((info: ChallengeMemberData, idx: number) => {
+            const ranking = idx === 0 && info.status === 1 ? true : false;
+            return { ...info, isFirst: ranking };
+          });
+        const daysDiff = dDayCalculator(data.end_date);
+        const addedData = {
+          ...data,
+          d_day: daysDiff,
+          challengeMemberList: listWithTotalAmount,
+        };
+        setChallengeData(addedData);
+        console.log(addedData);
+      } else {
+        //실제로는 위에 data를 바로 setChallengeData하면 된다
+        //아래는 별도 fake data적용하기 위한 임시 코드임
+        const { data } = await axios.get("/src/test/challengeResult.json");
+        const sortedMemberList = data.challengeMemberList.sort(
+          (a: ChallengeMemberResultData, b: ChallengeMemberResultData) => {
+            if (!a.total_amount || !b.total_amount) return;
+            return a.total_amount - b.total_amount;
+          }
+        );
+        const sortedData = { ...data, challengeMemberList: sortedMemberList };
+        setChallengeData(sortedData);
+        console.log(sortedData);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -100,13 +119,25 @@ const ChallengeRoom = () => {
               ))}
             </div>
             {tabMenu === "챌린지 현황" ? (
-              <ChallengeStatus data={challengeData} />
+              <ChallengeStatus data={challengeData as ChallengeData} />
             ) : (
               <div>게시판</div>
             )}
           </>
         ) : (
-          <ChallengeResult />
+          <>
+            <div className="text-cyan-950 text-sm flex justify-center items-center bg-base-color  rounded-lg  shadow py-3 mx-2 mb-2">
+              <GiTwoCoins size={17} className="text-yellow-400 mr-1" />
+              <div className="mr-2">목표금액</div>
+              <BiWon size={13} className="mr-0.5" />
+              <div>{goalAmount}</div>
+            </div>
+            <ChallengeResult
+              data={
+                challengeData.challengeMemberList as ChallengeMemberResultData[]
+              }
+            />
+          </>
         )}
       </Container>
     </main>
