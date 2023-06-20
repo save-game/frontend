@@ -20,7 +20,7 @@ interface ChallengeDataProps {
 const ChallengeStatus = ({ data }: ChallengeDataProps) => {
   const [isStart, setIsStart] = useState<boolean | null>(null);
   const [startDday, setStartDday] = useState<number | null>(null);
-  const amountString = data.goal_amount.toLocaleString();
+  const goalAmount = data.goal_amount.toLocaleString();
 
   useEffect(() => {
     const today = new Date();
@@ -37,6 +37,12 @@ const ChallengeStatus = ({ data }: ChallengeDataProps) => {
   return (
     <ArticleContainer>
       <div className="w-11/12 mx-auto">
+        <div className="text-cyan-950 text-sm flex justify-center items-center bg-teal-50  rounded-lg  shadow py-3 mb-2">
+          <GiTwoCoins size={17} className="text-yellow-400 mr-1" />
+          <div className="mr-2">목표금액</div>
+          <BiWon size={13} className="mr-0.5" />
+          <div>{goalAmount}</div>
+        </div>
         {isStart ? (
           <div className="text-xs flex justify-around items-center bg-base-100  rounded-lg h-10 shadow mb-2">
             <div className="pt-0.5">
@@ -60,12 +66,6 @@ const ChallengeStatus = ({ data }: ChallengeDataProps) => {
             </div>
           </div>
         )}
-        <div className="text-cyan-950 text-sm flex justify-center items-center bg-base-100  rounded-lg  shadow py-3 mb-2">
-          <GiTwoCoins size={17} className="text-yellow-400 mr-1" />
-          <div className="mr-2">목표금액</div>
-          <BiWon size={13} className="mr-0.5" />
-          <div>{amountString}</div>
-        </div>
 
         {isStart ? (
           <ChallengeChart challengeData={data} />

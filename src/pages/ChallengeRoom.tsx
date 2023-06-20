@@ -14,6 +14,7 @@ import ChallengeStatus from "../components/Challenge/ChallengeStatus";
 import ChallengeResult from "../components/Challenge/ChallengeResult";
 import { BiWon } from "react-icons/Bi";
 import { GiTwoCoins } from "react-icons/Gi";
+import { challengersColor } from "../constants/challengersColor";
 
 const Container = styled.div`
   ${tw`mx-auto pt-8 text-neutral-600 font-bold text-sm text-center`}
@@ -30,22 +31,33 @@ const ChallengeRoom = () => {
 
   // challengeId로 정보 서버에서 받아오기
   const getMyChallengeList = async () => {
+    let minAmount = 0;
     try {
       const { data } = await axios.get("/src/test/challengeStatus.json");
       if (data.challenge_status === 1) {
         const listWithTotalAmount = data.challengeMemberList
-          .map((info: ChallengeMemberData) => {
+          .map((info: ChallengeMemberData, idx: number) => {
             const ttlAmount = info.recordList
               .map((record) => record.amount)
               .reduce((pre, cur) => pre + cur);
-            return { ...info, total_amount: ttlAmount };
+            return {
+              ...info,
+              total_amount: ttlAmount,
+              color: challengersColor[idx],
+            };
           })
           .sort((a: ChallengeMemberData, b: ChallengeMemberData) => {
             if (!a.total_amount || !b.total_amount) return;
             return a.total_amount - b.total_amount;
           })
           .map((info: ChallengeMemberData, idx: number) => {
-            const ranking = idx === 0 && info.status === 1 ? true : false;
+            if (idx === 0) {
+              minAmount = info.total_amount;
+            }
+            const ranking =
+              info.total_amount === minAmount && info.status === 1
+                ? true
+                : false;
             return { ...info, isFirst: ranking };
           });
         const daysDiff = dDayCalculator(data.end_date);

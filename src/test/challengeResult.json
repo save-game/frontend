@@ -10,21 +10,18 @@
     {
       "memberId": 1,
       "nickName": "nickName1",
-      "color": "#e787d5",
       "status": 1,
       "total_amount": 400000
     },
     {
       "memberId": 2,
       "nickName": "nickName2",
-      "color": "#348bdc",
       "status": 1,
       "total_amount": 200000
     },
     {
       "memberId": 3,
       "nickName": "nickName3",
-      "color": "#c4dc6f",
       "status": 0,
       "total_amount": 600000
     }

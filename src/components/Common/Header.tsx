@@ -8,7 +8,7 @@ import { GiSevenPointedStar } from "react-icons/Gi";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const HeaderContainer = styled.header`
-  ${tw`btm-nav bg-light-color shadow-inner shadow-[#e0edea]`}
+  ${tw`btm-nav bg-teal-50 shadow-inner shadow-[#e0edea]`}
 `;
 
 const NavBtn = styled.button<{ selected: boolean }>`

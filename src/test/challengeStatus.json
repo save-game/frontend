@@ -10,7 +10,6 @@
     {
       "memberId": 1,
       "nickName": "nickName1",
-      "color": "#e787d5",
       "status": 1,
       "recordList": [
         {
@@ -30,7 +29,6 @@
     {
       "memberId": 2,
       "nickName": "nickName2",
-      "color": "#348bdc",
       "status": 1,
       "recordList": [
         {
@@ -54,7 +52,6 @@
     {
       "memberId": 3,
       "nickName": "nickName3",
-      "color": "#c4dc6f",
       "status": 0,
       "recordList": [
         {
@@ -72,6 +69,163 @@
         {
           "date": "2023-06-11",
           "amount": 200000
+        }
+      ]
+    },
+    {
+      "memberId": 4,
+      "nickName": "nickName4",
+      "status": 1,
+      "recordList": [
+        {
+          "date": "2023-06-02",
+          "amount": 10000
+        },
+        {
+          "date": "2023-06-03",
+          "amount": 10000
+        },
+        {
+          "date": "2023-06-07",
+          "amount": 10000
+        },
+        {
+          "date": "2023-06-11",
+          "amount": 20000
+        }
+      ]
+    },
+    {
+      "memberId": 5,
+      "nickName": "nickName5",
+      "status": 1,
+      "recordList": [
+        {
+          "date": "2023-06-02",
+          "amount": 10000
+        },
+        {
+          "date": "2023-06-03",
+          "amount": 3000
+        },
+        {
+          "date": "2023-06-07",
+          "amount": 10000
+        },
+        {
+          "date": "2023-06-11",
+          "amount": 200000
+        }
+      ]
+    },
+    {
+      "memberId": 6,
+      "nickName": "nickName6",
+      "status": 1,
+      "recordList": [
+        {
+          "date": "2023-06-02",
+          "amount": 10000
+        },
+        {
+          "date": "2023-06-03",
+          "amount": 150000
+        },
+        {
+          "date": "2023-06-07",
+          "amount": 3000
+        },
+        {
+          "date": "2023-06-11",
+          "amount": 40000
+        }
+      ]
+    },
+    {
+      "memberId": 7,
+      "nickName": "nickName7",
+      "status": 1,
+      "recordList": [
+        {
+          "date": "2023-06-02",
+          "amount": 50000
+        },
+        {
+          "date": "2023-06-03",
+          "amount": 50000
+        },
+        {
+          "date": "2023-06-07",
+          "amount": 60000
+        },
+        {
+          "date": "2023-06-11",
+          "amount": 100000
+        }
+      ]
+    },
+    {
+      "memberId": 8,
+      "nickName": "nickName8",
+      "status": 1,
+      "recordList": [
+        {
+          "date": "2023-06-02",
+          "amount": 40000
+        },
+        {
+          "date": "2023-06-05",
+          "amount": 150000
+        },
+        {
+          "date": "2023-06-08",
+          "amount": 60000
+        },
+        {
+          "date": "2023-06-11",
+          "amount": 20000
+        }
+      ]
+    },
+    {
+      "memberId": 9,
+      "nickName": "nickName9",
+      "status": 1,
+      "recordList": [
+        {
+          "date": "2023-06-02",
+          "amount": 10000
+        },
+        {
+          "date": "2023-06-03",
+          "amount": 150000
+        },
+        {
+          "date": "2023-06-09",
+          "amount": 300000
+        }
+      ]
+    },
+    {
+      "memberId": 10,
+      "nickName": "nickName10",
+      "status": 1,
+      "recordList": [
+        {
+          "date": "2023-06-02",
+          "amount": 10000
+        },
+        {
+          "date": "2023-06-04",
+          "amount": 20000
+        },
+        {
+          "date": "2023-06-05",
+          "amount": 80000
+        },
+        {
+          "date": "2023-06-10",
+          "amount": 40000
         }
       ]
     }
