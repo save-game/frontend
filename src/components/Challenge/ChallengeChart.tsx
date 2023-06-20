@@ -13,14 +13,15 @@ import { Line } from "react-chartjs-2";
 import { ChallengeData } from "../../interface/interface";
 import { dateRangeCalculator } from "../../helpers/helper";
 import MembersStatus from "./MembersStatus";
+import { MdPeople } from "react-icons/Md";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement);
 
-interface Props {
+interface ChallengeDataProps {
   challengeData: ChallengeData;
 }
 
-const ChallengeChart = ({ challengeData }: Props) => {
+const ChallengeChart = ({ challengeData }: ChallengeDataProps) => {
   const options: ChartOptions<"line"> = {
     responsive: true,
     plugins: {
@@ -121,20 +122,21 @@ const ChallengeChart = ({ challengeData }: Props) => {
 
   return (
     <>
-      <div className="bg-base-100 rounded-lg mt-3">
+      <div className="bg-base-100 rounded-lg mt-3 shadow">
         <div className="text-[9px] font-light text-neutral-500 text-left -my-1 pl-0.5">
           만원
         </div>
         <Line data={data} options={options} />
       </div>
-      <div className="flex items-center bg-base-100 rounded-lg mt-3 text-xs p-2 font-light">
-        <div className="mr-1">참가자 : </div>
-        <div>{expenseData.length} 명</div>
+      <div className="flex items-center bg-base-100 shadow rounded-lg mt-3 text-xs p-2 font-light">
+        <MdPeople size={15} className="mr-1 text-neutral-500" />
+        <div className="mr-1 pt-0.5">참가자 : </div>
+        <div className="pt-0.5">{expenseData.length} 명</div>
       </div>
-      <ul className="bg-base-100 rounded-lg mt-3 text-xs p-2 font-light">
+      <ul className="bg-base-100 rounded-lg shadow mt-3 text-xs p-2 font-light">
         {challengeData.challengeMemberList.map((challengersData) => (
           <li key={challengersData.memberId}>
-            <MembersStatus data={challengersData} />
+            <MembersStatus data={challengersData} top={false} />
           </li>
         ))}
       </ul>
