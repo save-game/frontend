@@ -17,7 +17,12 @@ interface Props {
   readonly top: boolean;
 }
 
-const MemberListContainer = styled.div<{ status: 1 | 0; top: boolean }>`
+const MemberListContainer = styled.div<{
+  status: 1 | 0;
+  top: boolean;
+  color: string;
+  mine: boolean;
+}>`
   ${(props) =>
     props.top
       ? css`
@@ -27,9 +32,16 @@ const MemberListContainer = styled.div<{ status: 1 | 0; top: boolean }>`
           ${tw`flex justify-center items-center py-1 rounded text-xs`}
           background: ${props.status === 1 ? "inherit" : "#edecec"};
         `};
+  color: ${(props) => (props.status === 1 ? `${props.color}` : "#787777")};
+  ${(props) =>
+    props.mine
+      ? css`
+          ${tw`bg-teal-50`}
+        `
+      : ``}
 `;
 
-const ColoredTextContainer = styled.div<{ color: string; top: boolean }>`
+const ColoredTextContainer = styled.div<{ top: boolean }>`
   ${(props) =>
     props.top
       ? css`
@@ -38,16 +50,17 @@ const ColoredTextContainer = styled.div<{ color: string; top: boolean }>`
       : css`
           ${tw`w-3/5 flex  items-center`}
         `};
-
-  color: ${(props) => props.color};
 `;
 
 const MembersStatus = ({ data, top }: Props) => {
   const [memberInfo, setMemberInfo] = useState<UserInfo | null>(null);
   const [isOpen, setIsOpen] = useState<boolean | null>(null);
   const [isFirst, setIsFirst] = useState<boolean | null>(null);
+  const [myStatus, setMyStatus] = useState<boolean>(false);
   const ttlAmount = data.total_amount.toLocaleString("ko-KR");
 
+  //실제로는 로그인 정보에서 memberId받기
+  const memberId = 5;
   // memberId로 정보 서버에서 받아오기
   const getMemberData = async () => {
     try {
@@ -60,6 +73,11 @@ const MembersStatus = ({ data, top }: Props) => {
 
   useEffect(() => {
     getMemberData();
+    if (data.memberId === memberId) {
+      setMyStatus(true);
+    } else {
+      setMyStatus(false);
+    }
     if ("isFirst" in data) {
       setIsOpen(true);
       if (data.isFirst) {
@@ -73,7 +91,12 @@ const MembersStatus = ({ data, top }: Props) => {
 
   return (
     <>
-      <MemberListContainer status={isOpen ? data.status : 1} top={top}>
+      <MemberListContainer
+        status={isOpen ? data.status : 1}
+        top={top}
+        color={data.color}
+        mine={myStatus}
+      >
         <div className="relative w-7 flex justify-center items-center text-neutral-400 mr-1">
           {isFirst ? (
             <div className="relative text-amber-400">
@@ -106,7 +129,7 @@ const MembersStatus = ({ data, top }: Props) => {
           )}
         </div>
 
-        <ColoredTextContainer color={data.color} top={top}>
+        <ColoredTextContainer top={top}>
           <div className={`${top ? `w-3/5` : `w-2/5 `} truncate mx-1`}>
             {data.nickName}
           </div>
