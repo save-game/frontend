@@ -10,7 +10,7 @@ import {
   isSubmitState,
   startDateState,
 } from "../../Recoil";
-import { ExpenseData } from "../../pages/AccountPage";
+import { ExpenseData } from "./Account";
 
 export default function SubmitForm() {
   const [startDate, setStartDate] = useRecoilState(startDateState);
@@ -43,13 +43,13 @@ export default function SubmitForm() {
             <button
               onClick={onSubmit}
               type="submit"
-              className="mr-5 btn btn-sm btn-accent text-base-100"
+              className="w-20 mr-5 btn btn-sm btn-accent text-base-100"
             >
               적용
             </button>
             <button
               onClick={() => setFilterForm(false)}
-              className="ml-5 btn btn-sm btn-accent text-base-100"
+              className="w-20 ml-5 btn btn-sm btn-accent text-base-100"
             >
               닫기
             </button>

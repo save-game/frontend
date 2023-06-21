@@ -17,8 +17,10 @@ import AnalyzeForm from "../../components/AccountPage/AnalyzeForm.js";
 import FilterBtn from "../../components/AccountPage/FilterBtn.js";
 import { categoryList } from "../../constants/expenseCategory.js";
 import { FilteredDataForm } from "../../components/AccountPage/FilterDataForm.js";
-import { useTest } from "../../components/AccountPage/getApi.js";
+
 import ExpenseFormButton from "../Expenses/ExpenseFormButton.js";
+import { MonthPickerWrapper } from "../../styles/DateRange.js";
+import { useTest } from "./getApi.js";
 
 export interface ExpenseData {
   recordId: number;
@@ -84,7 +86,7 @@ export default function Account() {
         <div className=" w-11/12 ml-auto mr-auto flex flex-col items-center mt-4 mb-4">
           <h1 className="text-3xl mt-3 mb-6">가계부</h1>
           <div className="w-full flex flex-col items-center">
-            <div
+            <MonthPickerWrapper
               className="w-full flex items-center justify-start
       mb-4"
             >
@@ -102,7 +104,7 @@ export default function Account() {
                 className="cursor-pointer hover:text-accent"
                 onClick={onClickNext}
               />
-            </div>
+            </MonthPickerWrapper>
 
             {analyze ? (
               <AnalyzeForm analyze={setAnalyze} />
@@ -182,7 +184,7 @@ export default function Account() {
                       <span>
                         <FiMeh size={50} className="mr-4 text-accent" />
                       </span>
-                      <p className="text-5xl text-accent">데이터가 없어요 </p>
+                      <p className="text-4xl text-accent">데이터가 없어요 </p>
                     </div>
                   )}
                 </div>

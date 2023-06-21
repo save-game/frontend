@@ -147,7 +147,7 @@ export const FilteredDataForm = () => {
           <span>
             <FiMeh size={50} className="mr-4 text-accent" />
           </span>
-          <p className="text-5xl text-accent">데이터가 없어요 </p>
+          <p className="text-4xl text-accent">데이터가 없어요 </p>
         </div>
       )}
       <div className="flex justify-center">
