@@ -4,11 +4,11 @@ import { ExpenseData } from "./Account";
 import { addComma } from "../../helpers/helper";
 import { axiosData } from "./getApi";
 
-interface Props {
+interface AnalyzeProps {
   analyze: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function AnalyzeForm({ analyze }: Props) {
+export default function AnalyzeForm({ analyze }: AnalyzeProps) {
   const [lists, setLists] = useState<ExpenseData[]>([]);
 
   const dataLists = async () => {
