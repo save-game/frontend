@@ -64,7 +64,7 @@ const MembersStatus = ({ data, top }: Props) => {
   // memberId로 정보 서버에서 받아오기
   const getMemberData = async () => {
     try {
-      const { data } = await axios.get("/src/test/memberInfo.json");
+      const { data } = await axios.get("/test/memberInfo.json");
       setMemberInfo(data);
     } catch (error) {
       console.error(`MemberInfo Error : TIME(${new Date()}) ERRROR(${error})`);

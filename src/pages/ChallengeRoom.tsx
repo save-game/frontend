@@ -33,7 +33,7 @@ const ChallengeRoom = () => {
   const getMyChallengeList = async () => {
     let minAmount = 0;
     try {
-      const { data } = await axios.get("/src/test/challengeStatus.json");
+      const { data } = await axios.get("/test/challengeStatus.json");
       if (data.challenge_status === 1) {
         const listWithTotalAmount = data.challengeMemberList
           .map((info: ChallengeMemberData, idx: number) => {
@@ -71,7 +71,7 @@ const ChallengeRoom = () => {
       } else {
         //실제로는 위에 data를 바로 setChallengeData하면 된다
         //아래는 별도 fake data적용하기 위한 임시 코드임
-        const { data } = await axios.get("/src/test/challengeResult.json");
+        const { data } = await axios.get("/test/challengeResult.json");
         const sortedMemberList = data.challengeMemberList.sort(
           (a: ChallengeMemberResultData, b: ChallengeMemberResultData) => {
             if (!a.total_amount || !b.total_amount) return;

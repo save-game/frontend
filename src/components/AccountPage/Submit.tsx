@@ -10,7 +10,7 @@ import {
   isSubmitState,
   startDateState,
 } from "../../Recoil";
-import { ExpenseData } from "../../pages/AccountPage";
+import { ExpenseData } from "./Account";
 
 export default function SubmitForm() {
   const [startDate, setStartDate] = useRecoilState(startDateState);

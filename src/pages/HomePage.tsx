@@ -27,7 +27,7 @@ export default function Home() {
 
   const getMyChallengeList = async () => {
     try {
-      const response = await axios.get("./src/test/challengeHomeTest.json");
+      const response = await axios.get("./test/challengeHomeTest.json");
       setMyChallengeList(response.data);
     } catch (error) {
       console.error(
