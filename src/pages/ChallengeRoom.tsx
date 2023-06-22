@@ -15,6 +15,7 @@ import ChallengeResult from "../components/Challenge/ChallengeResult";
 import { BiWon } from "react-icons/Bi";
 import { GiTwoCoins } from "react-icons/Gi";
 import { challengersColor } from "../constants/challengersColor";
+import NewBoardBtn from "../components/Board/NewBoardBtn";
 
 const Container = styled.div`
   ${tw`mx-auto pt-8 text-neutral-600 font-bold text-sm text-center`}
@@ -133,7 +134,10 @@ const ChallengeRoom = () => {
             {tabMenu === "챌린지 현황" ? (
               <ChallengeStatus data={challengeData as ChallengeData} />
             ) : (
-              <div>게시판</div>
+              <>
+                <div>게시판</div>
+                <NewBoardBtn />
+              </>
             )}
           </>
         ) : (

@@ -75,25 +75,30 @@ export const FilteredDataForm = () => {
     <>
       <div className="w-full  py-4 text-neutral-600">
         <div className=" w-11/12 ml-auto mr-auto flex flex-col items-center  ">
-          <div className=" flex items-center mb-2  border-2 rounded-full p-2">
-            <div>기간 :</div>
-
-            <div className=" ml-2 flex items-center">
+          <div className=" flex items-center mb-2  border-2 rounded-full ">
+            <div className="border-r-2 p-2">
+              <div>기간</div>
+            </div>
+            <div className="flex items-center p-2">
               {start} ~ {end}
             </div>
           </div>
 
-          <div className="flex flex-start mt-2 mb-4 border-2 rounded-full p-2">
-            <div>카테고리 :</div>
-            {checkedList.length === 13 || checkedList.length === 0 ? (
-              <div className="ml-1">전체</div>
-            ) : (
-              checkedList.map((el: string) => (
-                <div key={el} className="ml-1">
-                  {el}
-                </div>
-              ))
-            )}
+          <div className="w-full flex flex-start mt-2 mb-4 border-2 rounded-full ">
+            <div className="w-36 flex justify-center items-center border-r-2 ml-1 mr-1">
+              <div>카테고리</div>
+            </div>
+            <div className="flex flex-wrap p-2">
+              {checkedList.length === 13 || checkedList.length === 0 ? (
+                <div className="ml-1">전체</div>
+              ) : (
+                checkedList.map((el: string) => (
+                  <div key={el} className="ml-1">
+                    {el}
+                  </div>
+                ))
+              )}
+            </div>
           </div>
 
           <div className="w-full flex flex-col justify-start">
@@ -147,7 +152,7 @@ export const FilteredDataForm = () => {
           <span>
             <FiMeh size={50} className="mr-4 text-accent" />
           </span>
-          <p className="text-5xl text-accent">데이터가 없어요 </p>
+          <p className="text-4xl text-accent">데이터가 없어요 </p>
         </div>
       )}
       <div className="flex justify-center">

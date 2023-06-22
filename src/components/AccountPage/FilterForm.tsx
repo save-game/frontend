@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import DateFilter from "./DateFilter";
 import CategoryFilter from "./CategoryFilter";
@@ -8,20 +8,12 @@ import { addComma, getDayFunc } from "../../helpers/helper";
 import { categoryList } from "../../constants/expenseCategory";
 import { ExpenseData } from "./Account";
 import { useTest } from "./getApi";
+import { useRecoilState } from "recoil";
+import { filterFormState, isSubmitState } from "../../Recoil";
 
-interface Props {
-  setFilterForm: Dispatch<SetStateAction<boolean>>;
-  filterForm: boolean;
-  isSubmit: boolean;
-  setIsSubmit: Dispatch<SetStateAction<boolean>>;
-}
-
-export default function FilterForm({
-  setFilterForm,
-  filterForm,
-  isSubmit,
-  setIsSubmit,
-}: Props) {
+export default function FilterForm() {
+  const [isSubmit, setIsSubmit] = useRecoilState(isSubmitState);
+  const [filterForm, setFilterForm] = useRecoilState(filterFormState);
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [endDate, setEndDate] = useState<Date | null>(new Date());
   const [checkedList] = useState<string[]>([]);

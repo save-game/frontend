@@ -14,7 +14,7 @@ export default function FilterBtn({ children, onClick }: BtnTypeProps) {
     <>
       <button
         onClick={onClick}
-        className="w-32 btn btn-sm btn-accent text-base-100"
+        className="w-32 btn btn-sm btn-accent mr-10 text-base-100"
       >
         {children}
       </button>
