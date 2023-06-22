@@ -1,0 +1,22 @@
+[
+  {
+    "postId": 1,
+    "title": "이마트 세일중이래요",
+    "nickname": "이프엔",
+    "memberId": 1,
+    "createdAt": "2023-06-20",
+    "heart": "10",
+    "imageUrl": [
+      "https://firebasestorage.googleapis.com/v0/b/javatime-6eaed.appspot.com/o/KakaoTalk_20230622_170702974.jpg?alt=media&token=8dd52af9-0f54-413c-b6a0-841b574bb0d9"
+    ]
+  },
+  {
+    "postId": 2,
+    "title": "이프엔님 돈 좀 적당히 쓰셔야할 듯",
+    "nickname": "닉네임2",
+    "memberId": 2,
+    "createdAt": "2023-06-11",
+    "heart": "0",
+    "imageUrl": []
+  }
+]

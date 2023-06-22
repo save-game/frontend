@@ -16,6 +16,7 @@ import { BiWon } from "react-icons/Bi";
 import { GiTwoCoins } from "react-icons/Gi";
 import { challengersColor } from "../constants/challengersColor";
 import NewBoardBtn from "../components/Board/NewBoardBtn";
+import BoardList from "../components/Board/BoardList";
 
 const Container = styled.div`
   ${tw`mx-auto pt-8 text-neutral-600 font-bold text-sm text-center`}
@@ -31,7 +32,7 @@ const ChallengeRoom = () => {
   const goalAmount = challengeData?.goal_amount.toLocaleString("ko-KR");
 
   // challengeId로 정보 서버에서 받아오기
-  const getMyChallengeList = async () => {
+  const getChallengeList = async () => {
     let minAmount = 0;
     try {
       const { data } = await axios.get("/test/challengeStatus.json");
@@ -84,12 +85,14 @@ const ChallengeRoom = () => {
         console.log(sortedData);
       }
     } catch (error) {
-      console.error(error);
+      console.error(
+        `getChallengeList Error: Time(${new Date()}) ERROR ${error}`
+      );
     }
   };
 
   useEffect(() => {
-    getMyChallengeList();
+    getChallengeList();
   }, [challengeId]);
 
   useEffect(() => {
@@ -135,7 +138,7 @@ const ChallengeRoom = () => {
               <ChallengeStatus data={challengeData as ChallengeData} />
             ) : (
               <>
-                <div>게시판</div>
+                <BoardList challengeId={challengeId} />
                 <NewBoardBtn />
               </>
             )}

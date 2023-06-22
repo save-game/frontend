@@ -39,7 +39,7 @@ export default function NewBoardBtn() {
     <>
       <button
         onClick={Open}
-        className="fixed bottom-20 right-6 border-4 rounded-full hover:bg-accent hover:text-white hover:border-accent p-2"
+        className="fixed bottom-20 right-6 border-4 rounded-full hover:bg-accent hover:text-white hover:border-accent p-2 bg-base-100"
       >
         <TiPlus size={32} />
       </button>
