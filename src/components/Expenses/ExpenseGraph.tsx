@@ -16,7 +16,7 @@ export default function ExpenseGraph() {
 
   const getMonthlyExpenseData = async () => {
     try {
-      const response = await axios.get("./src/test/graphTest.json");
+      const response = await axios.get("./test/graphTest.json");
       setMonthlyTotalAmount(
         response.data.reduce((acc: number, cur: ExpenseData) => {
           return acc + cur.amount;

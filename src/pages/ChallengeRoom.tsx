@@ -16,6 +16,7 @@ import { BiWon } from "react-icons/Bi";
 import { GiTwoCoins } from "react-icons/Gi";
 import { challengersColor } from "../constants/challengersColor";
 import NewBoardBtn from "../components/Board/NewBoardBtn";
+import BoardList from "../components/Board/BoardList";
 
 const Container = styled.div`
   ${tw`mx-auto pt-8 text-neutral-600 font-bold text-sm text-center`}
@@ -31,10 +32,10 @@ const ChallengeRoom = () => {
   const goalAmount = challengeData?.goal_amount.toLocaleString("ko-KR");
 
   // challengeId로 정보 서버에서 받아오기
-  const getMyChallengeList = async () => {
+  const getChallengeList = async () => {
     let minAmount = 0;
     try {
-      const { data } = await axios.get("/src/test/challengeStatus.json");
+      const { data } = await axios.get("/test/challengeStatus.json");
       if (data.challenge_status === 1) {
         const listWithTotalAmount = data.challengeMemberList
           .map((info: ChallengeMemberData, idx: number) => {
@@ -72,7 +73,7 @@ const ChallengeRoom = () => {
       } else {
         //실제로는 위에 data를 바로 setChallengeData하면 된다
         //아래는 별도 fake data적용하기 위한 임시 코드임
-        const { data } = await axios.get("/src/test/challengeResult.json");
+        const { data } = await axios.get("/test/challengeResult.json");
         const sortedMemberList = data.challengeMemberList.sort(
           (a: ChallengeMemberResultData, b: ChallengeMemberResultData) => {
             if (!a.total_amount || !b.total_amount) return;
@@ -84,12 +85,14 @@ const ChallengeRoom = () => {
         console.log(sortedData);
       }
     } catch (error) {
-      console.error(error);
+      console.error(
+        `getChallengeList Error: Time(${new Date()}) ERROR ${error}`
+      );
     }
   };
 
   useEffect(() => {
-    getMyChallengeList();
+    getChallengeList();
   }, [challengeId]);
 
   useEffect(() => {
@@ -135,7 +138,7 @@ const ChallengeRoom = () => {
               <ChallengeStatus data={challengeData as ChallengeData} />
             ) : (
               <>
-                <div>게시판</div>
+                <BoardList challengeId={challengeId} />
                 <NewBoardBtn />
               </>
             )}

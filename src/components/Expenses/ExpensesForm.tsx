@@ -20,12 +20,11 @@ const ErrorNotice = styled.p`
   ${tw`h-5 text-[11px] text-error font-light text-right`}
 `;
 
-interface Props {
-  formStatus: boolean;
+interface ExpensesFormProps {
   formEditor: Dispatch<SetStateAction<boolean>>;
 }
 
-const ExpensesForm = ({ formStatus, formEditor }: Props) => {
+const ExpensesForm = ({ formEditor }: ExpensesFormProps) => {
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
     null
@@ -114,11 +113,7 @@ const ExpensesForm = ({ formStatus, formEditor }: Props) => {
   //
 
   return (
-    <section
-      className={`fixed top-0 left-0 right-0 bottom-0  transition-transform bg-base-100 z-[999] py-4 shadow-lg text-neutral-600 ${
-        formStatus ? ` translate-y-0 ` : `translate-y-full`
-      }`}
-    >
+    <section className="fixed top-0 left-0 right-0 bottom-0 bg-base-100 z-[999] py-4 shadow-lg text-neutral-600 ">
       <Container>
         <form
           onSubmit={onSubmit(handleExpenseSubmit)}
@@ -211,7 +206,7 @@ const ExpensesForm = ({ formStatus, formEditor }: Props) => {
                         <button
                           type="button"
                           onClick={() => handleSelectCategory(item)}
-                          className="btn btn-ghost hover:bg-transparent w-full p-0 block"
+                          className="btn btn-ghost hover:bg-transparent w-full p-0 block mb-1"
                         >
                           <div
                             className={`${item.color} w-4/5 mx-auto text-base-100 mb-1 flex justify-center items-center h-10 rounded-full`}
