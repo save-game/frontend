@@ -8,7 +8,7 @@ import { GiSevenPointedStar } from "react-icons/Gi";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const HeaderContainer = styled.header`
-  ${tw`btm-nav bg-teal-50 shadow-inner shadow-[#e0edea]`}
+  ${tw`btm-nav h-20 bg-teal-50 shadow-inner shadow-[#e0edea] `}
 `;
 
 const NavBtn = styled.button<{ selected: boolean }>`
@@ -16,10 +16,10 @@ const NavBtn = styled.button<{ selected: boolean }>`
   ${({ selected }) => selected && tw`text-accent font-bold`}
 `;
 const icons = {
-  홈: <AiTwotoneHome size="20" />,
-  챌린지: <GiSevenPointedStar size="20" />,
-  가계부: <RiBookletLine size="20" />,
-  마이페이지: <BsPersonFill size="23" />,
+  홈: <AiTwotoneHome size="20" className="shrink-0" />,
+  챌린지: <GiSevenPointedStar size="20" className="shrink-0" />,
+  가계부: <RiBookletLine size="20" className="shrink-0" />,
+  마이페이지: <BsPersonFill size="23" className="shrink-0" />,
 } as const;
 type NavMenu = keyof typeof icons;
 
