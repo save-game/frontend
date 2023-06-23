@@ -31,4 +31,27 @@ const Dropdown = (props: Props) => {
   );
 };
 
+import { SelectOptionProps } from "../../interface/interface";
+
+export function FilterDropDown({
+  optionList,
+  handleGetOptionValue,
+}: {
+  optionList: SelectOptionProps[];
+  handleGetOptionValue: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+}) {
+  return (
+    <select
+      className={`p-2 h-8 w-16 rounded-lg text-sm border border-l-[0.4px] border-neutral-400 `}
+      onChange={handleGetOptionValue}
+    >
+      {optionList.map((value, idx) => (
+        <option key={idx} value={value.value}>
+          {value.name}
+        </option>
+      ))}
+    </select>
+  );
+}
+
 export default Dropdown;
