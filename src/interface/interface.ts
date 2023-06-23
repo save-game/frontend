@@ -49,3 +49,13 @@ export interface RangeCalendarProps {
   readonly endDate: Date;
   readonly handleSelectedDate: (date: Date) => void;
 }
+
+export interface SelectOptionProps {
+  readonly value: string;
+  readonly name: string;
+}
+
+export interface SliderBarProps {
+  readonly rangeMinPercent: number;
+  readonly rangeMaxPercent: number;
+}

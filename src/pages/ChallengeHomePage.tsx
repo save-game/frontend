@@ -1,12 +1,9 @@
-import ChallengeForm from "../components/Challenge/ChallengeForm";
+import ChallengeHome from "../components/Challenge/ChallengeHome";
 
-export default function ChallengeHome() {
+export default function ChallengeHomePage() {
   return (
     <>
-      <label htmlFor="challenge_form" className="btn btn-accent">
-        + 챌린지 등록하기
-      </label>
-      <ChallengeForm />
+      <ChallengeHome />
     </>
   );
 }

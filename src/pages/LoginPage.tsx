@@ -1,8 +1,6 @@
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 
-import KakaoIcon from "../assets/kakao_icon.png";
-import NaverIcon from "../assets/naver_icon.png";
-import GoogleIcon from "../assets/google_icon.svg";
+import KakaoIcon from "../assets/kakao_login_large_wide.png";
 import Logo from "../assets/savegame_512x512.png";
 import { useNavigate } from "react-router-dom";
 
@@ -19,7 +17,7 @@ export default function LoginPage() {
       // 로그인
       console.log(data);
     } catch (error) {
-      console.log(error);
+      console.log(`handleLogin Error: Time(${new Date()}) ERROR ${error}`);
     }
   };
 
@@ -56,15 +54,9 @@ export default function LoginPage() {
         >
           회원가입
         </button>
-        <div className="flex w-2/3 justify-around">
-          <button className=" shadow-sm w-10 rounded-md">
+        <div className="flex w-full justify-around">
+          <button className=" shadow-sm rounded-md">
             <img src={KakaoIcon} />
-          </button>
-          <button className=" shadow-sm w-10 rounded-md">
-            <img src={NaverIcon} />
-          </button>
-          <button className=" shadow-lg w-10 rounded-md">
-            <img src={GoogleIcon} />
           </button>
         </div>
       </div>

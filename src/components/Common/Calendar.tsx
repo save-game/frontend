@@ -9,6 +9,9 @@ import { RangeCalendarProps } from "../../interface/interface";
 const StyledDatePicker = styled(DatePicker)`
   ${tw`border border-neutral-400 outline-2 outline-neutral-400 rounded-lg w-full h-12 text-center`};
 `;
+const StyledRangeDatePicker = styled(DatePicker)`
+  ${tw`border border-neutral-400 outline-2 outline-neutral-400 rounded-lg w-full h-8 text-center`};
+`;
 
 export interface Props {
   readonly selectedDate: Date;
@@ -39,7 +42,7 @@ export const RangeCalendarStart = ({
   return (
     <>
       <DatePickerWrapper>
-        <StyledDatePicker
+        <StyledRangeDatePicker
           dateFormat="yyyy.MM.dd"
           locale={ko}
           shouldCloseOnSelect
@@ -62,7 +65,7 @@ export const RangeCalendarEnd = ({
 }: RangeCalendarProps) => {
   return (
     <DatePickerWrapper>
-      <StyledDatePicker
+      <StyledRangeDatePicker
         dateFormat="yyyy.MM.dd"
         locale={ko}
         shouldCloseOnSelect
