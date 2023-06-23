@@ -9,6 +9,8 @@ import { RangeCalendarStart, RangeCalendarEnd } from "../Common/Calendar";
 import InformModal from "../Common/InformModal";
 import { addOneMonth } from "../../helpers/helper";
 import { SHOW_WARNING_MODAL_DELAY } from "../../constants/modalTime";
+import ChallengeCategoryFilter from "./ChallengeCategoryFilter";
+import { Category } from "../../constants/expenseCategory";
 
 export default function ChallengeForm() {
   const [memberCount, setMemberCount] = useState<number>(2);
@@ -24,6 +26,9 @@ export default function ChallengeForm() {
   const challengeSchema = Yup.object({
     title: Yup.string().required("필수 입력 항목입니다."),
     goal_amount: Yup.number().required("필수 입력 항목입니다."),
+    category: Yup.string().required(
+      "필수 입력 항목입니다. 카테고리를 선택해주세요."
+    ),
   });
 
   const {
@@ -113,6 +118,9 @@ export default function ChallengeForm() {
     contentInputRef.current.value = "";
     goalAmountInputRef.current.value = "";
   };
+  const handleSelectCategory = (item: Category) => {
+    setValue("category", item.category);
+  };
 
   useEffect(() => {
     setValue("member_count", memberCount);
@@ -133,13 +141,13 @@ export default function ChallengeForm() {
             </label>
             <h3 className="font-bold text-2xl mt-4 mb-4">챌린지 등록하기</h3>
             <form
-              className="w-full h-full flex flex-col items-center"
+              className="w-full h-full flex flex-col justify-around items-center"
               onSubmit={handleSubmit(handleSubmitChallenge)}
               onSubmitCapture={(e) => {
                 e.preventDefault();
               }}
             >
-              <div className="form-control w-full justify-evenly items-center h-96">
+              <div className="form-control w-full h-3/4 justify-between items-center">
                 <Controller
                   name="title"
                   control={control}
@@ -153,7 +161,7 @@ export default function ChallengeForm() {
                         type="text"
                         defaultValue={field.value}
                         placeholder="제목을 입력해주세요."
-                        className="text-lg input h-10 w-9/12 max-w-xs border border-l-[0.4px] border-neutral-400"
+                        className="text-md input h-8 w-9/12 max-w-xs border border-l-[0.4px] border-neutral-400"
                         onChange={(e) => field.onChange(e.target.value)}
                         ref={titleInputRef}
                       />
@@ -178,7 +186,7 @@ export default function ChallengeForm() {
                         type="text"
                         defaultValue={field.value}
                         placeholder="부제를 입력해주세요."
-                        className="text-lg input h-10 w-9/12 max-w-xs border border-l-[0.4px] border-neutral-400"
+                        className="text-md input h-8 w-9/12 max-w-xs border border-l-[0.4px] border-neutral-400"
                         onChange={(e) => field.onChange(e.target.value)}
                         ref={contentInputRef}
                       />
@@ -238,7 +246,7 @@ export default function ChallengeForm() {
                         type="text"
                         defaultValue={field.value}
                         placeholder="목표 금액을 입력해주세요."
-                        className="text-lg input h-10 w-9/12 max-w-xs border border-l-[0.4px] border-neutral-400 pr-10"
+                        className="text-md input h-8 w-9/12 max-w-xs border border-l-[0.4px] border-neutral-400 pr-10"
                         onChange={(e) =>
                           field.onChange(e.target.value.replace(/[^0-9]/g, ""))
                         }
@@ -253,6 +261,15 @@ export default function ChallengeForm() {
                 {errors.goal_amount && (
                   <span className="message text-xs text-error text-center">
                     {`${errors.goal_amount.message}`}
+                  </span>
+                )}
+                <ChallengeCategoryFilter
+                  control={control}
+                  handleSelectCategory={handleSelectCategory}
+                />
+                {errors.category && (
+                  <span className="message text-xs text-error text-center">
+                    {`${errors.category.message}`}
                   </span>
                 )}
                 <div className=" flex w-full justify-between items-center">
@@ -274,7 +291,7 @@ export default function ChallengeForm() {
                       type="member_count"
                       value={memberCount}
                       disabled
-                      className="text-lg h-10 w-20 text-center border border-l-[0.4px] border-neutral-400"
+                      className="text-md h-8 w-20 text-center border border-l-[0.4px] border-neutral-400"
                     />
                     <span className="text-lg ml-2">명</span>
                     <button
@@ -289,7 +306,7 @@ export default function ChallengeForm() {
                   </div>
                 </div>
               </div>
-              <button className="btn btn-accent w-full my-4 mt-auto">
+              <button className="btn btn-accent w-full mb-4">
                 챌린지 등록
               </button>
             </form>
