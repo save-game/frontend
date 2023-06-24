@@ -1,32 +1,54 @@
-[
-  {
-    "challengeId": 1,
-    "title": "식비 30만원으로 한 달 살기",
-    "endDate": "2023-07-23"
-  },
-  {
-    "challengeId": 2,
-    "title": "소비 월 100만원 도전!",
-    "endDate": "2023-10-12"
-  },
-  {
-    "challengeId": 3,
-    "title": "소비 월 100만원 도전!",
-    "endDate": "2023-10-12"
-  },
-  {
-    "challengeId": 4,
-    "title": "진심 여행가고 싶은디?",
-    "endDate": "2023-11-30"
-  },
-  {
-    "challengeId": 5,
-    "title": "소비 월 100만원 도전!",
-    "endDate": "2023-10-12"
-  },
-  {
-    "challengeId": 6,
-    "title": "소비 월 100만원 도전!",
-    "endDate": "2023-10-12"
-  }
-]
+{
+  "challengeList": [
+    {
+      "challengeId": 1,
+      "title": "식비 30만원으로 한 달 살기",
+      "content": "밥 값 좀 줄여봅시다!",
+      "goal_amount": 300000,
+      "startDate": "7/10/2023",
+      "endDate": "",
+      "maxPeople": 5,
+      "cnt": 5
+    },
+    {
+      "challengeId": 2,
+      "title": "소비 월 100만원 도전!",
+      "content": "우리의 소비는 너무 많다.",
+      "goal_amount": 1000000,
+      "startDate": "8/8/2023",
+      "endDate": "",
+      "maxPeople": 10,
+      "cnt": 5
+    },
+    {
+      "challengeId": 3,
+      "title": "교통비를 줄여 봅시다.",
+      "content": "",
+      "goal_amount": 100000,
+      "startDate": "9/20/2023",
+      "endDate": "",
+      "maxPeople": 10,
+      "cnt": 5
+    },
+    {
+      "challengeId": 4,
+      "title": "진심 여행가고 싶은디?",
+      "content": "돈이 있어야 가지...",
+      "goal_amount": 400000,
+      "startDate": "7/20/2023",
+      "endDate": "",
+      "maxPeople": 8,
+      "cnt": 1
+    },
+    {
+      "challengeId": 5,
+      "title": "진심 여행가고 싶은디?",
+      "content": "돈이 있어야 가지...",
+      "goal_amount": 400000,
+      "startDate": "7/20/2023",
+      "endDate": "",
+      "maxPeople": 8,
+      "cnt": 1
+    }
+  ]
+}

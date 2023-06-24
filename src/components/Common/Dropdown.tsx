@@ -1,5 +1,8 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { BiDotsVerticalRounded } from "react-icons/Bi";
+import { useRecoilState, useRecoilValue } from "recoil";
+
+import { textCategoryState } from "../../Recoil/challengeHomeFilterAtom";
 
 interface Props {
   children: ReactNode;
@@ -35,15 +38,19 @@ import { SelectOptionProps } from "../../interface/interface";
 
 export function FilterDropDown({
   optionList,
-  handleGetOptionValue,
 }: {
   optionList: SelectOptionProps[];
-  handleGetOptionValue: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }) {
+  const [option, setOption] = useRecoilState(textCategoryState);
+  const handleGetOption = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setOption(e.target.value);
+  };
+
   return (
     <select
       className={`p-2 h-8 w-16 rounded-lg text-sm border border-l-[0.4px] border-neutral-400 `}
-      onChange={handleGetOptionValue}
+      value={option}
+      onChange={handleGetOption}
     >
       {optionList.map((value, idx) => (
         <option key={idx} value={value.value}>
