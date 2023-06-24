@@ -1,15 +1,11 @@
-import { Control, Controller, FieldValues } from "react-hook-form";
-
 import {
   Category,
   ChanllegeCategoryList,
 } from "../../constants/expenseCategory";
 
 export default function ChallengeCategoryFilter({
-  control,
   handleSelectCategory,
 }: {
-  control: Control<FieldValues>;
   handleSelectCategory: (item: Category) => void;
 }) {
   return (
