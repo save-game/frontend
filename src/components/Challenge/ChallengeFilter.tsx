@@ -6,8 +6,8 @@ import ChallengeCategoryFilter from "./ChallengeCategoryFilter";
 import {
   textCategoryState,
   searchTextState,
-  minSearchAmount,
-  maxSearchAmount,
+  minSearchAmountState,
+  maxSearchAmountState,
   searchCategoryState,
 } from "../../Recoil/challengeHomeFilterAtom";
 import { Category } from "../../constants/expenseCategory";
