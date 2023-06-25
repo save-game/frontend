@@ -40,7 +40,13 @@ export const addComma = (price: number) => {
 };
 
 export const addOneMonth = (date: Date) => {
-  return new Date(
-    `${date.getFullYear()}-${date.getMonth() + 2}-${date.getDate()}`
-  );
+  let returnDate = new Date();
+  if (date.getMonth() === 11) {
+    returnDate = new Date(`${date.getFullYear() + 1}-${1}-${date.getDate()}`);
+  } else {
+    returnDate = new Date(
+      `${date.getFullYear()}-${date.getMonth() + 2}-${date.getDate()}`
+    );
+  }
+  return returnDate;
 };
