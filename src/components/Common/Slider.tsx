@@ -1,16 +1,24 @@
 import { useCallback, useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import tw from "twin.macro";
 
+import {
+  FIXED_MIN_VALUE,
+  FIXED_MAX_VALUE,
+  RANGE_STEP,
+} from "../../constants/challengeSliderFilter";
 import { SliderBarProps } from "../../interface/interface";
-
-const FIXED_MIN_VALUE = 0;
-const FIXED_MAX_VALUE = 2000000;
-const RANGE_STEP = 100000;
+import {
+  minSearchAmount,
+  maxSearchAmount,
+} from "../../Recoil/challengeHomeFilterAtom";
 
 export default function Slider() {
-  const [rangeMinValue, setRangeMinValue] = useState<number>(FIXED_MIN_VALUE);
-  const [rangeMaxValue, setRangeMaxValue] = useState<number>(FIXED_MAX_VALUE);
+  const [rangeMinValue, setRangeMinValue] =
+    useRecoilState<number>(minSearchAmount);
+  const [rangeMaxValue, setRangeMaxValue] =
+    useRecoilState<number>(maxSearchAmount);
   const [rangeMinPercent, setRangeMinPercent] = useState<number>(0);
   const [rangeMaxPercent, setRangeMaxPercent] = useState<number>(100);
 
@@ -33,21 +41,8 @@ export default function Slider() {
       setRangeMinPercent(() => (rangeMinValue / FIXED_MAX_VALUE) * 100);
       setRangeMaxPercent(() => (rangeMaxValue / FIXED_MAX_VALUE) * 100);
     }
-  }, [rangeMaxValue, rangeMinValue]);
+  }, [rangeMaxValue, rangeMinValue, setRangeMinValue, setRangeMaxValue]);
 
-  const handleOnblurMaxValue = (e: React.FocusEvent<HTMLInputElement>) => {
-    if (isNaN(Number(e.target.value))) {
-      e.target.value = FIXED_MAX_VALUE.toLocaleString("ko-KR");
-      twoRangeHandler();
-      return;
-    }
-    const formattedValue = Number(e.target.value).toLocaleString("ko-KR");
-    e.target.value = formattedValue;
-  };
-  const handleOnFocusValue = (e: React.FocusEvent<HTMLInputElement>) => {
-    const formattedValue = e.target.value.replace(/[^0-9]/g, "");
-    e.target.value = formattedValue;
-  };
   useEffect(() => {
     twoRangeHandler();
   }, [twoRangeHandler]);
@@ -85,8 +80,6 @@ export default function Slider() {
           type="text"
           className="text-xs w-1/3 text-center rounded-lg h-8 max-w-xs border border-l-[0.4px] border-neutral-400"
           value={rangeMinValue.toLocaleString("ko-KR")}
-          onChange={sliderRangeMinValueHandler}
-          onFocus={handleOnFocusValue}
         />
         <span className="text-lg px-4">-</span>
         <input
@@ -94,9 +87,6 @@ export default function Slider() {
           type="text"
           className="text-xs w-1/3 text-center rounded-lg h-8 max-w-xs border border-l-[0.4px] border-neutral-400"
           value={rangeMaxValue.toLocaleString("ko-KR")}
-          onChange={sliderRangeMaxValueHandler}
-          onBlur={handleOnblurMaxValue}
-          onFocus={handleOnFocusValue}
         />
       </div>
     </div>

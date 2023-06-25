@@ -130,7 +130,7 @@ export default function ChallengeForm() {
     <>
       <input type="checkbox" id="challenge_form" className="modal-toggle" />
       <div className="modal bg-white">
-        <div className=" max-h-full w-full rounded-none">
+        <div className="modal-box max-h-full w-full rounded-none">
           <Container>
             <label
               htmlFor="challenge_form"
@@ -161,7 +161,7 @@ export default function ChallengeForm() {
                         type="text"
                         defaultValue={field.value}
                         placeholder="제목을 입력해주세요."
-                        className="text-md input h-8 w-9/12 max-w-xs border border-l-[0.4px] border-neutral-400"
+                        className="text-sm input h-8 w-9/12 max-w-xs border border-l-[0.4px] border-neutral-400"
                         onChange={(e) => field.onChange(e.target.value)}
                         ref={titleInputRef}
                       />
@@ -186,7 +186,7 @@ export default function ChallengeForm() {
                         type="text"
                         defaultValue={field.value}
                         placeholder="부제를 입력해주세요."
-                        className="text-md input h-8 w-9/12 max-w-xs border border-l-[0.4px] border-neutral-400"
+                        className="text-sm input h-8 w-9/12 max-w-xs border border-l-[0.4px] border-neutral-400"
                         onChange={(e) => field.onChange(e.target.value)}
                         ref={contentInputRef}
                       />
@@ -246,7 +246,7 @@ export default function ChallengeForm() {
                         type="text"
                         defaultValue={field.value}
                         placeholder="목표 금액을 입력해주세요."
-                        className="text-md input h-8 w-9/12 max-w-xs border border-l-[0.4px] border-neutral-400 pr-10"
+                        className="text-sm input h-8 w-9/12 max-w-xs border border-l-[0.4px] border-neutral-400 pr-10"
                         onChange={(e) =>
                           field.onChange(e.target.value.replace(/[^0-9]/g, ""))
                         }
@@ -254,7 +254,7 @@ export default function ChallengeForm() {
                         onFocus={handleOnFocusCount}
                         ref={goalAmountInputRef}
                       />
-                      <span className="absolute text-lg right-8">원</span>
+                      <span className="absolute text-lg right-12">원</span>
                     </div>
                   )}
                 />
@@ -264,7 +264,6 @@ export default function ChallengeForm() {
                   </span>
                 )}
                 <ChallengeCategoryFilter
-                  control={control}
                   handleSelectCategory={handleSelectCategory}
                 />
                 {errors.category && (

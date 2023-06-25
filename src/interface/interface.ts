@@ -59,3 +59,14 @@ export interface SliderBarProps {
   readonly rangeMinPercent: number;
   readonly rangeMaxPercent: number;
 }
+
+export interface ChallengeDataProps {
+  readonly challengeId: number;
+  readonly title: string;
+  readonly content: string;
+  readonly goal_amount: number;
+  readonly startDate: string;
+  readonly endDate: string;
+  readonly maxPeople: number;
+  readonly cnt: number;
+}
