@@ -286,8 +286,8 @@ export default function ChallengeForm() {
                       {"<"}
                     </button>
                     <input
-                      id="title"
-                      type="member_count"
+                      id="member_count"
+                      type="text"
                       value={memberCount}
                       disabled
                       className="text-md h-8 w-20 text-center border border-l-[0.4px] border-neutral-400"
