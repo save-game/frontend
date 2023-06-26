@@ -44,6 +44,13 @@ export interface UserInfo {
   readonly imageUrl: string;
 }
 
+export interface UserData {
+  email: string;
+  memberId: number;
+  nickname: string;
+  profileImageUrl: string | null;
+}
+
 export interface RangeCalendarProps {
   readonly startDate: Date;
   readonly endDate: Date;
