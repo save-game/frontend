@@ -3,8 +3,17 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 import { useNavigate } from "react-router-dom";
 import { ValidationForm, validate } from "./validate";
+import axios from "axios";
+import { MouseEventHandler, useState } from "react";
+
+const API = "http://13.124.58.137";
 
 export default function SignUp() {
+  const [resultEmail, setResultEmail] = useState([]);
+  const [usableEmail, setUsableEmail] = useState(false);
+  const [usableNickName, setUsableNickName] = useState(false);
+  const [onChangeEmail, setOnChangeEmail] = useState("");
+  const [onChangeNickName, setOnChangeNickName] = useState("");
   const navigate = useNavigate();
   const {
     register,
@@ -14,10 +23,54 @@ export default function SignUp() {
     mode: "onChange",
     resolver: yupResolver(validate),
   });
-  const onSubmit: SubmitHandler<ValidationForm> = (data) => {
-    console.log(data);
-    navigate("/");
+
+  // const duplicationCheckAPI = async() => {
+  //   let return_value
+  //   await axios.post(`${API}/auth/checkemail`,{
+  //     value:document.getElementById("email")?.innerHTML
+  //   })
+  // }
+
+  const onSubmit: SubmitHandler<ValidationForm> = async (data) => {
+    if (usableEmail === false) {
+      console.log("아이디중복확인좀");
+    } else if (usableNickName === false) {
+      console.log("닉네임중복확인좀");
+    } else {
+      await axios
+        .post(`${API}/auth/signup`, {
+          email: data.email,
+          password: data.pw,
+          nickname: data.nickName,
+        })
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      navigate("/");
+    }
   };
+
+  const OnCheckEmail: MouseEventHandler<HTMLButtonElement> = async () => {
+    await axios
+      .post(`${API}/auth/checkemail`, {
+        value: onChangeEmail,
+      })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => console.log(error));
+  };
+
+  const OnCheckNickName: MouseEventHandler<HTMLButtonElement> = async () => {
+    await axios
+      .post(`${API}/auth/checknickname`, { value: onChangeNickName })
+      .then((response) => console.log(response))
+      .catch((error) => console.log(error));
+  };
+
   return (
     <>
       <div className=" w-11/12 ml-auto mr-auto flex flex-col justify-center items-center mt-10">
@@ -39,10 +92,14 @@ export default function SignUp() {
                 type="email"
                 placeholder="이메일을 입력해주세요."
                 className=" input h-8 text-sm mr-4 mb-2 max-w-xs"
-                {...register("email")}
+                {...register("email", {
+                  onChange: (e) => setOnChangeEmail(e.target.value),
+                })}
               />
 
               <button
+                onClick={OnCheckEmail}
+                id="usableEmail"
                 type="button"
                 className="btn join-item btn-outline text-sx btn-ghost  shadow-md mr-2 mb-2 btn-sm"
               >
@@ -112,9 +169,12 @@ export default function SignUp() {
                 type="text"
                 placeholder="닉네임을 입력해주세요"
                 className=" input h-8 text-sm mr-4 mb-2 max-w-xs"
-                {...register("nickName")}
+                {...register("nickName", {
+                  onChange: (e) => setOnChangeNickName(e.target.value),
+                })}
               />
               <button
+                onClick={OnCheckNickName}
                 type="button"
                 className=" w-3/10 btn join-item btn-outline text-sx btn-ghost  shadow-md mr-2 mb-2 btn-sm"
               >
@@ -138,17 +198,17 @@ export default function SignUp() {
                   (1) 회사는 최초 회원 가입시 원활한 고객상담, 서비스 제공을
                   위해 아래와 같은 최소한의 개인정보를 필수항목으로 수집하고
                   있습니다.
-                  <li className="ml-2">
+                  <div className="ml-2">
                     - 필수항목 : 이메일 주소, 이름(닉네임), 비밀번호, 전화번호
-                  </li>
-                  <li className="ml-2">- 선택항목 : 프로필 사진</li>
+                  </div>
+                  <div className="ml-2">- 선택항목 : 프로필 사진</div>
                 </li>
                 <li className="mt-2 ml-2">
                   (2) 소셜 계정을 통해 회원가입 시 아래와 같은 정보들이 추가로
                   수집될 수 있습니다.
-                  <li className="ml-2">- 네이버 : 프로필 사진, 나이</li>
-                  <li className="ml-2">- 페이스북 : 프로필 사진</li>
-                  <li className="ml-2">- 구글 : 프로필 사진</li>
+                  <div className="ml-2">- 네이버 : 프로필 사진, 나이</div>
+                  <div className="ml-2">- 페이스북 : 프로필 사진</div>
+                  <div className="ml-2">- 구글 : 프로필 사진</div>
                 </li>
                 <li className="mt-2 ml-2">
                   (3) 서비스 이용 과정이나 사업처리 과정에서 아래와 같은

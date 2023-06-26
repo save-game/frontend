@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent } from "react";
 import { useRecoilState } from "recoil";
 import { textLengthState, textState } from "../../Recoil/boardAtom";
 
