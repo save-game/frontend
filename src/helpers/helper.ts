@@ -39,14 +39,12 @@ export const addComma = (price: number) => {
   return returnStr;
 };
 
-export const addOneMonth = (date: Date) => {
-  let returnDate = new Date();
-  if (date.getMonth() === 11) {
-    returnDate = new Date(`${date.getFullYear() + 1}-${1}-${date.getDate()}`);
-  } else {
-    returnDate = new Date(
-      `${date.getFullYear()}-${date.getMonth() + 2}-${date.getDate()}`
-    );
+export const addOneMonth: (date: Date) => Date = (date: Date) => {
+  const returnDate = new Date(date);
+  returnDate.setMonth(returnDate.getMonth() + 1);
+  if (returnDate.getMonth() === 0) {
+    returnDate.setFullYear(returnDate.getFullYear() + 1);
   }
+
   return returnDate;
 };
