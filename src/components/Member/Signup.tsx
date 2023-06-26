@@ -4,16 +4,21 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
 import { ValidationForm, validate } from "./validate";
 import axios from "axios";
-import { MouseEventHandler, useState } from "react";
+import { MouseEventHandler, useRef, useState } from "react";
 
-const API = "http://13.124.58.137";
+import { SHOW_MODAL_DELAY } from "../../constants/modalTime";
+import DialogModal from "../Common/Dialog";
+import { API } from "../../constants/api";
 
 export default function SignUp() {
-  const [resultEmail, setResultEmail] = useState([]);
+  const [resultEmailMsg, setResultEmailMsg] = useState("");
+  const [resultNickNameMsg, setResultNickNameMsg] = useState("");
   const [usableEmail, setUsableEmail] = useState(false);
   const [usableNickName, setUsableNickName] = useState(false);
   const [onChangeEmail, setOnChangeEmail] = useState("");
   const [onChangeNickName, setOnChangeNickName] = useState("");
+  const emailCheckDialogRef = useRef<HTMLDialogElement>(null);
+  const nickNameCheckDialogRef = useRef<HTMLDialogElement>(null);
   const navigate = useNavigate();
   const {
     register,
@@ -24,18 +29,31 @@ export default function SignUp() {
     resolver: yupResolver(validate),
   });
 
-  // const duplicationCheckAPI = async() => {
-  //   let return_value
-  //   await axios.post(`${API}/auth/checkemail`,{
-  //     value:document.getElementById("email")?.innerHTML
-  //   })
-  // }
-
   const onSubmit: SubmitHandler<ValidationForm> = async (data) => {
     if (usableEmail === false) {
-      console.log("아이디중복확인좀");
+      if (emailCheckDialogRef.current) {
+        emailCheckDialogRef.current?.showModal();
+      } else {
+        return;
+      }
+      setTimeout(() => {
+        if (emailCheckDialogRef.current) {
+          emailCheckDialogRef.current.close();
+        }
+      }, SHOW_MODAL_DELAY);
+      return;
     } else if (usableNickName === false) {
-      console.log("닉네임중복확인좀");
+      if (nickNameCheckDialogRef.current) {
+        nickNameCheckDialogRef.current?.showModal();
+      } else {
+        return;
+      }
+      setTimeout(() => {
+        if (nickNameCheckDialogRef.current) {
+          nickNameCheckDialogRef.current.close();
+        }
+      }, SHOW_MODAL_DELAY);
+      return;
     } else {
       await axios
         .post(`${API}/auth/signup`, {
@@ -59,7 +77,13 @@ export default function SignUp() {
         value: onChangeEmail,
       })
       .then((response) => {
-        console.log(response);
+        if (response.data.success === false) {
+          setResultEmailMsg(response.data.data);
+          setUsableEmail(false);
+        } else {
+          setResultEmailMsg(response.data.data);
+          setUsableEmail(true);
+        }
       })
       .catch((error) => console.log(error));
   };
@@ -67,7 +91,15 @@ export default function SignUp() {
   const OnCheckNickName: MouseEventHandler<HTMLButtonElement> = async () => {
     await axios
       .post(`${API}/auth/checknickname`, { value: onChangeNickName })
-      .then((response) => console.log(response))
+      .then((response) => {
+        if (response.data.success === false) {
+          setResultNickNameMsg(response.data.data);
+          setUsableNickName(false);
+        } else {
+          setResultNickNameMsg(response.data.data);
+          setUsableNickName(true);
+        }
+      })
       .catch((error) => console.log(error));
   };
 
@@ -79,13 +111,30 @@ export default function SignUp() {
           className="w-full flex flex-col justify-center items-center mt-10 mb-4"
         >
           <h2 className="text-xl mb-10">회원가입</h2>
-          <div className="form-control w-full max-w-xs border-b border-accent-focus">
-            <label htmlFor="email" className="label">
-              <span className="label-text text-xs">
-                이메일
-                <span className="text-red-400 text-xs ml-1">*</span>
-              </span>
+          <div className="form-control max-w-xs border-b border-accent-focus">
+            <label htmlFor="email" className="label w-full">
+              <div className="w-full flex items-center justify-between">
+                <div className="label-text text-xs">
+                  이메일
+                  <span className="text-red-400 text-xs ml-1">*</span>
+                </div>
+                <div>
+                  {usableEmail === false ? (
+                    <span className="text-xs text-red-600">
+                      {resultEmailMsg}
+                    </span>
+                  ) : (
+                    <span className="text-xs text-blue-600">
+                      {resultEmailMsg}
+                    </span>
+                  )}
+                </div>
+              </div>
             </label>
+            <DialogModal
+              dialogRef={emailCheckDialogRef}
+              inform="이메일 중복확인을 해주세요."
+            />
             <div className="flex w-full">
               <input
                 id="email"
@@ -158,11 +207,28 @@ export default function SignUp() {
           )}
           <div className="form-control w-full max-w-xs border-b border-accent-focus">
             <label htmlFor="nickName" className="label">
-              <span className="label-text text-xs">
-                닉네임
-                <span className="text-red-400 text-xs ml-1">*</span>
-              </span>
+              <div className="w-full flex items-center justify-between">
+                <div className="label-text text-xs">
+                  닉네임
+                  <span className="text-red-400 text-xs ml-1">*</span>
+                </div>
+                <div>
+                  {usableNickName === false ? (
+                    <span className="text-xs text-red-600">
+                      {resultNickNameMsg}
+                    </span>
+                  ) : (
+                    <span className="text-xs text-blue-600">
+                      {resultNickNameMsg}
+                    </span>
+                  )}
+                </div>
+              </div>
             </label>
+            <DialogModal
+              dialogRef={nickNameCheckDialogRef}
+              inform="닉네임 중복확인을 해주세요."
+            />
             <div className="flex w-full">
               <input
                 id="nickName"
