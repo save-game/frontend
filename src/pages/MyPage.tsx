@@ -41,41 +41,19 @@ const MyPage = () => {
 
   const getUserInfo = async () => {
     try {
-      // Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjg3NzY5NzQ1fQ.dGLHxoUbyRgd2G2bqLHu4GgMEvnWbi9h3zs4QNERfic
-      //eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODgzNzI3NDV9.EEGiXqqm4FBxnarDvgHfdMikklMRrHLg3Nkh70L7XWg
-      console.log(accessToken);
-      console.log(accessRefreshToken);
-
       const { data } = await axios.get("http://13.124.58.137/member/detail", {
         headers: {
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjg3Nzc1MTA4fQ.HLTUGMbfxsqGU6d1blkRIJfPLnaarYTaoCGXe5pAVwA",
-          Refreshtoken:
-            "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODgzNzgxMDh9.8ziVVirjPtYJu5UG0Y4FhVBck233N1x9FmNeYtSDIa4",
+          Authorization: accessToken,
+          RefreshToken: accessRefreshToken,
         },
       });
+      console.log(data.data);
       setUserInfo(data.data);
 
-      // const response = await axios.get("http://13.124.58.137/auth/reissue", {
-      //   headers: {
-      //     Authorization:
-      //       "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjg3Nzc0NDk2fQ.so31UoL61K-tWQY5uy0qX6KxLcL51V1rXs-htIe5Rxk",
-      //     Refreshtoken:
-      //       "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODgzNzc0OTZ9.QQSjgvjpvigEso4BnrXtOgP1LPN00ioOuVGvbTsV_Ks",
-      //   },
-      // });
-      // const token = response.headers["authorization"];
-      // const refreshToken = response.headers["refreshtoken"];
-      // setAccessToken(token);
-      // setrefreshAccessToken(refreshToken);
-      // localStorage.setItem("token", token);
-      // localStorage.setItem("refreshToken", refreshToken);
-      // setUserInfo(response.data.data);
-
       // const res = await axios.post("http://13.124.58.137/auth/signup", {
-      //   email: "test7@naver.com",
+      //   email: "test5@naver.com",
       //   password: "test123!!",
-      //   nickname: "test7",
+      //   nickname: "test5",
       // });
       // console.log(res.data);
     } catch (error) {
@@ -84,21 +62,53 @@ const MyPage = () => {
   };
 
   useEffect(() => {
+    const refreshToken = localStorage.getItem("refreshToken");
+    const token = localStorage.getItem("token");
+    if (!token || !refreshToken) return;
+    setAccessToken(token);
+    setrefreshAccessToken(refreshToken);
     getUserInfo();
   }, []);
 
-  const handleSignOut = async () => {
-    const res = await axios.post("http://13.124.58.137/auth/logout", null, {
+  const tokenRefresh = async () => {
+    const response = await axios.get("/api/auth/reissue", {
       headers: {
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjg3Nzc1MTA4fQ.HLTUGMbfxsqGU6d1blkRIJfPLnaarYTaoCGXe5pAVwA",
-        RefreshToken:
-          "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODgzNzgxMDh9.8ziVVirjPtYJu5UG0Y4FhVBck233N1x9FmNeYtSDIa4",
+        Authorization: accessToken,
+        RefreshToken: accessRefreshToken,
       },
     });
-    console.log(res.data);
+    const token = response.headers["authorization"];
+    const refreshToken = response.headers["refreshtoken"];
+    setAccessToken(token);
+    setrefreshAccessToken(refreshToken);
+    localStorage.setItem("token", token);
+    localStorage.setItem("refreshToken", refreshToken);
+    handleSignOut();
+  };
 
-    // navigate("/");
+  const handleSignOut = async () => {
+    try {
+      const res = await axios.post("http://13.124.58.137/auth/logout", null, {
+        headers: {
+          Authorization: accessToken,
+          RefreshToken: accessRefreshToken,
+        },
+        // headers: {
+        //   Authorization:
+        //     "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjg3Nzg3OTM1fQ.ovdgDdBvn9VTzZ535ktFukRBG8BngipeE-4Jw5benjI",
+        //   RefreshToken:
+        //     "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODgzOTA5MzV9.c5lCHnnKHbf2eTvJ39TlpGMJEDR7Xt_CXhWprQtHYX0",
+        // },
+      });
+      console.log(res.data);
+      if (res.data.success) {
+        navigate("/");
+      } else if (res.data.data === "Token이 유효하지 않습니다.") {
+        tokenRefresh();
+      }
+    } catch (error) {
+      console.error(`handleSignOut Error: Time(${new Date()}) ERROR ${error}`);
+    }
   };
 
   const confirmWithdrawal = () => {
@@ -108,12 +118,10 @@ const MyPage = () => {
   };
 
   const handleWithdrawal = async () => {
-    const res = await axios.delete("/api/auth/withdrawal", {
+    const res = await axios.delete("http://13.124.58.137/auth/withdrawal", {
       headers: {
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIzIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjg3NzY5NzQ1fQ.dGLHxoUbyRgd2G2bqLHu4GgMEvnWbi9h3zs4QNERfic",
-        Refreshtoken:
-          "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODgzNzI3NDV9.EEGiXqqm4FBxnarDvgHfdMikklMRrHLg3Nkh70L7XWg",
+        Authorization: accessToken,
+        RefreshToken: accessRefreshToken,
       },
     });
     console.log(res.data);

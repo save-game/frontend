@@ -6,6 +6,12 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useRecoilState } from "recoil";
 import { refreshToken, token } from "../Recoil/token";
+import { login } from "../api/api";
+
+export interface LoginData {
+  email: string;
+  password: string;
+}
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -18,33 +24,18 @@ export default function LoginPage() {
   const [accessRefreshToken, setrefreshAccessToken] =
     useRecoilState(refreshToken);
 
-  const handleLogin: SubmitHandler<FieldValues> = async (formData) => {
+  const handleLogin: SubmitHandler<FieldValues> = async (
+    formData: FieldValues
+  ) => {
     try {
-      const response = await axios.post(
-        "http://13.124.58.137/auth/login",
-        formData
-      );
-      if (response.data.success) {
-        const token = response.headers["authorization"];
-        const refreshToken = response.headers["refreshtoken"];
-        setAccessToken(token);
-        setrefreshAccessToken(refreshToken);
-        localStorage.setItem("token", token);
-        localStorage.setItem("refreshToken", refreshToken);
-        console.log(token);
-        console.log(refreshToken);
-        console.log(accessToken);
-        console.log(accessRefreshToken);
-
-        console.log(response.data);
-
-        axios.defaults.headers.common["authorization"] = token;
-        axios.defaults.headers.common["refreshtoken"] = refreshToken;
-        // navigate("/home");
-        return response;
-      } else {
-        console.log(response.data.data);
-      }
+      const response = await login(formData);
+      setAccessToken(response?.token);
+      setrefreshAccessToken(response?.refreshToken);
+      localStorage.setItem("token", response?.token);
+      localStorage.setItem("refreshToken", response?.refreshToken);
+      //   // axios.defaults.headers.common["authorization"] = token;
+      //   // axios.defaults.headers.common["refreshtoken"] = refreshToken;
+      navigate("/home");
     } catch (error) {
       console.log(`handleLogin Error: Time(${new Date()}) ERROR ${error}`);
     }
