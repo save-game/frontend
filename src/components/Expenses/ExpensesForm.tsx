@@ -98,6 +98,26 @@ const ExpensesForm = ({ formEditor }: ExpensesFormProps) => {
     //날짜 포맷 확인 필요
 
     //서버에 지출등록
+    // const { data } = await axios.post(
+    //   "http://13.124.58.137/record",
+    //   {
+    //     amount: 10000,
+    //     category: "FOOD",
+    //     memo: "메모",
+    //     paidFor: "식당",
+    //     payType: "CARD",
+    //     useDate: "6/24/2023",
+    //   }
+    //   // {
+    //   //   headers: {
+    //   //     Authorization:
+    //   //       "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjg3NjA4NTIxfQ.gpPDNP5lCSk_ASPXsgyFSvtDA0OGkevyHygUhAFu-UM",
+    //   //     Refreshtoken:
+    //   //       "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODgyMTE1MjF9.l1UMkaEHfF8qdz4jzooFdgz9j3QpIL0KfmmARsGAjW4",
+    //   //   },
+    //   // }
+    // );
+    // console.log(data);
     //onsuccess에
     // reset();
 

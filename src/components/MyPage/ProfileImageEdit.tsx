@@ -6,7 +6,7 @@ import { IoCloseOutline } from "react-icons/Io5";
 import { BsPersonFill } from "react-icons/Bs";
 
 interface Props {
-  readonly img: string | null;
+  readonly img: string | null | undefined;
 }
 interface Imagefile {
   readonly file: File | null;
