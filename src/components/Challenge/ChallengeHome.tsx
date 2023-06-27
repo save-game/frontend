@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
 import styled from "styled-components";
 import tw from "twin.macro";
 import axios from "axios";
@@ -14,6 +15,7 @@ const Container = styled.div`
 
 export default function ChallengeHome() {
   const [challengeData, setChallengeData] = useState<ChallengeDataProps[]>([]);
+  const [filterParameter, setFilterParameter] = useState();
 
   const getChallengeData = useCallback(async () => {
     try {
@@ -29,7 +31,7 @@ export default function ChallengeHome() {
 
   useEffect(() => {
     getChallengeData();
-  }, []);
+  }, [getChallengeData]);
 
   return (
     <>

@@ -10,15 +10,15 @@ import {
 } from "../../constants/challengeSliderFilter";
 import { SliderBarProps } from "../../interface/interface";
 import {
-  minSearchAmount,
-  maxSearchAmount,
+  minSearchAmountState,
+  maxSearchAmountState,
 } from "../../Recoil/challengeHomeFilterAtom";
 
 export default function Slider() {
   const [rangeMinValue, setRangeMinValue] =
-    useRecoilState<number>(minSearchAmount);
+    useRecoilState<number>(minSearchAmountState);
   const [rangeMaxValue, setRangeMaxValue] =
-    useRecoilState<number>(maxSearchAmount);
+    useRecoilState<number>(maxSearchAmountState);
   const [rangeMinPercent, setRangeMinPercent] = useState<number>(0);
   const [rangeMaxPercent, setRangeMaxPercent] = useState<number>(100);
 
