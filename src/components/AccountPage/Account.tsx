@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 import { FiMeh } from "react-icons/fi";
 
 import { SlArrowLeft, SlArrowRight } from "react-icons/sl";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import {
   checkedListState,
   endDateState,
@@ -20,7 +20,8 @@ import { FilteredDataForm } from "../../components/AccountPage/FilterDataForm.js
 
 import ExpenseFormButton from "../Expenses/ExpenseFormButton.js";
 import { MonthPickerWrapper } from "../../styles/DateRange.js";
-import { useTest } from "./getApi.js";
+import { getRecordedExpense } from "../../api/expenseAPI.js";
+import { refreshToken, token } from "../../Recoil/token.js";
 
 export interface ExpenseData {
   recordId: number;
@@ -35,36 +36,47 @@ export interface ExpenseData {
 export default function Account() {
   const [isSubmit, setIsSubmit] = useRecoilState(isSubmitState);
   const [, setFilterForm] = useRecoilState(filterFormState);
-  const [, setEndDate] = useRecoilState(endDateState);
-  const [, setStartDate] = useRecoilState(startDateState);
+  const [endDate, setEndDate] = useRecoilState(endDateState);
+  const [startDate, setStartDate] = useRecoilState(startDateState);
   const [, setCategoryList] = useRecoilState(checkedListState);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [analyze, setAnalyze] = useState(false);
   const [data, setData] = useState<ExpenseData[]>([]);
 
-  const getUseData = async () => {
+  // const aToken = useRecoilValue(token);
+  // const rToken = useRecoilValue(refreshToken);
+
+  const aToken =
+    "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjg3ODc2OTc1fQ.xyjz9cUjNCQe3TbIsBm6c8rDUmU5fjzJm9hsrNQTthQ";
+  const rToken =
+    "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg0Nzk5NzV9.UwtSXO-27OuFamj_STT-le78iK9f8EuQuamzsqaXJ-A";
+
+  const getUseData = useCallback(async () => {
     try {
-      const res = await useTest;
+      const res = await getRecordedExpense(
+        startDate?.toLocaleDateString("en-US") as string,
+        endDate?.toLocaleDateString("en-US") as string,
+        { Authorization: aToken, Refreshtoken: rToken }
+      );
       setData(res.data);
     } catch (error) {
-      console.error(error);
+      console.error(`getUseData Error: Time(${new Date()}) ERROR ${error}`);
     }
-  };
+  }, [startDate, endDate, aToken, rToken]);
 
   useEffect(() => {
     getUseData();
     setIsSubmit(false);
     setFilterForm(false);
     setCategoryList([]);
-    setStartDate(new Date(new Date().getFullYear(), new Date().getMonth(), 1));
-    setEndDate(new Date());
-  }, [setFilterForm, setIsSubmit, setCategoryList, setStartDate, setEndDate]);
+  }, [setFilterForm, setIsSubmit, setCategoryList, getUseData]);
 
   const filterDate = data.filter((d) => {
     if (getDayFunc(selectedDate.toString(), 1) === getDayFunc(d.useDate, 1)) {
       return d;
     }
   });
+
   const totalAmount = filterDate.reduce(
     (acc, cur) => acc + Number(cur.amount),
     0
@@ -73,17 +85,27 @@ export default function Account() {
   const prevMonth = new Date(selectedDate).getMonth();
   const nextMonth = new Date(selectedDate).getMonth() + 1;
 
+  const onChangeMonth = (date: Date) => {
+    setSelectedDate(date);
+    setStartDate(new Date(date.getFullYear(), date.getMonth(), 1));
+    setEndDate(new Date(date.getFullYear(), date.getMonth() + 1, 0));
+  };
+
   const onClickPrev = () => {
     setSelectedDate(new Date(year, prevMonth - 1));
+    setStartDate(new Date(year, prevMonth - 1, 1));
+    setEndDate(new Date(year, prevMonth, 0));
   };
   const onClickNext = () => {
     setSelectedDate(new Date(year, nextMonth));
+    setStartDate(new Date(year, nextMonth, 1));
+    setEndDate(new Date(year, nextMonth + 1, 0));
   };
 
   return (
     <div className=" w-11/12 ml-auto mr-auto flex flex-col items-center mt-4 mb-20">
       {isSubmit === false ? (
-        <div className=" w-11/12 ml-auto mr-auto flex flex-col items-center mt-4 mb-4">
+        <div className=" w-full ml-auto mr-auto flex flex-col items-center mt-4 mb-4">
           <h1 className="text-3xl mt-3 mb-6">가계부</h1>
           <div className="w-full flex flex-col items-center">
             <MonthPickerWrapper
@@ -97,7 +119,7 @@ export default function Account() {
               />
               <MonthPicker
                 selectedDate={selectedDate}
-                handleSelectedDate={setSelectedDate}
+                handleSelectedDate={onChangeMonth}
               />
               <SlArrowRight
                 size={14}

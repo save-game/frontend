@@ -7,7 +7,7 @@ export const checkedListState = atom<string[]>({
 
 export const startDateState = atom<Date | null>({
   key: "startDate",
-  default: new Date(),
+  default: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
 });
 
 export const endDateState = atom<Date | null>({
