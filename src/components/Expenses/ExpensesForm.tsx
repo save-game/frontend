@@ -1,5 +1,5 @@
 import { ChangeEvent, Dispatch, SetStateAction, useRef, useState } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import InformModal from "../Common/InformModal";
@@ -11,6 +11,9 @@ import { IoCloseOutline } from "react-icons/Io5";
 import Calendar from "../Common/Calendar";
 import { Category, categoryList } from "../../constants/expenseCategory";
 import { SHOW_MODAL_DELAY } from "../../constants/modalTime";
+
+import { postExpense } from "../../api/expenseAPI";
+import { expenseFormProps } from "../../interface/interface";
 
 const Container = styled.div`
   ${tw`mx-auto w-11/12 pt-8 text-neutral-600 font-bold text-sm`}
@@ -91,36 +94,14 @@ const ExpensesForm = ({ formEditor }: ExpensesFormProps) => {
     setSelectedCategory(null);
   };
 
-  const handleExpenseSubmit = (formdata: ExpensesFormData) => {
+  const handleExpenseSubmit: SubmitHandler<expenseFormProps> = async (
+    formdata: expenseFormProps
+  ) => {
     console.log(formdata);
+    const response = await postExpense(formdata);
+    console.log(response.data);
+
     if (!dialogRef.current) return;
-    //amount는 숫자로 바꿔서 서버로 보내야함
-    //날짜 포맷 확인 필요
-
-    //서버에 지출등록
-    // const { data } = await axios.post(
-    //   "http://13.124.58.137/record",
-    //   {
-    //     amount: 10000,
-    //     category: "FOOD",
-    //     memo: "메모",
-    //     paidFor: "식당",
-    //     payType: "CARD",
-    //     useDate: "6/24/2023",
-    //   }
-    //   // {
-    //   //   headers: {
-    //   //     Authorization:
-    //   //       "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjg3NjA4NTIxfQ.gpPDNP5lCSk_ASPXsgyFSvtDA0OGkevyHygUhAFu-UM",
-    //   //     Refreshtoken:
-    //   //       "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODgyMTE1MjF9.l1UMkaEHfF8qdz4jzooFdgz9j3QpIL0KfmmARsGAjW4",
-    //   //   },
-    //   // }
-    // );
-    // console.log(data);
-    //onsuccess에
-    // reset();
-
     dialogRef.current.showModal();
     setTimeout(() => {
       if (!dialogRef.current) return;
