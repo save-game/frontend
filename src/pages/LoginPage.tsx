@@ -6,7 +6,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useRecoilState } from "recoil";
 import { refreshToken, token } from "../Recoil/token";
-import { login } from "../api/api";
+import { login, tokenRefresh } from "../api/auth";
+import { useEffect, useState } from "react";
 
 export interface LoginData {
   email: string;
@@ -20,26 +21,44 @@ export default function LoginPage() {
     handleSubmit,
     formState: { isSubmitting },
   } = useForm();
-  const [accessToken, setAccessToken] = useRecoilState(token);
-  const [accessRefreshToken, setrefreshAccessToken] =
-    useRecoilState(refreshToken);
+  const [errorMsg, setErrorMsg] = useState("");
 
   const handleLogin: SubmitHandler<FieldValues> = async (
     formData: FieldValues
   ) => {
     try {
       const response = await login(formData);
-      setAccessToken(response?.token);
-      setrefreshAccessToken(response?.refreshToken);
-      localStorage.setItem("token", response?.token);
-      localStorage.setItem("refreshToken", response?.refreshToken);
-      //   // axios.defaults.headers.common["authorization"] = token;
-      //   // axios.defaults.headers.common["refreshtoken"] = refreshToken;
-      navigate("/home");
+
+      if (response.data.success) {
+        const token = response.headers["authorization"];
+        const refreshToken = response.headers["refreshtoken"];
+        console.log(response.data);
+
+        localStorage.setItem("isLogin", "emailLogin");
+        localStorage.setItem("token", token);
+        localStorage.setItem("refreshToken", refreshToken);
+        // axios.defaults.headers.common["authorization"] = token;
+        // axios.defaults.headers.common["refreshtoken"] = refreshToken;
+        navigate("/home");
+      } else if (!response.data.success) {
+        if (response.data.data === "이미 로그인되어 있습니다.") {
+          await tokenRefresh();
+          navigate("/home");
+        } else if (response.data.data === "틀린 비밀번호입니다.") {
+          setErrorMsg(response.data.data);
+        }
+      }
     } catch (error) {
       console.log(`handleLogin Error: Time(${new Date()}) ERROR ${error}`);
     }
   };
+
+  useEffect(() => {
+    const loginCheck = localStorage.getItem("isLogin");
+    if (loginCheck) {
+      navigate("/home");
+    }
+  }, []);
 
   return (
     <>
@@ -61,6 +80,7 @@ export default function LoginPage() {
             className=" w-full h-10 text-sm pl-1 rounded-lg mb-4 shadow-lg"
             {...register("password")}
           />
+          <p className="w-full h-5 text-xs text-right text-error">{errorMsg}</p>
           <button
             type="submit"
             className="h-10 rounded-lg btn-accent w-full text-xl shadow-lg"
