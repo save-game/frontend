@@ -1,33 +1,50 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
+import { useRecoilValue } from "recoil";
 import ExpenseGraph from "../Expenses/ExpenseGraph";
-import { ExpenseData } from "./Account";
-import { addComma } from "../../helpers/helper";
-import { axiosData } from "./getApi";
+import { ExpenseDataForAnalyze } from "../../interface/interface";
+
+import { startDateState } from "../../Recoil";
+import { getRecordedeExpenseForAnalyze } from "../../api/expenseAPI";
 
 interface AnalyzeProps {
   analyze: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function AnalyzeForm({ analyze }: AnalyzeProps) {
-  const [lists, setLists] = useState<ExpenseData[]>([]);
+  const [lists, setLists] = useState<ExpenseDataForAnalyze[]>([]);
+  const startDateForAnalyze = useRecoilValue(startDateState);
 
-  const dataLists = async () => {
+  const getExpenseData = useCallback(async () => {
     try {
-      const res = await axiosData;
-      setLists(res.data);
+      const response = await getRecordedeExpenseForAnalyze(
+        startDateForAnalyze?.getFullYear() as number,
+        (startDateForAnalyze?.getMonth() as number) + 1
+      );
+      setLists(
+        response.data.sort(
+          (a: ExpenseDataForAnalyze, b: ExpenseDataForAnalyze) =>
+            b.total - a.total
+        )
+      );
     } catch (error) {
-      console.error(error);
+      console.error(`getExpenseData Error: Time(${new Date()}) ERROR ${error}`);
     }
-  };
+  }, [startDateForAnalyze]);
 
   const total = lists.reduce(
-    (acc: number, cur: ExpenseData) => acc + cur.amount,
+    (acc: number, cur: ExpenseDataForAnalyze) => acc + cur.total,
     0
   );
 
   useEffect(() => {
-    dataLists();
-  }, []);
+    getExpenseData();
+  }, [getExpenseData]);
 
   return (
     <div className="w-full">
@@ -43,20 +60,20 @@ export default function AnalyzeForm({ analyze }: AnalyzeProps) {
         </button>
       </div>
       <div className="flex justify-center p-4 border-b-4">
-        <ExpenseGraph />
+        <ExpenseGraph total={total} list={lists} />
       </div>
       <div>
-        {lists
-          .sort((a, b) => b.amount - a.amount)
-          .map((list, idx) => (
-            <div key={idx} className="flex w-full justify-between">
-              <div className="w-1/3 ml-4">{list.category}</div>
-              <p className="w-1/3 text-center"> {addComma(list.amount)}원</p>
-              <p className="w-1/3 text-end mr-4">
-                {((list.amount / total) * 100).toFixed(2)}%
-              </p>
-            </div>
-          ))}
+        {lists.map((list, idx) => (
+          <div key={idx} className="flex w-full justify-between">
+            <div className="w-1/3 ml-4">{list.category}</div>
+            <p className="w-1/3 text-center">
+              {list.total.toLocaleString("ko-KR")}원
+            </p>
+            <p className="w-1/3 text-end mr-4">
+              {((list.total / total) * 100).toFixed(2)}%
+            </p>
+          </div>
+        ))}
       </div>
     </div>
   );

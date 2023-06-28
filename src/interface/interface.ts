@@ -86,3 +86,18 @@ export interface expenseFormProps {
   readonly useDate: string;
   readonly memo?: string | null;
 }
+
+export interface ExpenseData {
+  readonly recordId: number;
+  readonly category: string;
+  readonly amount: number;
+  readonly useDate: string;
+  readonly paidFor: string;
+  readonly memo: string;
+  readonly payType: string;
+}
+
+export interface ExpenseDataForAnalyze {
+  readonly category: string;
+  readonly total: number;
+}
