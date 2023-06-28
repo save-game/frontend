@@ -73,8 +73,8 @@ export default function SignUp() {
 
   const OnCheckEmail: MouseEventHandler<HTMLButtonElement> = async () => {
     await axios
-      .post(`${API}/auth/checkemail`, {
-        value: onChangeEmail,
+      .get(`${API}/auth/checkemail`, {
+        params: { value: onChangeEmail },
       })
       .then((response) => {
         if (response.data.success === false) {
@@ -90,7 +90,7 @@ export default function SignUp() {
 
   const OnCheckNickName: MouseEventHandler<HTMLButtonElement> = async () => {
     await axios
-      .post(`${API}/auth/checknickname`, { value: onChangeNickName })
+      .get(`${API}/auth/checknickname`, { params: { value: onChangeNickName } })
       .then((response) => {
         if (response.data.success === false) {
           setResultNickNameMsg(response.data.data);
@@ -142,7 +142,11 @@ export default function SignUp() {
                 placeholder="이메일을 입력해주세요."
                 className=" input h-8 text-sm mr-4 mb-2 max-w-xs"
                 {...register("email", {
-                  onChange: (e) => setOnChangeEmail(e.target.value),
+                  onChange: (e) => {
+                    setOnChangeEmail(e.target.value);
+                    setUsableEmail(false);
+                    setResultEmailMsg("중복확인을 해 주세요");
+                  },
                 })}
               />
 
@@ -236,7 +240,11 @@ export default function SignUp() {
                 placeholder="닉네임을 입력해주세요"
                 className=" input h-8 text-sm mr-4 mb-2 max-w-xs"
                 {...register("nickName", {
-                  onChange: (e) => setOnChangeNickName(e.target.value),
+                  onChange: (e) => {
+                    setOnChangeNickName(e.target.value);
+                    setUsableNickName(false);
+                    setResultNickNameMsg("중복확인을 해 주세요");
+                  },
                 })}
               />
               <button
