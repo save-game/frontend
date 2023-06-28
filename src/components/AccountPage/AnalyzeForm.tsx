@@ -8,9 +8,11 @@ import {
 import { useRecoilValue } from "recoil";
 import ExpenseGraph from "../Expenses/ExpenseGraph";
 import { ExpenseDataForAnalyze } from "../../interface/interface";
+import { FiMeh } from "react-icons/fi";
 
 import { startDateState } from "../../Recoil";
 import { getRecordedeExpenseForAnalyze } from "../../api/expenseAPI";
+import NoDisplayData from "../Common/NoDisplayData";
 
 interface AnalyzeProps {
   analyze: Dispatch<SetStateAction<boolean>>;
@@ -59,21 +61,32 @@ export default function AnalyzeForm({ analyze }: AnalyzeProps) {
           월별 지출 보기
         </button>
       </div>
-      <div className="flex justify-center p-4 border-b-4">
-        <ExpenseGraph total={total} list={lists} />
-      </div>
-      <div>
-        {lists.map((list, idx) => (
-          <div key={idx} className="flex w-full justify-between">
-            <div className="w-1/3 ml-4">{list.category}</div>
-            <p className="w-1/3 text-center">
-              {list.total.toLocaleString("ko-KR")}원
-            </p>
-            <p className="w-1/3 text-end mr-4">
-              {((list.total / total) * 100).toFixed(2)}%
-            </p>
-          </div>
-        ))}
+      <div className="relative flex flex-col items-center">
+        {!(lists.length === 0) ? (
+          <>
+            <div className="flex justify-center p-4 border-b-4">
+              <ExpenseGraph total={total} list={lists} />
+            </div>
+            <div className="w-full">
+              {lists.map((list, idx) => (
+                <div
+                  key={idx}
+                  className="flex w-full justify-between mb-2 text-lg"
+                >
+                  <div className="w-1/3 ml-4">{list.category}</div>
+                  <p className="w-1/3 text-center">
+                    {list.total.toLocaleString("ko-KR")}원
+                  </p>
+                  <p className="w-1/3 text-end mr-4">
+                    {((list.total / total) * 100).toFixed(2)}%
+                  </p>
+                </div>
+              ))}
+            </div>
+          </>
+        ) : (
+          <NoDisplayData />
+        )}
       </div>
     </div>
   );

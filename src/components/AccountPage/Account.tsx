@@ -22,6 +22,7 @@ import ExpenseFormButton from "../Expenses/ExpenseFormButton.js";
 import { MonthPickerWrapper } from "../../styles/DateRange.js";
 import { getRecordedExpense } from "../../api/expenseAPI.js";
 import { ExpenseData } from "../../interface/interface.js";
+import NoDisplayData from "../Common/NoDisplayData.js";
 
 export default function Account() {
   const [isSubmit, setIsSubmit] = useRecoilState(isSubmitState);
@@ -141,7 +142,7 @@ export default function Account() {
                   </div>
                 </div>
 
-                <div className="w-full">
+                <div className="w-full relative flex flex-col items-center">
                   {filterDate.length > 0 ? (
                     filterDate.map((d) => (
                       <div key={d.recordId} className="w-full border p-4 mb-2">
@@ -183,12 +184,7 @@ export default function Account() {
                       </div>
                     ))
                   ) : (
-                    <div className="flex items-center justify-center p-10 rounded-2xl mt-36 mb-10">
-                      <span>
-                        <FiMeh size={50} className="mr-4 text-accent" />
-                      </span>
-                      <p className="text-4xl text-accent">데이터가 없어요 </p>
-                    </div>
+                    <NoDisplayData />
                   )}
                 </div>
               </>
