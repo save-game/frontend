@@ -77,3 +77,12 @@ export interface ChallengeDataProps {
   readonly maxPeople: number;
   readonly cnt: number;
 }
+
+export interface expenseFormProps {
+  readonly amount: string;
+  readonly payType: string;
+  readonly category: string;
+  readonly paidFor: string;
+  readonly useDate: string;
+  readonly memo?: string | null;
+}
