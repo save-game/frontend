@@ -9,11 +9,13 @@ import { useNavigate } from "react-router-dom";
 import InformModal from "../components/Common/InformModal";
 import ConfirmModal from "../components/Common/ConfirmModal";
 import { SHOW_MODAL_DELAY } from "../constants/modalTime";
-import axios from "axios";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { refreshToken, token } from "../Recoil/token";
 import { user } from "../Recoil/user";
 import { UserData } from "../interface/interface";
+import axios from "../api/axios";
+import { signOut, withdrawal } from "../api/auth";
+import { useUser } from "../api/member";
 
 const Container = styled.div`
   ${tw`mx-auto w-11/12 pt-8 text-neutral-600 font-bold text-sm`}
@@ -32,82 +34,40 @@ const MyPage = () => {
   //   imageUrl:
   //     "https://firebasestorage.googleapis.com/v0/b/javatime-6eaed.appspot.com/o/user%2FJFRkuYjomQVLmW148zv8YXpL3Zi1?alt=media&token=90894058-d360-4451-82b7-cb9e643553f9",
   // });
+  // const [userInfo, setUserInfo] = useRecoilState<UserData | null>(user);
+  const { data: userInfo, isLoading } = useUser();
 
-  const [userInfo, setUserInfo] = useRecoilState<UserData | null>(user);
+  // const [accessToken, setAccessToken] = useRecoilState(token);
+  // const [accessRefreshToken, setrefreshAccessToken] =
+  //   useRecoilState(refreshToken);
 
-  const [accessToken, setAccessToken] = useRecoilState(token);
-  const [accessRefreshToken, setrefreshAccessToken] =
-    useRecoilState(refreshToken);
-
-  const getUserInfo = async () => {
+  const test = async () => {
     try {
-      const { data } = await axios.get("http://13.124.58.137/member/detail", {
-        headers: {
-          Authorization: accessToken,
-          RefreshToken: accessRefreshToken,
-        },
-      });
-      console.log(data.data);
-      setUserInfo(data.data);
-
+      // const { data } = await axios.get("http://13.124.58.137/member/detail");
+      // console.log(data.data);
+      // setUserInfo(data.data);
       // const res = await axios.post("http://13.124.58.137/auth/signup", {
-      //   email: "test5@naver.com",
+      //   email: "test2@naver.com",
       //   password: "test123!!",
-      //   nickname: "test5",
+      //   nickname: "test2",
       // });
       // console.log(res.data);
     } catch (error) {
-      console.error(`getUserInfo Error: Time(${new Date()}) ERROR ${error}`);
+      console.error(`test Error: Time(${new Date()}) ERROR ${error}`);
     }
   };
 
   useEffect(() => {
-    const refreshToken = localStorage.getItem("refreshToken");
-    const token = localStorage.getItem("token");
-    if (!token || !refreshToken) return;
-    setAccessToken(token);
-    setrefreshAccessToken(refreshToken);
-    getUserInfo();
+    // test();
   }, []);
 
-  const tokenRefresh = async () => {
-    const response = await axios.get("/api/auth/reissue", {
-      headers: {
-        Authorization: accessToken,
-        RefreshToken: accessRefreshToken,
-      },
-    });
-    const token = response.headers["authorization"];
-    const refreshToken = response.headers["refreshtoken"];
-    setAccessToken(token);
-    setrefreshAccessToken(refreshToken);
-    localStorage.setItem("token", token);
-    localStorage.setItem("refreshToken", refreshToken);
-    handleSignOut();
-  };
-
   const handleSignOut = async () => {
-    try {
-      const res = await axios.post("http://13.124.58.137/auth/logout", null, {
-        headers: {
-          Authorization: accessToken,
-          RefreshToken: accessRefreshToken,
-        },
-        // headers: {
-        //   Authorization:
-        //     "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjg3Nzg3OTM1fQ.ovdgDdBvn9VTzZ535ktFukRBG8BngipeE-4Jw5benjI",
-        //   RefreshToken:
-        //     "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODgzOTA5MzV9.c5lCHnnKHbf2eTvJ39TlpGMJEDR7Xt_CXhWprQtHYX0",
-        // },
-      });
-      console.log(res.data);
-      if (res.data.success) {
-        navigate("/");
-      } else if (res.data.data === "Token이 유효하지 않습니다.") {
-        tokenRefresh();
-      }
-    } catch (error) {
-      console.error(`handleSignOut Error: Time(${new Date()}) ERROR ${error}`);
+    const res = await signOut();
+
+    //아래 부분은 protected rount쪽에서 구현할까봐
+    if (res.success) {
+      localStorage.clear();
+      navigate("/");
     }
   };
 
@@ -118,22 +78,17 @@ const MyPage = () => {
   };
 
   const handleWithdrawal = async () => {
-    const res = await axios.delete("http://13.124.58.137/auth/withdrawal", {
-      headers: {
-        Authorization: accessToken,
-        RefreshToken: accessRefreshToken,
-      },
-    });
-    console.log(res.data);
-    //onSuccess에
-    if (!informDialogRef.current) return;
-
-    informDialogRef.current.showModal();
-    setTimeout(() => {
+    const res = await withdrawal();
+    if (res.data.success) {
       if (!informDialogRef.current) return;
-      informDialogRef.current.close();
-      navigate("/");
-    }, SHOW_MODAL_DELAY);
+
+      informDialogRef.current.showModal();
+      setTimeout(() => {
+        if (!informDialogRef.current) return;
+        informDialogRef.current.close();
+        navigate("/");
+      }, SHOW_MODAL_DELAY);
+    }
   };
 
   return (

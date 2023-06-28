@@ -12,6 +12,7 @@ import ChallengeHomePage from "./pages/ChallengeHomePage";
 import { queryClient } from "./constants/queryClient";
 import SignUpPage from "./pages/SignUpPage";
 import AccountPage from "./pages/AccountPage";
+import ProtectedRoute from "./components/Common/ProtectedRoute";
 
 const App = () => {
   return (
@@ -20,12 +21,17 @@ const App = () => {
         <RecoilRoot>
           <Routes>
             <Route path="/" element={<LoginPage />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/challenge" element={<ChallengeHomePage />} />
-            <Route path="/challenge/:challengeId" element={<ChallengeRoom />} />
-            <Route path="/account" element={<AccountPage />} />
-            <Route path="/mypage" element={<MyPage />} />
             <Route path="/signup" element={<SignUpPage />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path="/home" element={<Home />} />
+              <Route path="/challenge" element={<ChallengeHomePage />} />
+              <Route
+                path="/challenge/:challengeId"
+                element={<ChallengeRoom />}
+              />
+              <Route path="/account" element={<AccountPage />} />
+              <Route path="/mypage" element={<MyPage />} />
+            </Route>
           </Routes>
           <Header />
         </RecoilRoot>
