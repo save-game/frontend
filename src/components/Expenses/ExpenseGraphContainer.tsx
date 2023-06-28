@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 
 import ExpenseGraph from "./ExpenseGraph";
 import { getRecordedeExpenseForAnalyze } from "../../api/expenseAPI";
