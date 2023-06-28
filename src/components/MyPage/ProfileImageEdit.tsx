@@ -4,6 +4,13 @@ import tw from "twin.macro";
 import { MdPhotoCamera } from "react-icons/Md";
 import { IoCloseOutline } from "react-icons/Io5";
 import { BsPersonFill } from "react-icons/Bs";
+import { getUrl } from "../../api/firebase";
+import { uploadProfileImage, useUser } from "../../api/member";
+import { UseQueryResult, useMutation, useQueryClient } from "react-query";
+import { UserData } from "../../interface/interface";
+import imageCompression from "browser-image-compression";
+import InformModal from "../Common/InformModal";
+import { SHOW_MODAL_DELAY } from "../../constants/modalTime";
 
 interface Props {
   readonly img: string | null | undefined;
@@ -15,15 +22,27 @@ interface Imagefile {
 }
 
 const Dialog = styled.dialog`
-  /* ::backdrop {
-    ${tw`bg-medium-color/30`}
-  } */
   ${tw`relative w-10/12 py-20 rounded-lg shadow-lg text-neutral-600 `}
 `;
 
 const ProfileImageEdit = ({ img }: Props) => {
+  const queryClient = useQueryClient();
+  const { data: userInfo }: UseQueryResult<UserData> = useUser();
   const [imgFile, setImgFile] = useState<Imagefile | null>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const informDialogRef = useRef<HTMLDialogElement>(null);
+  const { mutate: profileImageMutate, isLoading } = useMutation(
+    uploadProfileImage,
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["userInfo"]);
+        setTimeout(() => {
+          if (!informDialogRef.current) return;
+          informDialogRef.current.close();
+        }, SHOW_MODAL_DELAY);
+      },
+    }
+  );
 
   useEffect(() => {
     if (img) {
@@ -42,19 +61,29 @@ const ProfileImageEdit = ({ img }: Props) => {
   };
 
   const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const fileList = e.target.files;
-    if (fileList && fileList[0]) {
-      const url = URL.createObjectURL(fileList[0]);
-      setImgFile({
-        file: fileList[0],
-        thumbnail: url,
-        name: fileList[0].name,
-      });
-    }
+    if (!e.target.files) return;
+    const file = e.target.files[0];
+    const url = URL.createObjectURL(file);
+    setImgFile({
+      file: file,
+      thumbnail: url,
+      name: file.name,
+    });
   };
 
-  const handleProfileImageUpload = () => {
-    //storage올리고 url따서 서버에 업데이트
+  const handleProfileImageUpload = async () => {
+    if (!userInfo || !imgFile || !imgFile.file) return;
+
+    const resizedBlob = await imageCompression(imgFile.file, {
+      maxSizeMB: 0.5,
+    });
+
+    const url = await getUrl(userInfo.memberId, resizedBlob);
+
+    if (!url) return;
+    profileImageMutate(url);
+    if (!informDialogRef.current) return;
+    informDialogRef.current.showModal();
   };
 
   return (
@@ -116,6 +145,11 @@ const ProfileImageEdit = ({ img }: Props) => {
           ></label>
         </form>
       </Dialog>
+      <InformModal
+        dialogRef={informDialogRef}
+        loading={isLoading}
+        inform="변경 되었습니다!"
+      />
     </div>
   );
 };
