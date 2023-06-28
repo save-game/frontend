@@ -3,7 +3,7 @@ import { useEffect, useState, useCallback } from "react";
 import { FiMeh } from "react-icons/fi";
 
 import { SlArrowLeft, SlArrowRight } from "react-icons/sl";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import {
   checkedListState,
   endDateState,
@@ -21,17 +21,7 @@ import { FilteredDataForm } from "../../components/AccountPage/FilterDataForm.js
 import ExpenseFormButton from "../Expenses/ExpenseFormButton.js";
 import { MonthPickerWrapper } from "../../styles/DateRange.js";
 import { getRecordedExpense } from "../../api/expenseAPI.js";
-import { refreshToken, token } from "../../Recoil/token.js";
-
-export interface ExpenseData {
-  recordId: number;
-  category: string;
-  amount: number;
-  useDate: string;
-  paidFor: string;
-  memo: string;
-  payType: string;
-}
+import { ExpenseData } from "../../interface/interface.js";
 
 export default function Account() {
   const [isSubmit, setIsSubmit] = useRecoilState(isSubmitState);
@@ -43,26 +33,17 @@ export default function Account() {
   const [analyze, setAnalyze] = useState(false);
   const [data, setData] = useState<ExpenseData[]>([]);
 
-  // const aToken = useRecoilValue(token);
-  // const rToken = useRecoilValue(refreshToken);
-
-  const aToken =
-    "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjg3ODc2OTc1fQ.xyjz9cUjNCQe3TbIsBm6c8rDUmU5fjzJm9hsrNQTthQ";
-  const rToken =
-    "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg0Nzk5NzV9.UwtSXO-27OuFamj_STT-le78iK9f8EuQuamzsqaXJ-A";
-
   const getUseData = useCallback(async () => {
     try {
-      const res = await getRecordedExpense(
+      const response = await getRecordedExpense(
         startDate?.toLocaleDateString("en-US") as string,
-        endDate?.toLocaleDateString("en-US") as string,
-        { Authorization: aToken, Refreshtoken: rToken }
+        endDate?.toLocaleDateString("en-US") as string
       );
-      setData(res.data);
+      setData(response.data);
     } catch (error) {
       console.error(`getUseData Error: Time(${new Date()}) ERROR ${error}`);
     }
-  }, [startDate, endDate, aToken, rToken]);
+  }, [startDate, endDate]);
 
   useEffect(() => {
     getUseData();
