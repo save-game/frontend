@@ -7,6 +7,10 @@ import { useNavigate } from "react-router";
 import ExpenseGraphContainer from "../components/Expenses/ExpenseGraphContainer";
 import MyChallengeCard from "../components/Challenge/MyChallengeCard";
 import ExpenseFormButton from "../components/Expenses/ExpenseFormButton";
+import { useUser } from "../api/member";
+import { UserData } from "../interface/interface";
+import { UseQueryResult } from "react-query";
+import { BsPersonFill } from "react-icons/Bs";
 
 interface MyChallengeList {
   challengeId: number;
@@ -15,8 +19,7 @@ interface MyChallengeList {
 }
 
 export default function Home() {
-  const [imgSrc, setImgSrc] = useState("https://picsum.photos/70");
-  const [nickName, setNickName] = useState("닉네임(기본값)");
+  const { data: userInfo }: UseQueryResult<UserData> = useUser();
   const [myChallengeList, setMyChallengeList] = useState<MyChallengeList[]>();
 
   const navigate = useNavigate();
@@ -44,8 +47,14 @@ export default function Home() {
     <>
       <Container>
         <ProfileContainer>
-          <ProfileImg src={imgSrc} />
-          <p className="ml-4 text-accent text-lg">{nickName}</p>
+          <ProfileImgContainer>
+            {userInfo?.profileImageUrl ? (
+              <img src={userInfo.profileImageUrl} />
+            ) : (
+              <BsPersonFill size={80} className="mt-2" />
+            )}
+          </ProfileImgContainer>
+          <p className="ml-4 text-accent text-lg">{userInfo?.nickname}</p>
         </ProfileContainer>
         <ExpenseGraphContainer />
         <ExpenseFormButton size={"normal"} />
@@ -85,8 +94,6 @@ const ProfileContainer = styled.div`
   ${tw`h-20 w-full flex items-center px-4 pb-2 shadow-md rounded-md`}
 `;
 
-const ProfileImg = styled.img`
-  width: 70px;
-  height: 70px;
-  ${tw` rounded-full`};
+const ProfileImgContainer = styled.div`
+  ${tw`w-20 h-20  rounded-full overflow-hidden bg-[#f0f8f6] text-accent shadow-lg`}
 `;

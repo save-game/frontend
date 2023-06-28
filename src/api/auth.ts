@@ -11,12 +11,12 @@ export const login = async (formData: FieldValues) => {
 
 export const tokenRefresh = async () => {
   try {
-    const response = await axios.get("/api/auth/reissue");
+    const response = await axios.get("http://13.124.58.137/auth/reissue");
     if (response.data.success) {
       const token = response.headers["authorization"];
       const refreshToken = response.headers["refreshtoken"];
-      axios.defaults.headers.common["authorization"] = token;
-      axios.defaults.headers.common["refreshtoken"] = refreshToken;
+      // axios.defaults.headers.common["authorization"] = token;
+      // axios.defaults.headers.common["refreshtoken"] = refreshToken;
       localStorage.setItem("token", token);
       localStorage.setItem("refreshToken", refreshToken);
     } else {

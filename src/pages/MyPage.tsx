@@ -9,13 +9,10 @@ import { useNavigate } from "react-router-dom";
 import InformModal from "../components/Common/InformModal";
 import ConfirmModal from "../components/Common/ConfirmModal";
 import { SHOW_MODAL_DELAY } from "../constants/modalTime";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { refreshToken, token } from "../Recoil/token";
-import { user } from "../Recoil/user";
 import { UserData } from "../interface/interface";
-import axios from "../api/axios";
 import { signOut, withdrawal } from "../api/auth";
 import { useUser } from "../api/member";
+import { UseQueryResult } from "react-query";
 
 const Container = styled.div`
   ${tw`mx-auto w-11/12 pt-8 text-neutral-600 font-bold text-sm`}
@@ -27,44 +24,11 @@ const MyPage = () => {
   const navigate = useNavigate();
   const [nicknameForm, setNicknameForm] = useState(false);
   const [passwordForm, setPasswordForm] = useState(false);
-  //userInfo는 나중에 useQuery로
-  // const [userInfo, setUserInfo] = useState({
-  //   email: "이메일",
-  //   nickname: "닉네임",
-  //   imageUrl:
-  //     "https://firebasestorage.googleapis.com/v0/b/javatime-6eaed.appspot.com/o/user%2FJFRkuYjomQVLmW148zv8YXpL3Zi1?alt=media&token=90894058-d360-4451-82b7-cb9e643553f9",
-  // });
-  // const [userInfo, setUserInfo] = useRecoilState<UserData | null>(user);
-  const { data: userInfo, isLoading } = useUser();
-
-  // const [accessToken, setAccessToken] = useRecoilState(token);
-  // const [accessRefreshToken, setrefreshAccessToken] =
-  //   useRecoilState(refreshToken);
-
-  const test = async () => {
-    try {
-      // const { data } = await axios.get("http://13.124.58.137/member/detail");
-      // console.log(data.data);
-      // setUserInfo(data.data);
-      // const res = await axios.post("http://13.124.58.137/auth/signup", {
-      //   email: "test2@naver.com",
-      //   password: "test123!!",
-      //   nickname: "test2",
-      // });
-      // console.log(res.data);
-    } catch (error) {
-      console.error(`test Error: Time(${new Date()}) ERROR ${error}`);
-    }
-  };
-
-  useEffect(() => {
-    // test();
-  }, []);
+  const { data: userInfo }: UseQueryResult<UserData> = useUser();
 
   const handleSignOut = async () => {
     const res = await signOut();
 
-    //아래 부분은 protected rount쪽에서 구현할까봐
     if (res.success) {
       localStorage.clear();
       navigate("/");
