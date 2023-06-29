@@ -86,3 +86,11 @@ export interface expenseFormProps {
   readonly useDate: string;
   readonly memo?: string | null;
 }
+
+export interface ValidationFormProps {
+  readonly email: string;
+  readonly nickName: string;
+  readonly pw: string;
+  readonly checkPw: string;
+  readonly checkBox: boolean;
+}
