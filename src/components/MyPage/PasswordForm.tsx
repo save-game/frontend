@@ -5,8 +5,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { SHOW_MODAL_DELAY } from "../../constants/modalTime";
 import { useSetRecoilState } from "recoil";
 import { loadingAtom } from "../../Recoil/loading";
-import { useMutation, useQueryClient } from "react-query";
-import { passwordChange } from "../../api/member";
+import { useMutation } from "react-query";
+import { passwordChange } from "../../api/membersAPI";
 
 interface Props {
   readonly formEditor: Dispatch<SetStateAction<boolean>>;

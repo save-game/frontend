@@ -7,7 +7,7 @@ import { useNavigate } from "react-router";
 import ExpenseGraphContainer from "../components/Expenses/ExpenseGraphContainer";
 import MyChallengeCard from "../components/Challenge/MyChallengeCard";
 import ExpenseFormButton from "../components/Expenses/ExpenseFormButton";
-import { useUser } from "../api/member";
+import { useUser } from "../api/membersAPI";
 import { UserData } from "../interface/interface";
 import { UseQueryResult } from "react-query";
 import { BsPersonFill } from "react-icons/Bs";

@@ -1,4 +1,4 @@
-import axios from "./axios";
+import axios from "./axiosInterceptors";
 import { API } from "../constants/api";
 
 import { FieldValues } from "react-hook-form";

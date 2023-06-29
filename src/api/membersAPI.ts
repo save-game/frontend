@@ -1,10 +1,11 @@
 import { useQuery } from "react-query";
-import axios from "./axios";
+import axios from "./axiosInterceptors";
+import { API } from "../constants/api";
 
 export const useUser = () => {
   const getUserInfo = async () => {
     try {
-      const { data } = await axios.get("http://13.124.58.137/members/detail");
+      const { data } = await axios.get(`${API}/members/detail`);
       return data.data;
     } catch (error) {
       console.error(`getUserInfo Error: Time(${new Date()}) ERROR ${error}`);
@@ -15,12 +16,9 @@ export const useUser = () => {
 
 export const uploadProfileImage = async (url: string) => {
   try {
-    const { data } = await axios.put(
-      "http://13.124.58.137/members/detail/image",
-      {
-        profileImageUrl: url,
-      }
-    );
+    const { data } = await axios.put(`${API}/members/detail/image`, {
+      profileImageUrl: url,
+    });
     return data;
   } catch (error) {
     console.error(
@@ -31,12 +29,9 @@ export const uploadProfileImage = async (url: string) => {
 
 export const nicknameChange = async (nickname: string) => {
   try {
-    const { data } = await axios.put(
-      "http://13.124.58.137/members/detail/nickname",
-      {
-        nickname: nickname,
-      }
-    );
+    const { data } = await axios.put(`${API}/members/detail/nickname`, {
+      nickname: nickname,
+    });
     return data;
   } catch (error) {
     console.error(`nicknameChange Error: Time(${new Date()}) ERROR ${error}`);
@@ -50,13 +45,10 @@ interface PasswordData {
 
 export const passwordChange = async (password: PasswordData) => {
   try {
-    const { data } = await axios.put(
-      "http://13.124.58.137/members/detail/password",
-      {
-        oldPassword: password.prevPassword,
-        newPassword: password.newPassword,
-      }
-    );
+    const { data } = await axios.put(`${API}/members/detail/password`, {
+      oldPassword: password.prevPassword,
+      newPassword: password.newPassword,
+    });
     return data;
   } catch (error) {
     console.error(`passwordChange Error: Time(${new Date()}) ERROR ${error}`);

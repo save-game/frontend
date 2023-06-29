@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { BsPersonFill } from "react-icons/Bs";
@@ -10,8 +10,8 @@ import InformModal from "../components/Common/InformModal";
 import ConfirmModal from "../components/Common/ConfirmModal";
 import { SHOW_MODAL_DELAY } from "../constants/modalTime";
 import { UserData } from "../interface/interface";
-import { signOut, withdrawal } from "../api/auth";
-import { useUser } from "../api/member";
+import { signOut, withdrawal } from "../api/authAPI";
+import { useUser } from "../api/membersAPI";
 import { UseQueryResult } from "react-query";
 import { useRecoilValue } from "recoil";
 import { loadingAtom } from "../Recoil/loading";

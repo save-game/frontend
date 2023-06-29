@@ -10,9 +10,9 @@ import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SHOW_MODAL_DELAY } from "../../constants/modalTime";
 import { IoCloseOutline } from "react-icons/Io5";
-import { checkNickname } from "../../api/auth";
+import { checkNickname } from "../../api/authAPI";
 import { useMutation, useQueryClient } from "react-query";
-import { nicknameChange } from "../../api/member";
+import { nicknameChange } from "../../api/membersAPI";
 import { useSetRecoilState } from "recoil";
 import { loadingAtom } from "../../Recoil/loading";
 

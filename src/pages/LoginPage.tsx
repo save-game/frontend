@@ -3,10 +3,7 @@ import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import KakaoIcon from "../assets/kakao_login_large_wide.png";
 import Logo from "../assets/savegame_512x512.png";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { useRecoilState } from "recoil";
-import { refreshToken, token } from "../Recoil/token";
-import { login, tokenRefresh } from "../api/auth";
+import { login, tokenRefresh } from "../api/authAPI";
 import { useEffect, useState } from "react";
 
 export interface LoginData {
@@ -16,11 +13,7 @@ export interface LoginData {
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const {
-    register,
-    handleSubmit,
-    formState: { isSubmitting },
-  } = useForm();
+  const { register, handleSubmit } = useForm();
   const [errorMsg, setErrorMsg] = useState("");
 
   const handleLogin: SubmitHandler<FieldValues> = async (
@@ -37,8 +30,6 @@ export default function LoginPage() {
         localStorage.setItem("isLogin", "emailLogin");
         localStorage.setItem("token", token);
         localStorage.setItem("refreshToken", refreshToken);
-        // axios.defaults.headers.common["authorization"] = token;
-        // axios.defaults.headers.common["refreshtoken"] = refreshToken;
         navigate("/home");
       } else if (!response.data.success) {
         if (response.data.data === "이미 로그인되어 있습니다.") {
@@ -60,7 +51,7 @@ export default function LoginPage() {
     if (loginCheck) {
       navigate("/home");
     }
-  }, []);
+  });
 
   return (
     <>
