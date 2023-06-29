@@ -46,6 +46,8 @@ export default function LoginPage() {
           navigate("/home");
         } else if (response.data.data === "틀린 비밀번호입니다.") {
           setErrorMsg(response.data.data);
+        } else if (response.data.data === "사용자를 찾을 수 없습니다") {
+          setErrorMsg(response.data.data);
         }
       }
     } catch (error) {
