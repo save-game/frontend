@@ -1,17 +1,29 @@
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import {
+  Dispatch,
+  RefObject,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import { useForm } from "react-hook-form";
-import InformModal from "../Common/InformModal";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SHOW_MODAL_DELAY } from "../../constants/modalTime";
+import { IoCloseOutline } from "react-icons/Io5";
+import { checkNickname } from "../../api/auth";
+import { useMutation, useQueryClient } from "react-query";
+import { nicknameChange } from "../../api/member";
+import { useSetRecoilState } from "recoil";
+import { loadingAtom } from "../../Recoil/loading";
 
 interface Props {
   readonly formEditor: Dispatch<SetStateAction<boolean>>;
+  readonly informChangeRef: RefObject<HTMLDialogElement>;
 }
 
-// 취소버튼 필요하지 않나싶다
-
-const NicknameForm = ({ formEditor }: Props) => {
+const NicknameForm = ({ formEditor, informChangeRef }: Props) => {
+  const queryClient = useQueryClient();
+  const setIsLoading = useSetRecoilState(loadingAtom);
   const [duplicationCheck, setDuplicationCheck] = useState({
     check: false,
     result: false,
@@ -24,7 +36,16 @@ const NicknameForm = ({ formEditor }: Props) => {
       .required("변경할 닉네임을 입력해주세요."),
   });
   type NicknameFormData = Yup.InferType<typeof nicknameSchema>;
-  const dialogRef = useRef<HTMLDialogElement>(null);
+  const { mutate: nicknameMutate } = useMutation(nicknameChange, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["userInfo"]);
+      setIsLoading(false);
+      setTimeout(() => {
+        if (!informChangeRef.current) return;
+        informChangeRef.current.close();
+      }, SHOW_MODAL_DELAY);
+    },
+  });
   const {
     register,
     formState: { errors },
@@ -44,10 +65,12 @@ const NicknameForm = ({ formEditor }: Props) => {
     });
   }, [nicknameInput]);
 
-  const handleNicknameCheck = () => {
+  const handleNicknameCheck = async () => {
     if (nicknameInput === "") return;
-    //서버와중복체크
-    const isPassed = true;
+
+    const res = await checkNickname(nicknameInput);
+    const isPassed = res.success;
+
     if (isPassed) {
       setDuplicationCheck({
         check: true,
@@ -62,18 +85,13 @@ const NicknameForm = ({ formEditor }: Props) => {
     clearErrors("nickname");
   };
 
-  const handleNicknameChange = () => {
-    //서버에 닉넴수정 요청 useMutation으로
-    //onSuccess에 완료모달
-    if (!dialogRef.current) return;
+  const handleNicknameChange = ({ nickname }: NicknameFormData) => {
+    setIsLoading(true);
+    if (!informChangeRef.current) return;
+    informChangeRef.current.showModal();
 
-    dialogRef.current.showModal();
-    setTimeout(() => {
-      if (!dialogRef.current) return;
-      dialogRef.current.close();
-
-      formEditor(false);
-    }, SHOW_MODAL_DELAY);
+    nicknameMutate(nickname);
+    formEditor(false);
   };
   return (
     <>
@@ -85,7 +103,7 @@ const NicknameForm = ({ formEditor }: Props) => {
             maxLength={11}
             spellCheck={false}
             autoFocus
-            className="outline-none pl-2 h-10 my-1 placeholder:text-xs placeholder:font-light"
+            className="outline-none pl-2 h-10 mt-5 placeholder:text-xs placeholder:font-light"
             {...register("nickname")}
           />
           {duplicationCheck.check ? (
@@ -110,6 +128,13 @@ const NicknameForm = ({ formEditor }: Props) => {
         <div className="flex flex-col space-y-2.5">
           <button
             type="button"
+            onClick={() => formEditor(false)}
+            className="btn btn-xs btn-ghost text-xs px-1 -mt-2"
+          >
+            <IoCloseOutline size={22} />
+          </button>
+          <button
+            type="button"
             onClick={handleNicknameCheck}
             className="btn btn-xs btn-ghost text-xs px-1 bg-light-color hover:bg-[#dff1ed] shadow"
           >
@@ -120,11 +145,6 @@ const NicknameForm = ({ formEditor }: Props) => {
           </button>
         </div>
       </form>
-      <InformModal
-        dialogRef={dialogRef}
-        loading={false}
-        inform="닉네임이 변경되었습니다!"
-      />
     </>
   );
 };

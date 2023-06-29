@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { RefObject, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { MdPhotoCamera } from "react-icons/Md";
@@ -9,11 +9,13 @@ import { uploadProfileImage, useUser } from "../../api/member";
 import { UseQueryResult, useMutation, useQueryClient } from "react-query";
 import { UserData } from "../../interface/interface";
 import imageCompression from "browser-image-compression";
-import InformModal from "../Common/InformModal";
 import { SHOW_MODAL_DELAY } from "../../constants/modalTime";
+import { useSetRecoilState } from "recoil";
+import { loadingAtom } from "../../Recoil/loading";
 
 interface Props {
   readonly img: string | null | undefined;
+  readonly informChangeRef: RefObject<HTMLDialogElement>;
 }
 interface Imagefile {
   readonly file: File | null;
@@ -25,24 +27,22 @@ const Dialog = styled.dialog`
   ${tw`relative w-10/12 py-20 rounded-lg shadow-lg text-neutral-600 `}
 `;
 
-const ProfileImageEdit = ({ img }: Props) => {
+const ProfileImageEdit = ({ img, informChangeRef }: Props) => {
   const queryClient = useQueryClient();
   const { data: userInfo }: UseQueryResult<UserData> = useUser();
   const [imgFile, setImgFile] = useState<Imagefile | null>(null);
+  const setIsLoading = useSetRecoilState(loadingAtom);
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const informDialogRef = useRef<HTMLDialogElement>(null);
-  const { mutate: profileImageMutate, isLoading } = useMutation(
-    uploadProfileImage,
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(["userInfo"]);
-        setTimeout(() => {
-          if (!informDialogRef.current) return;
-          informDialogRef.current.close();
-        }, SHOW_MODAL_DELAY);
-      },
-    }
-  );
+  const { mutate: profileImageMutate } = useMutation(uploadProfileImage, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["userInfo"]);
+      setIsLoading(false);
+      setTimeout(() => {
+        if (!informChangeRef.current) return;
+        informChangeRef.current.close();
+      }, SHOW_MODAL_DELAY);
+    },
+  });
 
   useEffect(() => {
     if (img) {
@@ -69,21 +69,23 @@ const ProfileImageEdit = ({ img }: Props) => {
       thumbnail: url,
       name: file.name,
     });
+    e.target.value = "";
   };
 
   const handleProfileImageUpload = async () => {
     if (!userInfo || !imgFile || !imgFile.file) return;
 
+    setIsLoading(true);
+    if (!informChangeRef.current) return;
+    informChangeRef.current.showModal();
+
     const resizedBlob = await imageCompression(imgFile.file, {
       maxSizeMB: 0.5,
     });
-
     const url = await getUrl(userInfo.memberId, resizedBlob);
 
     if (!url) return;
     profileImageMutate(url);
-    if (!informDialogRef.current) return;
-    informDialogRef.current.showModal();
   };
 
   return (
@@ -95,7 +97,7 @@ const ProfileImageEdit = ({ img }: Props) => {
         <MdPhotoCamera size={20} />
       </div>
       <Dialog ref={dialogRef}>
-        <form method="dialog" className="">
+        <form method="dialog" className=" z-50">
           <div className="flex flex-col items-center text-sm font-semibold my-3">
             <div className="w-28 h-28 z-[888] flex justify-center items-center rounded-lg shadow bg-base-200  overflow-hidden relative mb-4">
               {imgFile ? (
@@ -139,17 +141,8 @@ const ProfileImageEdit = ({ img }: Props) => {
           <button id="close" className="absolute top-5 right-5">
             <IoCloseOutline size={26} />
           </button>
-          <label
-            htmlFor="close"
-            className="fixed top-0 bottom-0 left-0 right-0 -z-10"
-          ></label>
         </form>
       </Dialog>
-      <InformModal
-        dialogRef={informDialogRef}
-        loading={isLoading}
-        inform="변경 되었습니다!"
-      />
     </div>
   );
 };

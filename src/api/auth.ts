@@ -45,3 +45,15 @@ export const withdrawal = async () => {
     console.error(`withdrawal Error: Time(${new Date()}) ERROR ${error}`);
   }
 };
+
+export const checkNickname = async (nicknameInput: string) => {
+  try {
+    const { data } = await axios.get(
+      `http://13.124.58.137/auth/checknickname?value=${nicknameInput}`
+    );
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.error(`checkNickname Error: Time(${new Date()}) ERROR ${error}`);
+  }
+};
