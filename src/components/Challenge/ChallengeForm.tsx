@@ -11,6 +11,7 @@ import { addOneMonth } from "../../helpers/helper";
 import { SHOW_WARNING_MODAL_DELAY } from "../../constants/modalTime";
 import ChallengeCategoryFilter from "./ChallengeCategoryFilter";
 import { Category } from "../../constants/expenseCategory";
+import { postChallenge } from "../../api/challengeAPI";
 
 export default function ChallengeForm() {
   const [memberCount, setMemberCount] = useState<number>(2);
@@ -97,6 +98,7 @@ export default function ChallengeForm() {
 
   const handleSubmitChallenge = async (data: FieldValues) => {
     try {
+      postChallenge(data);
       console.log(data);
     } catch (error) {
       console.error(
