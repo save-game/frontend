@@ -1,15 +1,20 @@
-import { Dispatch, SetStateAction, useRef } from "react";
+import { Dispatch, RefObject, SetStateAction } from "react";
 import { useForm } from "react-hook-form";
-import InformModal from "../Common/InformModal";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SHOW_MODAL_DELAY } from "../../constants/modalTime";
+import { useSetRecoilState } from "recoil";
+import { loadingAtom } from "../../Recoil/loading";
+import { useMutation } from "react-query";
+import { passwordChange } from "../../api/membersAPI";
 
 interface Props {
   readonly formEditor: Dispatch<SetStateAction<boolean>>;
+  readonly informChangeRef: RefObject<HTMLDialogElement>;
 }
 
-const PasswordForm = ({ formEditor }: Props) => {
+const PasswordForm = ({ formEditor, informChangeRef }: Props) => {
+  const setIsLoading = useSetRecoilState(loadingAtom);
   const passwordRegExp =
     /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-~])(?=.*[0-9]).{8,25}$/;
 
@@ -29,7 +34,6 @@ const PasswordForm = ({ formEditor }: Props) => {
       .required("필수 입력 항목입니다."),
   });
   type PasswordFormData = Yup.InferType<typeof passwordSchema>;
-  const dialogRef = useRef<HTMLDialogElement>(null);
   const {
     register,
     formState: { errors },
@@ -38,18 +42,30 @@ const PasswordForm = ({ formEditor }: Props) => {
     resolver: yupResolver(passwordSchema),
     mode: "onSubmit",
   });
+  const { mutate: passwordMutate } = useMutation(passwordChange, {
+    onSuccess: () => {
+      setIsLoading(false);
+      setTimeout(() => {
+        if (!informChangeRef.current) return;
+        informChangeRef.current.close();
+      }, SHOW_MODAL_DELAY);
+    },
+  });
 
-  const handlePasswordChange = () => {
-    //비번변경 서버에 요청
-    if (!dialogRef.current) return;
-    //onSuccess에
+  const handlePasswordChange = ({
+    prevPassword,
+    newPassword,
+  }: PasswordFormData) => {
+    setIsLoading(true);
+    if (!informChangeRef.current) return;
+    informChangeRef.current.showModal();
 
-    dialogRef.current.showModal();
-    setTimeout(() => {
-      if (!dialogRef.current) return;
-      dialogRef.current.close();
-      formEditor(false);
-    }, SHOW_MODAL_DELAY);
+    const password = {
+      prevPassword: prevPassword,
+      newPassword: newPassword,
+    };
+    passwordMutate(password);
+    formEditor(false);
   };
 
   return (
@@ -106,20 +122,17 @@ const PasswordForm = ({ formEditor }: Props) => {
         <p className="text-[11px] h-4 font-light text-error text-right bg-base-100">
           {errors.confirmPassword?.message ?? null}
         </p>
+        <button className="btn btn-neutral w-full mt-6 mb-3">
+          비밀번호 변경
+        </button>
         <button
           type="button"
           onClick={() => formEditor(false)}
-          className="btn btn-outline w-full mt-6 mb-3"
+          className="btn btn-outline w-full  "
         >
           취소
         </button>
-        <button className="btn w-full">비밀번호 변경</button>
       </form>
-      <InformModal
-        dialogRef={dialogRef}
-        loading={false}
-        inform="비밀번호가 변경되었습니다!"
-      />
     </>
   );
 };

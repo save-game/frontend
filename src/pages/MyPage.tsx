@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { BsPersonFill } from "react-icons/Bs";
@@ -13,9 +13,11 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { refreshToken, token } from "../Recoil/token";
 import { user } from "../Recoil/user";
 import { UserData } from "../interface/interface";
-import axios from "../api/axios";
-import { signOut, withdrawal } from "../api/auth";
-import { useUser } from "../api/member";
+import { signOut, withdrawal } from "../api/authAPI";
+import { useUser } from "../api/membersAPI";
+import { UseQueryResult } from "react-query";
+import { useRecoilValue } from "recoil";
+import { loadingAtom } from "../Recoil/loading";
 
 const Container = styled.div`
   ${tw`mx-auto w-11/12 pt-8 text-neutral-600 font-bold text-sm`}
@@ -23,43 +25,12 @@ const Container = styled.div`
 
 const MyPage = () => {
   const confirmDialogRef = useRef<HTMLDialogElement>(null);
-  const informDialogRef = useRef<HTMLDialogElement>(null);
+  const informWithdrawalRef = useRef<HTMLDialogElement>(null);
+  const informChangeRef = useRef<HTMLDialogElement>(null);
   const navigate = useNavigate();
   const [nicknameForm, setNicknameForm] = useState(false);
   const [passwordForm, setPasswordForm] = useState(false);
-  //userInfo는 나중에 useQuery로
-  // const [userInfo, setUserInfo] = useState({
-  //   email: "이메일",
-  //   nickname: "닉네임",
-  //   imageUrl:
-  //     "https://firebasestorage.googleapis.com/v0/b/javatime-6eaed.appspot.com/o/user%2FJFRkuYjomQVLmW148zv8YXpL3Zi1?alt=media&token=90894058-d360-4451-82b7-cb9e643553f9",
-  // });
-  // const [userInfo, setUserInfo] = useRecoilState<UserData | null>(user);
-  const { data: userInfo, isLoading } = useUser();
-
-  // const [accessToken, setAccessToken] = useRecoilState(token);
-  // const [accessRefreshToken, setrefreshAccessToken] =
-  //   useRecoilState(refreshToken);
-
-  const test = async () => {
-    try {
-      // const { data } = await axios.get("http://13.124.58.137/member/detail");
-      // console.log(data.data);
-      // setUserInfo(data.data);
-      // const res = await axios.post("http://13.124.58.137/auth/signup", {
-      //   email: "test2@naver.com",
-      //   password: "test123!!",
-      //   nickname: "test2",
-      // });
-      // console.log(res.data);
-    } catch (error) {
-      console.error(`test Error: Time(${new Date()}) ERROR ${error}`);
-    }
-  };
-
-  useEffect(() => {
-    // test();
-  }, []);
+  const { data: userInfo }: UseQueryResult<UserData> = useUser();
 
   const handleSignOut = async () => {
     const res = await signOut();
@@ -80,12 +51,12 @@ const MyPage = () => {
   const handleWithdrawal = async () => {
     const res = await withdrawal();
     if (res.data.success) {
-      if (!informDialogRef.current) return;
+      if (!informWithdrawalRef.current) return;
 
-      informDialogRef.current.showModal();
+      informWithdrawalRef.current.showModal();
       setTimeout(() => {
-        if (!informDialogRef.current) return;
-        informDialogRef.current.close();
+        if (!informWithdrawalRef.current) return;
+        informWithdrawalRef.current.close();
         navigate("/");
       }, SHOW_MODAL_DELAY);
     }
@@ -108,10 +79,16 @@ const MyPage = () => {
                   <BsPersonFill size={80} className="mt-2" />
                 )}
               </div>
-              <ProfileImageEdit img={userInfo?.profileImageUrl} />
+              <ProfileImageEdit
+                img={userInfo?.profileImageUrl}
+                informChangeRef={informChangeRef}
+              />
             </div>
             {nicknameForm ? (
-              <NicknameForm formEditor={setNicknameForm} />
+              <NicknameForm
+                formEditor={setNicknameForm}
+                informChangeRef={informChangeRef}
+              />
             ) : (
               <>
                 <div className="w-6/12 px-2 ">{userInfo?.nickname}</div>
@@ -129,7 +106,10 @@ const MyPage = () => {
             )}
           </div>
           {passwordForm ? (
-            <PasswordForm formEditor={setPasswordForm} />
+            <PasswordForm
+              formEditor={setPasswordForm}
+              informChangeRef={informChangeRef}
+            />
           ) : (
             <div>
               <div className="flex items-center w-full h-16 p-2 border-b border-accent-focus/60">
@@ -149,7 +129,7 @@ const MyPage = () => {
               <div className="absolute bottom-0 w-11/12 my-4 space-y-4">
                 <button
                   onClick={handleSignOut}
-                  className="btn w-full shadow-md"
+                  className="btn btn-neutral w-full shadow-md"
                 >
                   로그아웃
                 </button>
@@ -169,9 +149,14 @@ const MyPage = () => {
           onConfirm={handleWithdrawal}
         />
         <InformModal
-          dialogRef={informDialogRef}
+          dialogRef={informWithdrawalRef}
           loading={false}
           inform="탈퇴처리가 완료되었습니다."
+        />
+        <InformModal
+          dialogRef={informChangeRef}
+          loading={isLoading}
+          inform="변경되었습니다!"
         />
       </main>
     </>
