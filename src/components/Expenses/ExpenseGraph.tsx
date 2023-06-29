@@ -1,43 +1,33 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { Chart, ArcElement, Tooltip, TooltipItem } from "chart.js";
 import { Pie } from "react-chartjs-2";
 
+import { ExpenseDataForAnalyze } from "../../interface/interface";
+
 Chart.register(ArcElement, Tooltip);
 
-interface ExpenseData {
-  category: string;
-  amount: number;
-}
-
-export default function ExpenseGraph() {
-  const [monthlyExpenseData, setMonthlyExpenseData] = useState<ExpenseData[]>();
-  const [monthlyTotalAmount, setMonthlyTotalAmount] = useState<number>(0);
-
-  const getMonthlyExpenseData = async () => {
-    try {
-      const response = await axios.get("./test/graphTest.json");
-      setMonthlyTotalAmount(
-        response.data.reduce((acc: number, cur: ExpenseData) => {
-          return acc + cur.amount;
-        }, 0)
-      );
-      setMonthlyExpenseData(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+export default function ExpenseGraph({
+  total,
+  list,
+}: {
+  total: number;
+  list: ExpenseDataForAnalyze[];
+}) {
+  const [monthlyExpenseData, setMonthlyExpenseData] =
+    useState<ExpenseDataForAnalyze[]>(list);
+  const [monthlyTotalAmount, setMonthlyTotalAmount] = useState<number>(total);
 
   useEffect(() => {
-    getMonthlyExpenseData();
-  }, []);
+    setMonthlyExpenseData(list);
+    setMonthlyTotalAmount(total);
+  }, [list, total]);
 
   const data = {
     datasets: [
       {
         data: monthlyExpenseData,
         backgroundColor: bgColor,
-        borderColor: bdColor,
+        borderColor: bgColor,
         borderWidth: 1,
         hoverOffset: 10,
       },
@@ -61,7 +51,7 @@ export default function ExpenseGraph() {
           label: (tooltipItem: TooltipItem<"pie">) => {
             const dataIndex = tooltipItem.dataIndex;
             const amount =
-              monthlyExpenseData && monthlyExpenseData[dataIndex].amount;
+              monthlyExpenseData && monthlyExpenseData[dataIndex].total;
             if (!amount) {
               return;
             }
@@ -75,7 +65,7 @@ export default function ExpenseGraph() {
       hoverOffset: 20,
     },
     parsing: {
-      key: "amount",
+      key: "total",
     },
     layout: {
       autoPadding: true,
@@ -89,21 +79,17 @@ export default function ExpenseGraph() {
 }
 
 const bgColor = [
-  "#86CE98",
-  "#E47375",
-  "#D97990",
-  "#DF9467",
-  "#85CBD3",
-  "#DF6586",
-  "#7CB78C",
-];
-
-const bdColor = [
-  "#86CE98",
-  "#E47375",
-  "#D97990",
-  "#DF9467",
-  "#85CBD3",
-  "#DF6586",
-  "#7CB78C",
+  "#1f77b4",
+  "#ff7f0e",
+  "#2ca02c",
+  "#d62728",
+  "#9467bd",
+  "#8c564b",
+  "#e377c2",
+  "#7f7f7f",
+  "#bcbd22",
+  "#17becf",
+  "#aec7e8",
+  "#ffbb78",
+  "#98df8a",
 ];

@@ -94,3 +94,8 @@ export interface ValidationFormProps {
   readonly checkPw: string;
   readonly checkBox: boolean;
 }
+
+export interface ExpenseDataForAnalyze {
+  readonly category: string;
+  readonly total: number;
+}
