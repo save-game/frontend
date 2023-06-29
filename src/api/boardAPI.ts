@@ -1,4 +1,4 @@
-import axios from "./axios";
+import axios from "./axiosInterceptors";
 import { API } from "../constants/api";
 //지우기
 const challengeId = 1;

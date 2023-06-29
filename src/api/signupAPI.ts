@@ -1,4 +1,4 @@
-import axios from "./axios";
+import axios from "./axiosInterceptors";
 import { ValidationFormProps } from "../interface/interface";
 import { API } from "../constants/api";
 

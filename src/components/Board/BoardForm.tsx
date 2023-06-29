@@ -1,6 +1,6 @@
 import { FormEvent, MouseEventHandler, useRef } from "react";
 import { GrClose } from "react-icons/gr";
-import axios from "../../api/axios";
+import axios from "../../api/axiosInterceptors";
 import ImgUpLoad from "./ImgUpload";
 import TextUpload from "./TextUpload";
 import { useRecoilState } from "recoil";
