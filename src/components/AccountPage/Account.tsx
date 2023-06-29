@@ -1,9 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 
-import { FiMeh } from "react-icons/fi";
-
 import { SlArrowLeft, SlArrowRight } from "react-icons/sl";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import {
   checkedListState,
   endDateState,
@@ -21,17 +19,9 @@ import { FilteredDataForm } from "../../components/AccountPage/FilterDataForm.js
 import ExpenseFormButton from "../Expenses/ExpenseFormButton.js";
 import { MonthPickerWrapper } from "../../styles/DateRange.js";
 import { getRecordedExpense } from "../../api/expenseAPI.js";
-import { refreshToken, token } from "../../Recoil/token.js";
-
-export interface ExpenseData {
-  recordId: number;
-  category: string;
-  amount: number;
-  useDate: string;
-  paidFor: string;
-  memo: string;
-  payType: string;
-}
+import { expenseFormProps } from "../../interface/interface.js";
+import NoDisplayData from "../Common/NoDisplayData.js";
+import SubmitForm from "./Submit.js";
 
 export default function Account() {
   const [isSubmit, setIsSubmit] = useRecoilState(isSubmitState);
@@ -41,28 +31,19 @@ export default function Account() {
   const [, setCategoryList] = useRecoilState(checkedListState);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [analyze, setAnalyze] = useState(false);
-  const [data, setData] = useState<ExpenseData[]>([]);
-
-  // const aToken = useRecoilValue(token);
-  // const rToken = useRecoilValue(refreshToken);
-
-  const aToken =
-    "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0IiwiYXV0aCI6IlJPTEVfTUVNQkVSIiwiZXhwIjoxNjg3ODc2OTc1fQ.xyjz9cUjNCQe3TbIsBm6c8rDUmU5fjzJm9hsrNQTthQ";
-  const rToken =
-    "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg0Nzk5NzV9.UwtSXO-27OuFamj_STT-le78iK9f8EuQuamzsqaXJ-A";
+  const [data, setData] = useState<expenseFormProps[]>([]);
 
   const getUseData = useCallback(async () => {
     try {
-      const res = await getRecordedExpense(
+      const response = await getRecordedExpense(
         startDate?.toLocaleDateString("en-US") as string,
-        endDate?.toLocaleDateString("en-US") as string,
-        { Authorization: aToken, Refreshtoken: rToken }
+        endDate?.toLocaleDateString("en-US") as string
       );
-      setData(res.data);
+      setData(response.data);
     } catch (error) {
       console.error(`getUseData Error: Time(${new Date()}) ERROR ${error}`);
     }
-  }, [startDate, endDate, aToken, rToken]);
+  }, [startDate, endDate]);
 
   useEffect(() => {
     getUseData();
@@ -152,21 +133,25 @@ export default function Account() {
                   </div>
                 </div>
                 <div className="flex justify-around w-full mb-4">
-                  <FilterBtn onClick={() => setFilterForm(true)}>
+                  <label
+                    htmlFor="account_filter"
+                    className="w-32 btn btn-sm btn-accent mr-10 text-base-100"
+                  >
                     필터선택
-                  </FilterBtn>
+                  </label>
+                  <SubmitForm />
                   <div className="w-32">
                     <ExpenseFormButton size={"small"} />
                   </div>
                 </div>
 
-                <div className="w-full">
+                <div className="w-full relative flex flex-col items-center">
                   {filterDate.length > 0 ? (
                     filterDate.map((d) => (
-                      <div key={d.recordId} className="w-full border p-4 mb-2">
+                      <div key={d.amount} className="w-full border p-4 mb-2">
                         <div className="flex w-full justify-between mb-4 pb-2 border-b-4">
                           <div>{getDayFunc(d.useDate, 2)}</div>
-                          <div className="mr-4">{addComma(d.amount)} 원</div>
+                          <div className="mr-4">{d.amount} 원</div>
                         </div>
                         <div className="flex items-center w-full">
                           <div className="flex items-center w-full">
@@ -195,19 +180,14 @@ export default function Account() {
                             </div>
                             <div className="w-1/6 text-center">{d.payType}</div>
                             <div className="w-2/6 text-center">
-                              {addComma(d.amount)} 원
+                              {d.amount} 원
                             </div>
                           </div>
                         </div>
                       </div>
                     ))
                   ) : (
-                    <div className="flex items-center justify-center p-10 rounded-2xl mt-36 mb-10">
-                      <span>
-                        <FiMeh size={50} className="mr-4 text-accent" />
-                      </span>
-                      <p className="text-4xl text-accent">데이터가 없어요 </p>
-                    </div>
+                    <NoDisplayData />
                   )}
                 </div>
               </>

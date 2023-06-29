@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
 import DateFilter from "../AccountPage/DateFilter";
 import CategoryFilter from "../AccountPage/CategoryFilter";
@@ -10,7 +10,7 @@ import {
   isSubmitState,
   startDateState,
 } from "../../Recoil";
-import { ExpenseData } from "./Account";
+import { expenseFormProps } from "../../interface/interface";
 
 export default function SubmitForm() {
   const [startDate, setStartDate] = useRecoilState(startDateState);
@@ -18,41 +18,30 @@ export default function SubmitForm() {
   const [checkedList] = useRecoilState(checkedListState);
   const [, setIsSubmit] = useRecoilState(isSubmitState);
   const [, setFilterForm] = useRecoilState(filterFormState);
-  const [data] = useState<ExpenseData[]>([]);
+  const [data] = useState<expenseFormProps[]>([]);
 
-  const onSubmit = () => {
-    setFilterForm(false);
-    setIsSubmit(true);
-    if (endDate === null) {
-      setEndDate(new Date());
-    }
-    if (startDate === null) {
-      setStartDate(endDate);
-    }
-    if (checkedList.length === 0) {
-      data.map;
-    }
-  };
   return (
     <>
-      <div className="fixed top-0 left-0 right-0 bottom-0 bg-base-100 z-[999] py-4 shadow-lg text-neutral-600">
-        <div className="w-full">
-          <DateFilter />
-          <CategoryFilter />
-          <div className="flex justify-center items-center m-12">
-            <button
-              onClick={onSubmit}
-              type="submit"
-              className="w-20 mr-5 btn btn-sm btn-accent text-base-100"
-            >
-              적용
-            </button>
-            <button
-              onClick={() => setFilterForm(false)}
-              className="w-20 ml-5 btn btn-sm btn-accent text-base-100"
-            >
-              닫기
-            </button>
+      <input type="checkbox" id="account_filter" className="modal-toggle" />
+      <div className="modal w-full">
+        <div className=" modal-box bg-base-100 z-[999] py-4 shadow-lg text-neutral-600">
+          <div className="w-full">
+            <DateFilter />
+            <CategoryFilter />
+            <div className="flex justify-center items-center m-12">
+              <button
+                type="submit"
+                className="w-20 mr-5 btn btn-sm btn-accent text-base-100"
+              >
+                적용
+              </button>
+              <label
+                htmlFor="account_filter"
+                className="w-20 ml-5 btn btn-sm btn-accent text-base-100"
+              >
+                닫기
+              </label>
+            </div>
           </div>
         </div>
       </div>
