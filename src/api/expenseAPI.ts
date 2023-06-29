@@ -5,7 +5,7 @@ import { expenseFormProps } from "../interface/interface";
 
 export const postExpense = async (data: expenseFormProps) => {
   try {
-    const response = await axios.post(`${API}/record`, {
+    const response = await axios.post(`${API}/records`, {
       amount: Number(data.amount),
       category: data.category,
       memo: data.memo,
