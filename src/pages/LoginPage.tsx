@@ -83,13 +83,13 @@ export default function LoginPage() {
           <p className="w-full h-5 text-xs text-right text-error">{errorMsg}</p>
           <button
             type="submit"
-            className="h-10 rounded-lg btn-accent w-full text-xl shadow-lg"
+            className="btn h-10 rounded-lg btn-accent w-full text-xl shadow-lg"
           >
             로그인
           </button>
         </form>
         <button
-          className="h-10 rounded-lg border border-accent w-full text-xl shadow-lg focus:bg-accent mb-4"
+          className="btn h-10 rounded-lg border border-accent w-full text-xl shadow-lg focus:bg-accent mb-4"
           onClick={() => navigate("/signup")}
         >
           회원가입
