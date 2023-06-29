@@ -24,7 +24,7 @@ export const getRecordedExpense = async (
   endDate: string
 ) => {
   try {
-    const response = await axios.get(`${API}/record`, {
+    const response = await axios.get(`${API}/records`, {
       params: { startDate: startDate, endDate: endDate },
     });
     return response.data;
@@ -38,7 +38,7 @@ export const getRecordedeExpenseForAnalyze = async (
   month: number
 ) => {
   try {
-    const response = await axios.get(`${API}/record/analysis`, {
+    const response = await axios.get(`${API}/records/analysis`, {
       params: {
         year: year,
         month: month,
