@@ -82,12 +82,6 @@ const ExpensesForm = ({ formEditor }: ExpensesFormProps) => {
     setSelectModal(false);
   };
 
-  const handleDate = (date: Date) => {
-    setSelectedDate(date);
-    const stringDate = selectedDate.toLocaleDateString("en-US");
-    setValue("useDate", stringDate);
-  };
-
   const handleClose = () => {
     formEditor(false);
     reset();
@@ -242,10 +236,13 @@ const ExpensesForm = ({ formEditor }: ExpensesFormProps) => {
               name="useDate"
               control={control}
               defaultValue={selectedDate.toLocaleDateString("en-US")}
-              render={() => (
+              render={({ field }) => (
                 <Calendar
                   selectedDate={selectedDate}
-                  handleSelectedDate={handleDate}
+                  handleSelectedDate={(date) => {
+                    field.onChange(date.toLocaleDateString("en-US"));
+                    setSelectedDate(date);
+                  }}
                 />
               )}
             />
