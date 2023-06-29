@@ -2,13 +2,15 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import { useNavigate } from "react-router-dom";
-import { ValidationForm, validate } from "./validate";
+import { validate } from "./validate";
 import axios from "axios";
 import { MouseEventHandler, useRef, useState } from "react";
 
 import { SHOW_MODAL_DELAY } from "../../constants/modalTime";
 import DialogModal from "../Common/Dialog";
 import { API } from "../../constants/api";
+import { ValidationFormProps } from "../../interface/interface";
+import { postMember } from "../../api/signupAPI";
 
 export default function SignUp() {
   const [resultEmailMsg, setResultEmailMsg] = useState("");
@@ -19,17 +21,18 @@ export default function SignUp() {
   const [onChangeNickName, setOnChangeNickName] = useState("");
   const emailCheckDialogRef = useRef<HTMLDialogElement>(null);
   const nickNameCheckDialogRef = useRef<HTMLDialogElement>(null);
+  const dialogRef = useRef<HTMLDialogElement>(null);
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ValidationForm>({
+  } = useForm<ValidationFormProps>({
     mode: "onChange",
     resolver: yupResolver(validate),
   });
 
-  const onSubmit: SubmitHandler<ValidationForm> = async (data) => {
+  const onSubmit: SubmitHandler<ValidationFormProps> = async (data) => {
     if (usableEmail === false) {
       if (emailCheckDialogRef.current) {
         emailCheckDialogRef.current?.showModal();
@@ -55,19 +58,15 @@ export default function SignUp() {
       }, SHOW_MODAL_DELAY);
       return;
     } else {
-      await axios
-        .post(`${API}/auth/signup`, {
-          email: data.email,
-          password: data.pw,
-          nickname: data.nickName,
-        })
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-      navigate("/");
+      await postMember(data);
+      if (!dialogRef.current) return;
+      dialogRef.current.showModal();
+      setTimeout(() => {
+        if (!dialogRef.current) return;
+        dialogRef.current.close();
+
+        navigate("/");
+      }, SHOW_MODAL_DELAY);
     }
   };
 
@@ -132,6 +131,7 @@ export default function SignUp() {
               </div>
             </label>
             <DialogModal
+              loading={true}
               dialogRef={emailCheckDialogRef}
               inform="이메일 중복확인을 해주세요."
             />
@@ -230,6 +230,7 @@ export default function SignUp() {
               </div>
             </label>
             <DialogModal
+              loading={true}
               dialogRef={nickNameCheckDialogRef}
               inform="닉네임 중복확인을 해주세요."
             />
@@ -312,6 +313,11 @@ export default function SignUp() {
             >
               회원가입
             </button>
+            <DialogModal
+              loading={false}
+              dialogRef={dialogRef}
+              inform="회원가입 되었습니다!"
+            />
             <button
               type="button"
               className="h-8 rounded-lg btn-accent w-1/6 text-base shadow-lg"

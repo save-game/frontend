@@ -1,6 +1,6 @@
-import { MouseEventHandler } from "react";
+import { FormEvent, MouseEventHandler, useRef } from "react";
 import { GrClose } from "react-icons/gr";
-
+import axios from "../../api/axios";
 import ImgUpLoad from "./ImgUpload";
 import TextUpload from "./TextUpload";
 import { useRecoilState } from "recoil";
@@ -9,6 +9,9 @@ import {
   textLengthState,
   textState,
 } from "../../Recoil/boardAtom";
+import DialogModal from "../Common/Dialog";
+import { SHOW_MODAL_DELAY } from "../../constants/modalTime";
+import { postBoard } from "../../api/boardAPI";
 
 interface NewBoardFormProp {
   onClick: MouseEventHandler<HTMLButtonElement>;
@@ -18,13 +21,26 @@ export default function NewBoardForm({ onClick }: NewBoardFormProp) {
   const [showImg, setShowImg] = useRecoilState(showImgState);
   const [text, setText] = useRecoilState(textState);
   const [, setTextLength] = useRecoilState(textLengthState);
+  const contentsDialogRef = useRef<HTMLDialogElement>(null);
 
-  const onSubmitHandler = () => {
-    console.log(`text:${text}, imgURLLists:${showImg.map((d) => d)}`);
-    setShowImg([]);
-    setText("");
-    setTextLength(0);
+  const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
+    if (showImg.length === 0 && text === "") {
+      e.preventDefault();
+      if (!contentsDialogRef.current) return;
+      contentsDialogRef.current.showModal();
+      setTimeout(() => {
+        if (!contentsDialogRef.current) return;
+        contentsDialogRef.current.close();
+      }, SHOW_MODAL_DELAY);
+      return false;
+    } else {
+      postBoard(text, showImg);
+      setShowImg([]);
+      setText("");
+      setTextLength(0);
+    }
   };
+
   return (
     <div>
       <form
@@ -52,6 +68,11 @@ export default function NewBoardForm({ onClick }: NewBoardFormProp) {
           >
             등록
           </button>
+          <DialogModal
+            loading={false}
+            dialogRef={contentsDialogRef}
+            inform={"내용이 없습니다."}
+          />
         </div>
       </form>
     </div>

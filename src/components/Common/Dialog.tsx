@@ -1,6 +1,7 @@
 import { RefObject } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
+import { CgSpinner } from "react-icons/Cg";
 
 const Dialog = styled.dialog`
   ::backdrop {
@@ -12,12 +13,21 @@ const Dialog = styled.dialog`
 interface Props {
   readonly dialogRef: RefObject<HTMLDialogElement>;
   readonly inform: string;
+  readonly loading: boolean;
 }
 
-const DialogModal = ({ dialogRef, inform }: Props) => {
+const DialogModal = ({ dialogRef, loading, inform }: Props) => {
   return (
     <Dialog ref={dialogRef}>
-      <div className="flex justify-center items-center">{inform}</div>
+      <div className="flex justify-center items-center">
+        {loading ? (
+          <div>
+            <CgSpinner size={35} className="animate-spin text-accent-focus" />
+          </div>
+        ) : (
+          <div>{inform}</div>
+        )}
+      </div>
     </Dialog>
   );
 };

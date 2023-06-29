@@ -1,13 +1,5 @@
 import * as yup from "yup";
 
-export interface ValidationForm {
-  email: string;
-  nickName: string;
-  pw: string;
-  checkPw: string;
-  checkBox: boolean;
-}
-
 export const validate = yup.object({
   email: yup
     .string()
