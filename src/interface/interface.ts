@@ -79,7 +79,7 @@ export interface ChallengeDataProps {
 }
 
 export interface ExpenseFormProps {
-  readonly amount: number;
+  readonly amount: number | string;
   readonly payType: string;
   readonly category: string;
   readonly paidFor: string;

@@ -13,7 +13,7 @@ import { Category, categoryList } from "../../constants/expenseCategory";
 import { SHOW_MODAL_DELAY } from "../../constants/modalTime";
 
 import { postExpense } from "../../api/expenseAPI";
-import { expenseFormProps } from "../../interface/interface";
+import { ExpenseFormProps } from "../../interface/interface";
 
 const Container = styled.div`
   ${tw`mx-auto w-11/12 pt-8 text-neutral-600 font-bold text-sm`}
@@ -88,10 +88,9 @@ const ExpensesForm = ({ formEditor }: ExpensesFormProps) => {
     setSelectedCategory(null);
   };
 
-  const handleExpenseSubmit: SubmitHandler<expenseFormProps> = async (
-    formdata: expenseFormProps
+  const handleExpenseSubmit: SubmitHandler<ExpenseFormProps> = async (
+    formdata: ExpenseFormProps
   ) => {
-    console.log(formdata);
     const response = await postExpense(formdata);
     console.log(response.data);
 

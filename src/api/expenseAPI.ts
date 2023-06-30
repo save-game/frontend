@@ -1,9 +1,9 @@
 import axios from "./axiosInterceptors";
 
 import { API } from "../constants/api";
-import { expenseFormProps } from "../interface/interface";
+import { ExpenseFormProps } from "../interface/interface";
 
-export const postExpense = async (data: expenseFormProps) => {
+export const postExpense = async (data: ExpenseFormProps) => {
   try {
     const response = await axios.post(`${API}/records`, {
       amount: Number(data.amount),
