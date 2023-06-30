@@ -6,7 +6,6 @@ import {
   checkedListState,
   endDateState,
   isfilteredState,
-  isSubmitState,
   startDateState,
 } from "../../Recoil/index.js";
 import { addComma, getDayFunc } from "../../helpers/helper.js";
@@ -22,7 +21,6 @@ import NoDisplayData from "../Common/NoDisplayData.js";
 import SubmitForm from "./Submit.js";
 
 export default function Account() {
-  const [isSubmit, setIsSubmit] = useRecoilState(isSubmitState);
   const [isFiltered, setisFilterd] = useRecoilState(isfilteredState);
   const [endDate, setEndDate] = useRecoilState(endDateState);
   const [startDate, setStartDate] = useRecoilState(startDateState);
