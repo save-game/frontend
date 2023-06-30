@@ -1,45 +1,57 @@
-import React, { useState } from "react";
+import { useRecoilState } from "recoil";
 
 import DateFilter from "../AccountPage/DateFilter";
 import CategoryFilter from "../AccountPage/CategoryFilter";
-import { useRecoilState } from "recoil";
 import {
-  checkedListState,
-  endDateState,
-  filterFormState,
-  isSubmitState,
   startDateState,
+  endDateState,
+  checkedListState,
+  isfilteredState,
 } from "../../Recoil";
-import { expenseFormProps } from "../../interface/interface";
 
 export default function SubmitForm() {
-  const [startDate, setStartDate] = useRecoilState(startDateState);
-  const [endDate, setEndDate] = useRecoilState(endDateState);
-  const [checkedList] = useRecoilState(checkedListState);
-  const [, setIsSubmit] = useRecoilState(isSubmitState);
-  const [, setFilterForm] = useRecoilState(filterFormState);
-  const [data] = useState<expenseFormProps[]>([]);
+  const [, setStartDate] = useRecoilState(startDateState);
+  const [, setEndDate] = useRecoilState(endDateState);
+  const [, setList] = useRecoilState(checkedListState);
+  const [, setisFiltered] = useRecoilState(isfilteredState);
+
+  const handleFilterReset = () => {
+    setStartDate(new Date(new Date().getFullYear(), new Date().getMonth(), 1));
+    setEndDate(new Date());
+    setList([]);
+    setisFiltered(false);
+  };
+  const setFilter = () => {
+    setisFiltered(true);
+  };
 
   return (
     <>
       <input type="checkbox" id="account_filter" className="modal-toggle" />
-      <div className="modal w-full">
-        <div className=" modal-box bg-base-100 z-[999] py-4 shadow-lg text-neutral-600">
-          <div className="w-full">
+      <div className="modal w-full flex justify-center">
+        <div className="w-11/12 h-5/6 bg-base-100 z-[999] py-4 shadow-lg text-neutral-600 relative">
+          <label
+            className="btn btn-ghost absolute top-2 right-2"
+            htmlFor="account_filter"
+          >
+            X
+          </label>
+          <div className="w-full flex flex-col items-center justify-around">
             <DateFilter />
             <CategoryFilter />
             <div className="flex justify-center items-center m-12">
-              <button
-                type="submit"
+              <label
+                htmlFor="account_filter"
+                onClick={setFilter}
                 className="w-20 mr-5 btn btn-sm btn-accent text-base-100"
               >
                 적용
-              </button>
+              </label>
               <label
-                htmlFor="account_filter"
+                onClick={handleFilterReset}
                 className="w-20 ml-5 btn btn-sm btn-accent text-base-100"
               >
-                닫기
+                초기화
               </label>
             </div>
           </div>

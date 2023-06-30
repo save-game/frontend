@@ -78,8 +78,8 @@ export interface ChallengeDataProps {
   readonly cnt: number;
 }
 
-export interface expenseFormProps {
-  readonly amount: string;
+export interface ExpenseFormProps {
+  readonly amount: number;
   readonly payType: string;
   readonly category: string;
   readonly paidFor: string;
