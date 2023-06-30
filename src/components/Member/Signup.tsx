@@ -7,10 +7,10 @@ import axios from "axios";
 import { MouseEventHandler, useRef, useState } from "react";
 
 import { SHOW_MODAL_DELAY } from "../../constants/modalTime";
-import DialogModal from "../Common/Dialog";
 import { API } from "../../constants/api";
 import { ValidationFormProps } from "../../interface/interface";
 import { postMember } from "../../api/signupAPI";
+import InformModal from "../Common/InformModal";
 
 export default function SignUp() {
   const [resultEmailMsg, setResultEmailMsg] = useState("");
@@ -19,6 +19,7 @@ export default function SignUp() {
   const [usableNickName, setUsableNickName] = useState(false);
   const [onChangeEmail, setOnChangeEmail] = useState("");
   const [onChangeNickName, setOnChangeNickName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const emailCheckDialogRef = useRef<HTMLDialogElement>(null);
   const nickNameCheckDialogRef = useRef<HTMLDialogElement>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -59,12 +60,18 @@ export default function SignUp() {
       return;
     } else {
       await postMember(data);
-      if (!dialogRef.current) return;
-      dialogRef.current.showModal();
-      setTimeout(() => {
-        if (!dialogRef.current) return;
-        dialogRef.current.close();
 
+      if (dialogRef.current) {
+        dialogRef.current.showModal();
+        setTimeout(() => setIsLoading(false), 500);
+        setIsLoading(true);
+      } else {
+        return;
+      }
+      setTimeout(() => {
+        if (dialogRef.current) {
+          dialogRef.current.close();
+        }
         navigate("/");
       }, SHOW_MODAL_DELAY);
     }
@@ -130,11 +137,6 @@ export default function SignUp() {
                 </div>
               </div>
             </label>
-            <DialogModal
-              loading={true}
-              dialogRef={emailCheckDialogRef}
-              inform="이메일 중복확인을 해주세요."
-            />
             <div className="flex w-full">
               <input
                 id="email"
@@ -229,11 +231,6 @@ export default function SignUp() {
                 </div>
               </div>
             </label>
-            <DialogModal
-              loading={true}
-              dialogRef={nickNameCheckDialogRef}
-              inform="닉네임 중복확인을 해주세요."
-            />
             <div className="flex w-full">
               <input
                 id="nickName"
@@ -309,24 +306,34 @@ export default function SignUp() {
           <div className="flex w-full join justify-center items-center mt-4">
             <button
               type="submit"
-              className="h-8 rounded-lg btn-accent w-1/6 mr-10 text-base shadow-lg"
+              className="h-8 rounded-lg btn-accent w-1/4 mr-10 text-base shadow-lg"
             >
               회원가입
             </button>
-            <DialogModal
-              loading={false}
-              dialogRef={dialogRef}
-              inform="회원가입 되었습니다!"
-            />
             <button
               type="button"
-              className="h-8 rounded-lg btn-accent w-1/6 text-base shadow-lg"
+              className="h-8 rounded-lg btn-accent w-1/4 text-base shadow-lg"
               onClick={() => navigate(-1)}
             >
               취소
             </button>
           </div>
         </form>
+        <InformModal
+          loading={false}
+          dialogRef={emailCheckDialogRef}
+          inform="이메일 중복확인을 해주세요."
+        />
+        <InformModal
+          loading={false}
+          dialogRef={nickNameCheckDialogRef}
+          inform="닉네임 중복확인을 해주세요."
+        />
+        <InformModal
+          loading={isLoading}
+          dialogRef={dialogRef}
+          inform="회원가입 되었습니다!"
+        />
       </div>
     </>
   );
