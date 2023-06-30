@@ -15,7 +15,7 @@ export const endDateState = atom<Date | null>({
   default: new Date(),
 });
 
-export const filterFormState = atom<boolean>({
+export const isfilteredState = atom<boolean>({
   key: "filterForm",
   default: false,
 });

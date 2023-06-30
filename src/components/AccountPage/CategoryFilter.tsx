@@ -1,7 +1,7 @@
 import { ChangeEvent } from "react";
 import { categoryList } from "../../constants/expenseCategory";
 import { useRecoilState } from "recoil";
-import { checkedListState, isCheckedState } from "../../Recoil";
+import { checkedListState, isCheckedState } from "../../Recoil/index";
 
 const CategoryFilter = () => {
   const [checkedList, setCheckedList] = useRecoilState(checkedListState);
@@ -23,7 +23,7 @@ const CategoryFilter = () => {
   };
 
   return (
-    <div className="mt-14 ml-6 mr-6">
+    <div className=" w-11/12">
       <div className="text-center m-2">카테고리 선택</div>
       <div className="grid grid-cols-4 border">
         {categoryList.map((list) => (
