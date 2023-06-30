@@ -55,7 +55,7 @@ export default function Account() {
     ["getExpenseData", startDate, endDate, categoryFilterList],
     getUseData
   );
-  
+
   useEffect(() => {
     getUseData();
   }, [getUseData]);
@@ -96,9 +96,6 @@ export default function Account() {
     setCategoryFilterList([]);
     setisFilterd(false);
   };
-  if (isLoading == true) {
-    return <LoadingSpinner />;
-  }
 
   return (
     <div className=" w-11/12 ml-auto mr-auto flex flex-col items-center mt-4 mb-20">
