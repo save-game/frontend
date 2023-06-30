@@ -5,7 +5,8 @@ import tw from "twin.macro";
 import Dropdown from "../Common/Dropdown";
 import { FaHeart, FaRegHeart } from "react-icons/Fa";
 import { BsPencil, BsTrash } from "react-icons/Bs";
-import { differenceInHours } from "date-fns";
+import { differenceInHours, isToday } from "date-fns";
+import ImageCarousel from "./ImageCarousel";
 
 const ArticleContainer = styled.article`
   ${tw`pt-1 pb-20 bg-base-color`};
@@ -19,7 +20,7 @@ interface BoardListProps {
 interface BoardListData {
   postId: number;
   title: string;
-  imageUrl: string[];
+  imageUrl: { id: number; postImage: string }[];
   nickname: string;
   memberId: number;
   createdAt: string;
@@ -28,17 +29,25 @@ interface BoardListData {
 
 const BoardList = ({ challengeId }: BoardListProps) => {
   const [list, setList] = useState<BoardListData[] | null>(null);
-  const [time, setTime] = useState(0);
   const userId = 1;
+
   // challengeId로 게시글 정보 서버에서 받아오기
   const getBoardList = async () => {
     try {
       const { data } = await axios.get("/test/boardList.json");
+      // 시간까지 넣어서 createdAt만들경우에 사용가능..
+      // const formattedTimeData = data.map((post: BoardListData) => {
+      //   const date = new Date(post.createdAt);
+      //   const hoursDifference = differenceInHours(new Date(), date);
+      //   console.log(hoursDifference);
+      //   if (isToday(date)) {
+      //     const hoursDifference = differenceInHours(new Date(), date);
+      //     return { ...post, createdAt: `${hoursDifference}시간 전` };
+      //   } else {
+      //     return post;
+      //   }
+      // });
       setList(data);
-      const date = new Date(data.createdAt);
-      const hoursDifference = differenceInHours(new Date(), date);
-      console.log("hoursDifference", hoursDifference);
-      setTime(hoursDifference);
       console.log(data);
     } catch (error) {
       console.error(`getBoardList Error: Time(${new Date()}) ERROR ${error}`);
@@ -59,33 +68,34 @@ const BoardList = ({ challengeId }: BoardListProps) => {
           >
             {userId === item.memberId ? (
               <Dropdown>
-                <li>
+                <li className="text-xs w-20 px-0 ">
                   <div
                     // onClick={() => handleRevision(review)}
-                    className="text-xs pl-2"
+                    className=" w-full mx-auto"
                   >
-                    <BsPencil size="25" />
+                    <BsPencil size="13" />
                     <p className="shrink-0">수정</p>
                   </div>
                 </li>
-                <li className="px-0 text-error">
+                <li className="text-error text-xs w-20 px-0">
                   <div
                     // onClick={() =>
                     //   handleDelete(review.reviewID, review.rating)
                     // }
-                    className="text-xs pl-2"
+                    className="w-full mx-auto"
                   >
-                    <BsTrash size="25" />
+                    <BsTrash size="13" />
                     <p className="shrink-0">삭제</p>
                   </div>
                 </li>
               </Dropdown>
             ) : null}
             {item.imageUrl.length !== 0 ? (
-              <div className="w-full overflow-hidden mx-auto">
-                <img src={item.imageUrl[0]} alt="image" />
-              </div>
-            ) : null}
+              <ImageCarousel imgList={item.imageUrl} />
+            ) : // <div className="w-full overflow-hidden mx-auto">
+            //   <img src={item.imageUrl[0]} alt="image" />
+            // </div>
+            null}
             <p className="text-left my-3 font-normal">{item.title}</p>
             <div className="flex justify-between mb-1">
               <div className="text-xs text-cyan-950">{item.nickname}</div>

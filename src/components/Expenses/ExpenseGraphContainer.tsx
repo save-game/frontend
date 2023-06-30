@@ -5,8 +5,9 @@ import { getRecordedeExpenseForAnalyze } from "../../api/expenseAPI";
 import { ExpenseDataForAnalyze } from "../../interface/interface";
 
 export default function ExpenseGraphContainer() {
-  const [monthlyExpenseData, setMonthlyExpenseData] =
-    useState<ExpenseDataForAnalyze[]>();
+  const [monthlyExpenseData, setMonthlyExpenseData] = useState<
+    ExpenseDataForAnalyze[] | null
+  >(null);
   const [monthlyTotalAmount, setMonthlyTotalAmount] = useState<number>(0);
   const currentMonth: number = new Date().getMonth() + 1;
 
@@ -16,6 +17,7 @@ export default function ExpenseGraphContainer() {
         new Date().getFullYear(),
         new Date().getMonth() + 1
       );
+      if (response.data.length === 0) return;
       setMonthlyTotalAmount(
         response.data.reduce(
           (acc: number, cur: ExpenseDataForAnalyze) => acc + cur.total,

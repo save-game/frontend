@@ -1,5 +1,5 @@
 import axios from "axios";
-import { signOut, tokenRefresh } from "./authAPI";
+import { tokenRefresh } from "./authAPI";
 
 axios.interceptors.request.use(
   (config) => {
