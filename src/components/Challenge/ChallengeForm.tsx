@@ -8,16 +8,26 @@ import tw from "twin.macro";
 import { RangeCalendarStart, RangeCalendarEnd } from "../Common/Calendar";
 import InformModal from "../Common/InformModal";
 import { addOneMonth } from "../../helpers/helper";
-import { SHOW_WARNING_MODAL_DELAY } from "../../constants/modalTime";
+import {
+  SHOW_MODAL_DELAY,
+  SHOW_WARNING_MODAL_DELAY,
+} from "../../constants/modalTime";
 import ChallengeCategoryFilter from "./ChallengeCategoryFilter";
 import { Category } from "../../constants/expenseCategory";
 import { postChallenge } from "../../api/challengeAPI";
+import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { openFormState } from "../../Recoil/challengeFormAtom";
 
 export default function ChallengeForm() {
   const [memberCount, setMemberCount] = useState<number>(2);
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [endDate, setEndDate] = useState<Date>(addOneMonth(new Date()));
+  const [openForm, setOpenForm] = useRecoilState(openFormState);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
+  const dialogRef = useRef<HTMLDialogElement>(null);
   const memberCountWarningRef = useRef<HTMLDialogElement>(null);
   const goalAmountWarningRef = useRef<HTMLDialogElement>(null);
   const titleInputRef = useRef<HTMLInputElement>(null);
@@ -26,7 +36,9 @@ export default function ChallengeForm() {
 
   const challengeSchema = Yup.object({
     title: Yup.string().required("필수 입력 항목입니다."),
-    goal_amount: Yup.number().required("필수 입력 항목입니다."),
+    goal_amount: Yup.number()
+      .max(10000000, "10000000원 이하로 입력해주세요")
+      .required("필수 입력 항목입니다."),
     category: Yup.string().required(
       "필수 입력 항목입니다. 카테고리를 선택해주세요."
     ),
@@ -97,9 +109,24 @@ export default function ChallengeForm() {
   };
 
   const handleSubmitChallenge = async (data: FieldValues) => {
+    console.log(data, memberCount);
     try {
-      postChallenge(data);
-      console.log(data);
+      await postChallenge(data, memberCount);
+      setOpenForm(false);
+      handleResetForm();
+      if (dialogRef.current) {
+        dialogRef.current.showModal();
+        setTimeout(() => setIsLoading(false), 300);
+        setIsLoading(true);
+      } else {
+        return;
+      }
+      setTimeout(() => {
+        if (dialogRef.current) {
+          dialogRef.current.close();
+        }
+        navigate("/challenge");
+      }, SHOW_MODAL_DELAY);
     } catch (error) {
       console.error(
         `handleSubmitChallenge Error: Time(${new Date()}) ERROR ${error}`
@@ -116,21 +143,31 @@ export default function ChallengeForm() {
       return;
     }
     reset();
+    setOpenForm(false);
     titleInputRef.current.value = "";
     contentInputRef.current.value = "";
     goalAmountInputRef.current.value = "";
+    setStartDate(new Date());
+    setEndDate(addOneMonth(new Date()));
+    setMemberCount(2);
   };
   const handleSelectCategory = (item: Category) => {
     setValue("category", item.category);
   };
 
-  useEffect(() => {
-    setValue("member_count", memberCount);
-  }, [memberCount, setValue]);
+  // useEffect(() => {
+  //   setValue("member_count", memberCount);
+  // }, [memberCount, setValue]);
 
   return (
     <>
-      <input type="checkbox" id="challenge_form" className="modal-toggle" />
+      <input
+        type="checkbox"
+        id="challenge_form"
+        checked={openForm}
+        className="modal-toggle"
+        readOnly
+      />
       <div className="modal bg-white">
         <div className="modal-box max-h-full w-full rounded-none">
           <Container>
@@ -311,6 +348,11 @@ export default function ChallengeForm() {
                 챌린지 등록
               </button>
             </form>
+            <InformModal
+              dialogRef={dialogRef}
+              loading={isLoading}
+              inform="챌린지 등록이 완료 되었습니다."
+            />
             <InformModal
               dialogRef={memberCountWarningRef}
               loading={false}

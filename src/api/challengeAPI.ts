@@ -4,16 +4,16 @@ import { API } from "../constants/api";
 import { FieldValues } from "react-hook-form";
 //지우기
 
-export const postChallenge = async (data: FieldValues) => {
+export const postChallenge = async (data: FieldValues, memberCount: number) => {
   try {
     const response = await axios.post(`${API}/challenges`, {
       title: data.title,
       content: data.content,
-      start_date: data.start_date,
-      end_date: data.end_date,
-      goal_amount: data.goal_amount,
+      startDate: data.start_date,
+      endDate: data.end_date,
+      goalAmount: data.goal_amount,
       category: data.category,
-      maxPeople: data.member_count,
+      maxPeople: memberCount,
     });
     return response.data;
   } catch (error) {

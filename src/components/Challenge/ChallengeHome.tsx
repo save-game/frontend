@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import styled from "styled-components";
 import tw from "twin.macro";
 import axios from "axios";
@@ -8,6 +8,7 @@ import ChallengeForm from "../../components/Challenge/ChallengeForm";
 import ChallengeFilter from "./ChallengeFilter";
 import ChallengeCard from "./ChallengeCard";
 import { ChallengeDataProps } from "../../interface/interface";
+import { openFormState } from "../../Recoil/challengeFormAtom";
 
 const Container = styled.div`
   ${tw`mx-auto relative w-11/12 h-screen max-h-screen pt-8 text-neutral-600 font-bold text-sm overflow-hidden`}
@@ -15,6 +16,7 @@ const Container = styled.div`
 
 export default function ChallengeHome() {
   const [challengeData, setChallengeData] = useState<ChallengeDataProps[]>([]);
+  const [, setOpenForm] = useRecoilState(openFormState);
   const [filterParameter, setFilterParameter] = useState();
 
   const getChallengeData = useCallback(async () => {
@@ -45,7 +47,7 @@ export default function ChallengeHome() {
           ))}
         </ChallengeCardWarp>
         <label
-          htmlFor="challenge_form"
+          onClick={() => setOpenForm(true)}
           className="btn btn-circle absolute btn-accent bottom-20 mb-2 right-2"
         >
           +
