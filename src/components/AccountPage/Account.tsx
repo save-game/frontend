@@ -19,6 +19,8 @@ import { getRecordedExpense } from "../../api/expenseAPI.js";
 import { ExpenseFormProps } from "../../interface/interface.js";
 import NoDisplayData from "../Common/NoDisplayData.js";
 import SubmitForm from "./Submit.js";
+import { useQuery } from "react-query";
+import LoadingSpinner from "../Common/LoadingSpinner.js";
 
 export default function Account() {
   const [isFiltered, setisFilterd] = useRecoilState(isfilteredState);
@@ -28,7 +30,7 @@ export default function Account() {
     useRecoilState(checkedListState);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [analyze, setAnalyze] = useState(false);
-  const [data, setData] = useState<ExpenseFormProps[]>([]);
+  const [expenseData, setExpenseData] = useState<ExpenseFormProps[]>([]);
 
   const getUseData = useCallback(async () => {
     try {
@@ -36,25 +38,29 @@ export default function Account() {
         startDate?.toLocaleDateString("en-US") as string,
         endDate?.toLocaleDateString("en-US") as string
       );
-      console.log(categoryFilterList);
       if (categoryFilterList.length === 0) {
-        setData(response.data);
+        setExpenseData(response.data);
         return;
       }
       const filteredList = response.data.filter((v: ExpenseFormProps) =>
         categoryFilterList.includes(v.category)
       );
-      setData(filteredList);
+      setExpenseData(filteredList);
     } catch (error) {
       console.error(`getUseData Error: Time(${new Date()}) ERROR ${error}`);
     }
   }, [startDate, endDate, categoryFilterList]);
 
+  const { isLoading } = useQuery(
+    ["getExpenseData", startDate, endDate, categoryFilterList],
+    getUseData
+  );
+  
   useEffect(() => {
     getUseData();
   }, [getUseData]);
 
-  const filterDate = data.filter((d) => {
+  const filterDate = expenseData.filter((d) => {
     if (getDayFunc(selectedDate.toString(), 1) === getDayFunc(d.useDate, 1)) {
       return d;
     }
@@ -90,6 +96,9 @@ export default function Account() {
     setCategoryFilterList([]);
     setisFilterd(false);
   };
+  if (isLoading == true) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className=" w-11/12 ml-auto mr-auto flex flex-col items-center mt-4 mb-20">
@@ -167,7 +176,10 @@ export default function Account() {
                           idx > 4 ? (
                             <></>
                           ) : (
-                            <span className="bg-emerald-200 rounded-md p-1 mr-1">
+                            <span
+                              key={idx}
+                              className="bg-emerald-200 rounded-md p-1 mr-1"
+                            >
                               {v}
                             </span>
                           )
@@ -182,8 +194,8 @@ export default function Account() {
                   <></>
                 )}
                 {filterDate.length > 0 ? (
-                  filterDate.map((d) => (
-                    <div key={d.amount} className="w-full border p-4 mb-2">
+                  filterDate.map((d, idx) => (
+                    <div key={idx} className="w-full border p-4 mb-2">
                       <div className="flex w-full justify-between mb-4 pb-2 border-b-4">
                         <div>{getDayFunc(d.useDate, 2)}</div>
                       </div>
