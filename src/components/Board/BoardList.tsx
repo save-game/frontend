@@ -1,12 +1,12 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useRef, useState } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
-import Dropdown from "../Common/Dropdown";
-import { FaHeart, FaRegHeart } from "react-icons/Fa";
-import { BsPencil, BsTrash } from "react-icons/Bs";
-import { differenceInHours, isToday } from "date-fns";
-import ImageCarousel from "./ImageCarousel";
+import { IoChatbubbleEllipsesOutline } from "react-icons/Io5";
+import { useInfiniteQuery, useMutation, useQueryClient } from "react-query";
+import { UserData } from "../../interface/interface";
+import { deletePost, getPosts } from "../../api/boardAPI";
+import ConfirmModal from "../Common/ConfirmModal";
+import BoardItem from "./BoardItem";
 
 const ArticleContainer = styled.article`
   ${tw`pt-1 pb-20 bg-base-color`};
@@ -14,103 +14,127 @@ const ArticleContainer = styled.article`
 `;
 
 interface BoardListProps {
-  challengeId: string | undefined;
+  challengeId: number;
 }
 
+// interface BoardListData {
+//   postId: number;
+//   title: string;
+//   imageUrl: { id: number; postImage: string }[];
+//   nickname: string;
+//   memberId: number;
+//   createdAt: string;
+//   heart: number;
+// }
+
 interface BoardListData {
-  postId: number;
-  title: string;
-  imageUrl: { id: number; postImage: string }[];
-  nickname: string;
-  memberId: number;
+  content: BoardContent[];
+  empty: boolean;
+  last: boolean;
+  pageable: {
+    pageNumber: number;
+  };
+}
+
+export interface BoardContent {
+  id: number;
+  challengeId: number;
+  author: UserData;
+  postContent: string;
+  imageList: {
+    id: number;
+    postImage: string;
+  }[];
+  heartCnt: number;
+  hasHeart: boolean;
   createdAt: string;
-  heart: number;
 }
 
 const BoardList = ({ challengeId }: BoardListProps) => {
-  const [list, setList] = useState<BoardListData[] | null>(null);
-  const userId = 1;
+  const queryClient = useQueryClient();
+  const confirmDialogRef = useRef<HTMLDialogElement>(null);
+  const [selectedPost, setSelectedPost] = useState<number | null>(null);
 
-  // challengeId로 게시글 정보 서버에서 받아오기
-  const getBoardList = async () => {
-    try {
-      const { data } = await axios.get("/test/boardList.json");
-      // 시간까지 넣어서 createdAt만들경우에 사용가능..
-      // const formattedTimeData = data.map((post: BoardListData) => {
-      //   const date = new Date(post.createdAt);
-      //   const hoursDifference = differenceInHours(new Date(), date);
-      //   console.log(hoursDifference);
-      //   if (isToday(date)) {
-      //     const hoursDifference = differenceInHours(new Date(), date);
-      //     return { ...post, createdAt: `${hoursDifference}시간 전` };
-      //   } else {
-      //     return post;
-      //   }
-      // });
-      setList(data);
-      console.log(data);
-    } catch (error) {
-      console.error(`getBoardList Error: Time(${new Date()}) ERROR ${error}`);
+  //실제 챌린지id로 적용해야함 (챌린지조회api완성 후 가능)
+  //확인 끝나면 페이지별사이즈 10개로 고치기
+
+  const {
+    data: boardList,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery<BoardListData>(
+    ["challengeBoard", 1],
+    ({ pageParam = 0 }) => getPosts(challengeId, pageParam),
+    {
+      getNextPageParam: (lastPage) => {
+        if (lastPage) {
+          if (lastPage.last) return;
+          console.log(lastPage.pageable.pageNumber);
+          const nextPageParam = lastPage.pageable.pageNumber + 1;
+          return nextPageParam;
+        }
+      },
     }
+  );
+
+  const { mutate: postDeleteMutate } = useMutation(deletePost, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["challengeBoard", 1]);
+      console.log("삭제되었다!!");
+    },
+  });
+
+  console.log(boardList);
+
+  const handleNextPage = () => {
+    fetchNextPage();
+    console.log("isFetchingNextPage", isFetchingNextPage);
   };
 
-  useEffect(() => {
-    getBoardList();
-  }, [challengeId]);
+  const handlePostDelete = () => {
+    if (!selectedPost) return;
+    postDeleteMutate(selectedPost);
+  };
 
   return (
     <ArticleContainer>
-      <ul className="p-1 mb-10">
-        {list?.map((item) => (
-          <li
-            key={item.postId}
-            className="bg-base-100 text-right mb-2 p-3 rounded-lg shadow"
-          >
-            {userId === item.memberId ? (
-              <Dropdown>
-                <li className="text-xs w-20 px-0 ">
-                  <div
-                    // onClick={() => handleRevision(review)}
-                    className=" w-full mx-auto"
-                  >
-                    <BsPencil size="13" />
-                    <p className="shrink-0">수정</p>
-                  </div>
-                </li>
-                <li className="text-error text-xs w-20 px-0">
-                  <div
-                    // onClick={() =>
-                    //   handleDelete(review.reviewID, review.rating)
-                    // }
-                    className="w-full mx-auto"
-                  >
-                    <BsTrash size="13" />
-                    <p className="shrink-0">삭제</p>
-                  </div>
-                </li>
-              </Dropdown>
-            ) : null}
-            {item.imageUrl.length !== 0 ? (
-              <ImageCarousel imgList={item.imageUrl} />
-            ) : // <div className="w-full overflow-hidden mx-auto">
-            //   <img src={item.imageUrl[0]} alt="image" />
-            // </div>
-            null}
-            <p className="text-left my-3 font-normal">{item.title}</p>
-            <div className="flex justify-between mb-1">
-              <div className="text-xs text-cyan-950">{item.nickname}</div>
-              <div className="mr-2 flex">
-                <span className="text-xs mr-1 font-light">{item.heart}</span>
-                <FaHeart className=" text-rose-500" />
-              </div>
+      <ul className="p-1">
+        {boardList?.pages ? (
+          boardList?.pages.map((page) =>
+            page.content.map((item) => (
+              <li
+                key={item.id}
+                className="bg-base-100 text-right mb-2 p-3 rounded-lg shadow"
+              >
+                <BoardItem
+                  post={item}
+                  confirmRef={confirmDialogRef}
+                  dispatch={setSelectedPost}
+                />
+              </li>
+            ))
+          )
+        ) : (
+          <div className="flex flex-col space-y-6 justify-center items-center mt-12">
+            <IoChatbubbleEllipsesOutline
+              size={28}
+              className="text-neutral-400"
+            />
+            <div className="font-normal">
+              함께 도전하는 멤버들과
+              <br /> 일상을 나눠보세요!
             </div>
-            <div className="text-xs font-normal text-right">
-              {item.createdAt}
-            </div>
-            {/* <div>{time}</div> */}
-          </li>
-        ))}
+          </div>
+        )}
       </ul>
+      <button onClick={handleNextPage} className="btn  mb-10">
+        더보기
+      </button>
+      <ConfirmModal
+        dialogRef={confirmDialogRef}
+        confirm="정말로 삭제하시겠습니까?"
+        onConfirm={handlePostDelete}
+      />
     </ArticleContainer>
   );
 };
