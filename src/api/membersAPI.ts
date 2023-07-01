@@ -54,3 +54,14 @@ export const passwordChange = async (password: PasswordData) => {
     console.error(`passwordChange Error: Time(${new Date()}) ERROR ${error}`);
   }
 };
+
+export const getMyChallenge = async () => {
+  try {
+    const response = await axios.get(`${API}/members/challenges`);
+    return response.data;
+  } catch (error) {
+    console.error(
+      `getMYChallengeList Error: Time(${new Date()}) ERROR ${error}`
+    );
+  }
+};

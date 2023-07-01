@@ -99,3 +99,11 @@ export interface ExpenseDataForAnalyze {
   readonly category: string;
   readonly total: number;
 }
+
+export interface ChallengeFilterProps {
+  readonly keyword: string;
+  readonly searchType: string;
+  readonly minAmount: number;
+  readonly maxAmount: number;
+  readonly category: string | null;
+}
