@@ -11,6 +11,8 @@ import { useUser } from "../api/membersAPI";
 import { UserData } from "../interface/interface";
 import { UseQueryResult } from "react-query";
 import { BsPersonFill } from "react-icons/Bs";
+import { getMyChallenge } from "../api/membersAPI";
+import LoadingSpinner from "../components/Common/LoadingSpinner";
 
 interface MyChallengeList {
   challengeId: number;
@@ -20,7 +22,8 @@ interface MyChallengeList {
 
 export default function Home() {
   const { data: userInfo }: UseQueryResult<UserData> = useUser();
-  const [myChallengeList, setMyChallengeList] = useState<MyChallengeList[]>();
+  const [isLoading, setIsLoading] = useState(true);
+  const [myChallengeList, setMyChallengeList] = useState<MyChallengeList[]>([]);
 
   const navigate = useNavigate();
 
@@ -30,7 +33,7 @@ export default function Home() {
 
   const getMyChallengeList = async () => {
     try {
-      const response = await axios.get("./test/homeTest.json");
+      const response = await getMyChallenge();
       setMyChallengeList(response.data);
     } catch (error) {
       console.error(
@@ -41,46 +44,53 @@ export default function Home() {
 
   useEffect(() => {
     getMyChallengeList();
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 300);
   }, []);
 
   return (
     <>
-      <Container>
-        <ProfileContainer>
-          <ProfileImgContainer>
-            {userInfo?.profileImageUrl ? (
-              <img src={userInfo.profileImageUrl} />
-            ) : (
-              <BsPersonFill size={80} className="mt-2" />
-            )}
-          </ProfileImgContainer>
-          <p className="ml-4 text-accent text-lg">{userInfo?.nickname}</p>
-        </ProfileContainer>
-        <ExpenseGraphContainer />
-        <ExpenseFormButton size={"normal"} />
-        {myChallengeList ? (
-          <div className="mt-6 w-full mb-16 text-black">
-            도전 중인 챌린지
-            {myChallengeList.map((v, i) => {
-              return (
-                <div key={i}>
-                  <MyChallengeCard myChallenge={v} />
-                </div>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="text-black mt-10 w-full">
-            <p className="mb-4">새로운 챌린지에 도전해 보세요!</p>
-            <button
-              className="btn btn-accent w-full h-20 "
-              onClick={handleMoveChallengeHome}
-            >
-              챌린지 둘러보러 가기
-            </button>
-          </div>
-        )}
-      </Container>
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
+        <Container>
+          <ProfileContainer>
+            <ProfileImgContainer>
+              {userInfo?.profileImageUrl ? (
+                <img src={userInfo.profileImageUrl} />
+              ) : (
+                <BsPersonFill size={80} className="mt-2" />
+              )}
+            </ProfileImgContainer>
+            <p className="ml-4 text-accent text-lg">{userInfo?.nickname}</p>
+          </ProfileContainer>
+          <ExpenseGraphContainer />
+          <ExpenseFormButton size={"normal"} />
+          {myChallengeList?.length > 0 ? (
+            <div className="mt-6 w-full mb-16 text-black">
+              도전 중인 챌린지
+              {myChallengeList.map((v, i) => {
+                return (
+                  <div key={i}>
+                    <MyChallengeCard myChallenge={v} />
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="text-black mt-10 w-full">
+              <p className="mb-4">새로운 챌린지에 도전해 보세요!</p>
+              <button
+                className="btn btn-accent text-white w-full h-20 "
+                onClick={handleMoveChallengeHome}
+              >
+                챌린지 둘러보러 가기
+              </button>
+            </div>
+          )}
+        </Container>
+      )}
     </>
   );
 }
