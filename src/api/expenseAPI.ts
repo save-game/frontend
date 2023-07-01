@@ -51,3 +51,25 @@ export const getRecordedeExpenseForAnalyze = async (
     );
   }
 };
+
+export const reviseExpense = async (data: {
+  data: ExpenseFormProps;
+  recordId: number;
+}) => {
+  const record = { ...data.data, amount: Number(data.data.amount) };
+  try {
+    const response = await axios.put(`${API}/records/${data.recordId}`, record);
+    return response.data;
+  } catch (error) {
+    console.error(`reviseExpense Error: Time(${new Date()}) ERROR ${error}`);
+  }
+};
+
+export const deleteExpense = async (recordId: number) => {
+  try {
+    const response = await axios.delete(`${API}/records/${recordId}`);
+    return response.data;
+  } catch (error) {
+    console.error(`deleteExpense Error: Time(${new Date()}) ERROR ${error}`);
+  }
+};

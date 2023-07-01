@@ -1,4 +1,11 @@
-import { ChangeEvent, Dispatch, SetStateAction, useRef, useState } from "react";
+import {
+  ChangeEvent,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -13,8 +20,10 @@ import Calendar from "../Common/Calendar";
 import { Category, categoryList } from "../../constants/expenseCategory";
 import { SHOW_MODAL_DELAY } from "../../constants/modalTime";
 
-import { postExpense } from "../../api/expenseAPI";
+import { postExpense, reviseExpense } from "../../api/expenseAPI";
 import { ExpenseFormProps } from "../../interface/interface";
+import { useRecoilState } from "recoil";
+import { expenseRecordAtom } from "../../Recoil/expenseRecord";
 
 const Container = styled.div`
   ${tw`mx-auto w-11/12 pt-8 text-neutral-600 font-bold text-sm`}
@@ -30,12 +39,12 @@ interface ExpensesFormProps {
 
 const ExpensesForm = ({ formEditor }: ExpensesFormProps) => {
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
     null
   );
   const [selectModal, setSelectModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [isRevision, setIsRevision] = useRecoilState(expenseRecordAtom);
   const expenseSchema = Yup.object({
     amount: Yup.string()
       .transform((value) => value.replace(/,/g, ""))
@@ -68,6 +77,29 @@ const ExpensesForm = ({ formEditor }: ExpensesFormProps) => {
     mode: "onSubmit",
   });
 
+  useEffect(() => {
+    if (!isRevision) return;
+    const record = {
+      paidFor: isRevision.paidFor,
+      memo: isRevision.memo,
+      category: selectedCategory?.category,
+    };
+    reset(record);
+    const formattedValue = isRevision.amount.toLocaleString("ko-KR");
+    setValue("amount", formattedValue);
+    categoryList.forEach((item) => {
+      if (item.name === isRevision.category) {
+        setSelectedCategory(item);
+        setValue("category", item.category);
+      }
+    });
+    const originalDate = new Date(isRevision.useDate);
+    setSelectedDate(originalDate);
+    setValue("useDate", originalDate.toLocaleDateString("en-US"));
+
+    return () => handleClose();
+  }, [isRevision]);
+
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
     const valueInNumber = Number(inputValue.replace(/,/g, ""));
@@ -88,18 +120,31 @@ const ExpensesForm = ({ formEditor }: ExpensesFormProps) => {
     formEditor(false);
     reset();
     setSelectedCategory(null);
+    setIsRevision(null);
   };
 
   const updateAccountMutation = useMutation(postExpense, {
     onSuccess: () => {
-      queryClient.invalidateQueries("getExpenseData");
+      queryClient.invalidateQueries(["getExpenseData"]);
+    },
+  });
+  const reviseAccountMutation = useMutation(reviseExpense, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["getExpenseData"]);
     },
   });
 
   const handleExpenseSubmit: SubmitHandler<ExpenseFormProps> = async (
     formdata: ExpenseFormProps
   ) => {
-    updateAccountMutation.mutate(formdata);
+    if (isRevision) {
+      reviseAccountMutation.mutate({
+        data: formdata,
+        recordId: isRevision.recordId,
+      });
+    } else {
+      updateAccountMutation.mutate(formdata);
+    }
 
     if (!dialogRef.current) return;
     dialogRef.current.showModal();
@@ -107,7 +152,7 @@ const ExpensesForm = ({ formEditor }: ExpensesFormProps) => {
       if (!dialogRef.current) return;
       dialogRef.current.close();
 
-      navigate("/account");
+      formEditor(false);
     }, SHOW_MODAL_DELAY);
   };
 
@@ -143,6 +188,7 @@ const ExpensesForm = ({ formEditor }: ExpensesFormProps) => {
                 value="card"
                 className="peer/card hidden"
                 {...register("payType")}
+                defaultChecked={isRevision?.payType === "카드"}
               />
               <label
                 htmlFor="card"
@@ -156,6 +202,7 @@ const ExpensesForm = ({ formEditor }: ExpensesFormProps) => {
                 value="cash"
                 className="peer/cash hidden"
                 {...register("payType")}
+                defaultChecked={isRevision?.payType === "현금"}
               />
               <label
                 htmlFor="cash"

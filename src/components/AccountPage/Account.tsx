@@ -1,7 +1,7 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 
 import { SlArrowLeft, SlArrowRight } from "react-icons/sl";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import {
   checkedListState,
   endDateState,
@@ -15,14 +15,22 @@ import { categoryList } from "../../constants/expenseCategory.js";
 
 import ExpenseFormButton from "../Expenses/ExpenseFormButton.js";
 import { MonthPickerWrapper } from "../../styles/DateRange.js";
-import { getRecordedExpense } from "../../api/expenseAPI.js";
-import { ExpenseFormProps } from "../../interface/interface.js";
+import { deleteExpense, getRecordedExpense } from "../../api/expenseAPI.js";
+import { ExpenseFormProps, ExpenseRecord } from "../../interface/interface.js";
 import NoDisplayData from "../Common/NoDisplayData.js";
 import SubmitForm from "./Submit.js";
-import { useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import LoadingSpinner from "../Common/LoadingSpinner.js";
+import { BsPencil, BsTrash } from "react-icons/Bs";
+import Dropdown from "../Common/Dropdown.js";
+import ConfirmModal from "../Common/ConfirmModal.js";
+import { expenseRecordAtom } from "../../Recoil/expenseRecord.js";
+import { useNavigate } from "react-router-dom";
+import ExpensesForm from "../Expenses/ExpensesForm.js";
 
 export default function Account() {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [isFiltered, setisFilterd] = useRecoilState(isfilteredState);
   const [endDate, setEndDate] = useRecoilState(endDateState);
   const [startDate, setStartDate] = useRecoilState(startDateState);
@@ -30,7 +38,11 @@ export default function Account() {
     useRecoilState(checkedListState);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [analyze, setAnalyze] = useState(false);
-  const [expenseData, setExpenseData] = useState<ExpenseFormProps[]>([]);
+  const [expenseData, setExpenseData] = useState<ExpenseRecord[]>([]);
+  const confirmDialogRef = useRef<HTMLDialogElement>(null);
+  const [selectedRecord, setSelectedRecord] = useState<number | null>(null);
+  const [expenseForm, setExpenseForm] = useState(false);
+  const [isRevision, setIsRevision] = useRecoilState(expenseRecordAtom);
 
   const getUseData = useCallback(async () => {
     try {
@@ -42,7 +54,7 @@ export default function Account() {
         setExpenseData(response.data);
         return;
       }
-      const filteredList = response.data.filter((v: ExpenseFormProps) =>
+      const filteredList = response.data.filter((v: ExpenseRecord) =>
         categoryFilterList.includes(v.category)
       );
       setExpenseData(filteredList);
@@ -51,10 +63,13 @@ export default function Account() {
     }
   }, [startDate, endDate, categoryFilterList]);
 
-  const { isLoading } = useQuery(
-    ["getExpenseData", startDate, endDate, categoryFilterList],
-    getUseData
-  );
+  const { isLoading } = useQuery(["getExpenseData"], getUseData);
+
+  const { mutate: expenseDeleteMutate } = useMutation(deleteExpense, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["getExpenseData"]);
+    },
+  });
 
   useEffect(() => {
     getUseData();
@@ -95,6 +110,22 @@ export default function Account() {
     setEndDate(new Date());
     setCategoryFilterList([]);
     setisFilterd(false);
+  };
+
+  const handleRevision = (record: ExpenseRecord) => {
+    setIsRevision(record);
+    setExpenseForm(true);
+  };
+
+  const confirmDelete = (id: number) => {
+    if (!confirmDialogRef.current || !id) return;
+    setSelectedRecord(id);
+    confirmDialogRef.current.showModal();
+  };
+
+  const handleExpenseDelete = () => {
+    if (!selectedRecord) return;
+    expenseDeleteMutate(selectedRecord);
   };
 
   return (
@@ -195,6 +226,26 @@ export default function Account() {
                     <div key={idx} className="w-full border p-4 mb-2">
                       <div className="flex w-full justify-between mb-4 pb-2 border-b-4">
                         <div>{getDayFunc(d.useDate, 2)}</div>
+                        <Dropdown>
+                          <li className="text-xs w-20 px-0 ">
+                            <div
+                              onClick={() => handleRevision(d)}
+                              className=" w-full mx-auto"
+                            >
+                              <BsPencil size="13" />
+                              <p className="shrink-0">수정</p>
+                            </div>
+                          </li>
+                          <li className="text-error text-xs w-20 px-0">
+                            <div
+                              onClick={() => confirmDelete(d.recordId)}
+                              className="w-full mx-auto"
+                            >
+                              <BsTrash size="13" />
+                              <p className="shrink-0">삭제</p>
+                            </div>
+                          </li>
+                        </Dropdown>
                       </div>
                       <div className="flex items-center w-full">
                         <div className="flex items-center w-full">
@@ -237,6 +288,12 @@ export default function Account() {
           )}
         </div>
       </div>
+      {expenseForm ? <ExpensesForm formEditor={setExpenseForm} /> : null}
+      <ConfirmModal
+        dialogRef={confirmDialogRef}
+        confirm="정말로 삭제하시겠습니까?"
+        onConfirm={handleExpenseDelete}
+      />
     </div>
   );
 }
