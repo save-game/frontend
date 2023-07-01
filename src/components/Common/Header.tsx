@@ -8,11 +8,11 @@ import { GiSevenPointedStar } from "react-icons/Gi";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const HeaderContainer = styled.header`
-  ${tw`btm-nav h-20 bg-teal-50 shadow-inner shadow-[#e0edea] `}
+  ${tw`btm-nav h-20 bg-teal-50 rounded-t-2xl`}
 `;
 
 const NavBtn = styled.button<{ selected: boolean }>`
-  ${tw`text-xs text-neutral-400`}
+  ${tw`text-xs text-gray-400`}
   ${({ selected }) => selected && tw`text-accent font-bold`}
 `;
 const icons = {
@@ -23,6 +23,7 @@ const icons = {
 } as const;
 type NavMenu = keyof typeof icons;
 
+//src\assets\savegame_300x300.png
 interface Menu {
   readonly name: NavMenu;
   readonly pathname: string;

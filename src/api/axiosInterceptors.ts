@@ -26,7 +26,6 @@ axios.interceptors.response.use(
     if (response.status === 400) {
       if (response.data.errorCode === "EXPIRED_TOKEN") {
         const originalRequest = response.config;
-
         await tokenRefresh();
         console.log("토큰 리프레쉬");
         const refreshToken = localStorage.getItem("refreshToken");

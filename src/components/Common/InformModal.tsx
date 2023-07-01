@@ -2,6 +2,7 @@ import { RefObject } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { CgSpinner } from "react-icons/Cg";
+import { BsCheckCircleFill } from "react-icons/Bs";
 
 const Dialog = styled.dialog`
   ::backdrop {
@@ -16,8 +17,6 @@ interface Props {
   readonly inform: string;
 }
 
-//loading은 useQuery등을 통해 loading값이 있을때 넘겨준다.
-
 const InformModal = ({ dialogRef, loading, inform }: Props) => {
   return (
     <Dialog ref={dialogRef}>
@@ -27,7 +26,10 @@ const InformModal = ({ dialogRef, loading, inform }: Props) => {
             <CgSpinner size={35} className="animate-spin text-accent-focus" />
           </div>
         ) : (
-          <div>{inform}</div>
+          <div className="flex flex-col justify-center items-center">
+            <BsCheckCircleFill size={20} className="text-accent mb-3" />
+            <div>{inform}</div>
+          </div>
         )}
       </form>
     </Dialog>
