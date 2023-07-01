@@ -12,6 +12,7 @@ import {
 import DialogModal from "../Common/Dialog";
 import { SHOW_MODAL_DELAY } from "../../constants/modalTime";
 import { postBoard } from "../../api/boardAPI";
+import { useMutation, useQueryClient } from "react-query";
 
 interface NewBoardFormProp {
   onClick: MouseEventHandler<HTMLButtonElement>;
@@ -22,6 +23,17 @@ export default function NewBoardForm({ onClick }: NewBoardFormProp) {
   const [text, setText] = useRecoilState(textState);
   const [, setTextLength] = useRecoilState(textLengthState);
   const contentsDialogRef = useRef<HTMLDialogElement>(null);
+
+  //게시판 구현위해 useMutation으로 변경함 아래 1은 실제 챌린지 id로 변경필요
+  const queryClient = useQueryClient();
+  const { mutate: postCreateMutate } = useMutation(
+    () => postBoard(text, showImg),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["challengeBoard", 1]);
+      },
+    }
+  );
 
   const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
     if (showImg.length === 0 && text === "") {
@@ -34,7 +46,8 @@ export default function NewBoardForm({ onClick }: NewBoardFormProp) {
       }, SHOW_MODAL_DELAY);
       return false;
     } else {
-      postBoard(text, showImg);
+      // postBoard(text, showImg);
+      postCreateMutate();
       setShowImg([]);
       setText("");
       setTextLength(0);

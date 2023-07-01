@@ -19,7 +19,10 @@ const ConfirmModal = ({ dialogRef, confirm, onConfirm }: Props) => {
         <div className="text-sm font-bold text-center">{confirm}</div>
         <div className="flex justify-center space-x-2 mt-6">
           <button className="btn btn-sm btn-outline w-1/3">취소</button>
-          <button onClick={onConfirm} className="btn btn-sm w-1/3">
+          <button
+            onClick={onConfirm}
+            className="btn btn-sm btn-accent text-base-100 w-1/3"
+          >
             확인
           </button>
         </div>

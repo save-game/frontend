@@ -24,15 +24,22 @@ interface Props {
 const NicknameForm = ({ formEditor, informChangeRef }: Props) => {
   const queryClient = useQueryClient();
   const setIsLoading = useSetRecoilState(loadingAtom);
-  const [duplicationCheck, setDuplicationCheck] = useState({
+  const [duplicationCheck, setDuplicationCheck] = useState<{
+    check: boolean;
+    result: true | string;
+  }>({
     check: false,
-    result: false,
+    result: "",
   });
   const nicknameSchema = Yup.object({
     nickname: Yup.string()
       .min(1, "입력된 내용이 없습니다.")
       .max(10, "10자 이내로 작성해주세요.")
-      .test("isDuplicated", "중복 확인해주세요.", () => duplicationCheck.result)
+      .test(
+        "isDuplicated",
+        "중복 확인해주세요.",
+        () => duplicationCheck.result === true
+      )
       .required("변경할 닉네임을 입력해주세요."),
   });
   type NicknameFormData = Yup.InferType<typeof nicknameSchema>;
@@ -61,7 +68,7 @@ const NicknameForm = ({ formEditor, informChangeRef }: Props) => {
   useEffect(() => {
     setDuplicationCheck({
       check: false,
-      result: false,
+      result: "",
     });
   }, [nicknameInput]);
 
@@ -70,6 +77,10 @@ const NicknameForm = ({ formEditor, informChangeRef }: Props) => {
 
     const res = await checkNickname(nicknameInput);
     const isPassed = res.success;
+    const msg =
+      res.data === "중복된 닉네임 입니다."
+        ? res.data
+        : "공백, 특수문자는 제외해주세요.";
 
     if (isPassed) {
       setDuplicationCheck({
@@ -79,7 +90,7 @@ const NicknameForm = ({ formEditor, informChangeRef }: Props) => {
     } else {
       setDuplicationCheck({
         check: true,
-        result: false,
+        result: msg,
       });
     }
     clearErrors("nickname");
@@ -108,13 +119,13 @@ const NicknameForm = ({ formEditor, informChangeRef }: Props) => {
           />
           {duplicationCheck.check ? (
             <div>
-              {duplicationCheck.result ? (
+              {duplicationCheck.result === true ? (
                 <p className="absolute right-3 bottom-0.5 text-[11px] font-light text-success text-center bg-base-100">
                   사용가능한 닉네임입니다.
                 </p>
               ) : (
                 <p className="absolute right-3 bottom-0.5 text-[11px] font-light text-error text-center bg-base-100">
-                  중복된 닉네임입니다.
+                  {duplicationCheck.result}
                 </p>
               )}
             </div>
