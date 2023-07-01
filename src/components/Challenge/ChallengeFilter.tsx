@@ -17,12 +17,16 @@ const ChallengeFilterList = [
   { value: "title", name: "제목" },
   { value: "content", name: "부제" },
 ];
-export default function ChallengeFilter() {
+interface applyClickProps {
+  onClick: () => void;
+}
+export default function ChallengeFilter({ onClick }: applyClickProps) {
   const [searchText, setSearchText] = useRecoilState(searchTextState);
   const [searchCategory, setSearchCategory] =
     useRecoilState(searchCategoryState);
   const handleGetTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchText(e.target.value);
+    console.log(searchText);
   };
   const handleGetCategory = (item: Category) => {
     setSearchCategory(item.category);
@@ -86,7 +90,13 @@ export default function ChallengeFilter() {
               onClick={handleResetCategory}
             ></label>
           </div>
-          <button className="btn btn-accent col-span-3 z-10">적용</button>
+          <button
+            type="button"
+            onClick={onClick}
+            className="btn btn-accent col-span-3 z-10"
+          >
+            적용
+          </button>
         </div>
       </div>
     </>

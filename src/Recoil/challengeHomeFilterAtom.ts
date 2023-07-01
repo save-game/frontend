@@ -20,7 +20,7 @@ export const maxSearchAmountState = atom({
   key: "max_amount",
   default: FIXED_MAX_VALUE,
 });
-export const searchCategoryState = atom({ key: "category", default: "" });
+export const searchCategoryState = atom({ key: "category", default: "all" });
 
 export const filterParameterSelector = selector({
   key: "filter_parameter",

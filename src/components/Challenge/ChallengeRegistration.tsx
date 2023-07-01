@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ChallengeData } from "../../interface/interface";
 import { BsPersonPlusFill } from "react-icons/Bs";
 import { MdPeople } from "react-icons/Md";
+import { postJoinChallenge } from "../../api/challengeAPI";
 
 interface ChallengeDataProps {
   challengeData: ChallengeData;
@@ -18,8 +19,12 @@ const ChallengeRegistration = ({ challengeData }: ChallengeDataProps) => {
     }
   }, [challengeData]);
 
+  //지우기
+  const challengeId = 8;
+
   const handleChallengeRegister = () => {
     //서버에 참가 요청
+    postJoinChallenge(challengeId);
     console.log("참가신청!");
   };
 

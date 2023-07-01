@@ -9,6 +9,8 @@ import ChallengeFilter from "./ChallengeFilter";
 import ChallengeCard from "./ChallengeCard";
 import { ChallengeDataProps } from "../../interface/interface";
 import { openFormState } from "../../Recoil/challengeFormAtom";
+import { getSearchChallenge } from "../../api/challengeAPI";
+import { filterParameterSelector } from "../../Recoil/challengeHomeFilterAtom";
 
 const Container = styled.div`
   ${tw`mx-auto relative w-11/12 h-screen max-h-screen pt-8 text-neutral-600 font-bold text-sm overflow-hidden`}
@@ -17,7 +19,7 @@ const Container = styled.div`
 export default function ChallengeHome() {
   const [challengeData, setChallengeData] = useState<ChallengeDataProps[]>([]);
   const [, setOpenForm] = useRecoilState(openFormState);
-  const [filterParameter, setFilterParameter] = useState();
+  const params = useRecoilValue(filterParameterSelector);
 
   const getChallengeData = useCallback(async () => {
     try {
@@ -34,11 +36,21 @@ export default function ChallengeHome() {
   useEffect(() => {
     getChallengeData();
   }, [getChallengeData]);
-
+  const page = 0;
+  const onApplyFilter = async () => {
+    await getSearchChallenge(
+      params.search_text,
+      params.text_category,
+      params.min_search_amount,
+      params.max_search_amount,
+      params.search_category,
+      page
+    );
+  };
   return (
     <>
       <Container>
-        <ChallengeFilter />
+        <ChallengeFilter onClick={onApplyFilter} />
         <ChallengeCardWarp>
           {challengeData.map((item) => (
             <div key={item.challengeId} className="mb-4">
