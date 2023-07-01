@@ -30,12 +30,6 @@ export default function SubmitForm() {
       <input type="checkbox" id="account_filter" className="modal-toggle" />
       <div className="modal w-full flex justify-center">
         <div className="w-11/12 h-5/6 bg-base-100 z-[999] py-4 shadow-lg text-neutral-600 relative">
-          <label
-            className="btn btn-ghost absolute top-2 right-2"
-            htmlFor="account_filter"
-          >
-            X
-          </label>
           <div className="w-full flex flex-col items-center justify-around">
             <DateFilter />
             <CategoryFilter />
@@ -48,6 +42,7 @@ export default function SubmitForm() {
                 적용
               </label>
               <label
+                htmlFor="account_filter"
                 onClick={handleFilterReset}
                 className="w-20 ml-5 btn btn-sm btn-accent text-base-100"
               >

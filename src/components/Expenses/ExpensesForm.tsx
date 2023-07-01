@@ -2,6 +2,7 @@ import { ChangeEvent, Dispatch, SetStateAction, useRef, useState } from "react";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useMutation, useQueryClient } from "react-query";
 import InformModal from "../Common/InformModal";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -28,6 +29,7 @@ interface ExpensesFormProps {
 }
 
 const ExpensesForm = ({ formEditor }: ExpensesFormProps) => {
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
     null
@@ -88,11 +90,16 @@ const ExpensesForm = ({ formEditor }: ExpensesFormProps) => {
     setSelectedCategory(null);
   };
 
+  const updateAccountMutation = useMutation(postExpense, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("getExpenseData");
+    },
+  });
+
   const handleExpenseSubmit: SubmitHandler<ExpenseFormProps> = async (
     formdata: ExpenseFormProps
   ) => {
-    const response = await postExpense(formdata);
-    console.log(response.data);
+    updateAccountMutation.mutate(formdata);
 
     if (!dialogRef.current) return;
     dialogRef.current.showModal();
@@ -103,8 +110,6 @@ const ExpensesForm = ({ formEditor }: ExpensesFormProps) => {
       navigate("/account");
     }, SHOW_MODAL_DELAY);
   };
-
-  //
 
   return (
     <section className="fixed top-0 left-0 right-0 bottom-0 bg-base-100 z-[999] py-4 shadow-lg text-neutral-600 ">
