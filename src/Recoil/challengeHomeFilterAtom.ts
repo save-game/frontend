@@ -49,4 +49,11 @@ export const filterParameterSelector = selector({
       category: searchCategory,
     };
   },
+  set: ({ set, reset }) => {
+    reset(textCategoryState);
+    reset(searchTextState);
+    reset(minSearchAmountState);
+    reset(maxSearchAmountState);
+    reset(searchCategoryState);
+  },
 });
