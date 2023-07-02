@@ -24,7 +24,10 @@ import LoadingSpinner from "../Common/LoadingSpinner.js";
 import { BsPencil, BsTrash } from "react-icons/Bs";
 import Dropdown from "../Common/Dropdown.js";
 import ConfirmModal from "../Common/ConfirmModal.js";
-import { expenseRecordAtom } from "../../Recoil/expenseRecord.js";
+import {
+  expenseRecordAtom,
+  selectedExpenseDateState,
+} from "../../Recoil/expenseRecord.js";
 import { useNavigate } from "react-router-dom";
 import ExpensesForm from "../Expenses/ExpensesForm.js";
 
@@ -36,7 +39,8 @@ export default function Account() {
   const [startDate, setStartDate] = useRecoilState(startDateState);
   const [categoryFilterList, setCategoryFilterList] =
     useRecoilState(checkedListState);
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [selectedDateForGetData, setSelectedDateForGetData] =
+    useRecoilState<Date>(selectedExpenseDateState);
   const [analyze, setAnalyze] = useState(false);
   const [expenseData, setExpenseData] = useState<ExpenseRecord[]>([]);
   const confirmDialogRef = useRef<HTMLDialogElement>(null);
@@ -75,39 +79,34 @@ export default function Account() {
     getUseData();
   }, [getUseData]);
 
-  const filterDate = expenseData.filter((d) => {
-    if (getDayFunc(selectedDate.toString(), 1) === getDayFunc(d.useDate, 1)) {
-      return d;
-    }
-  });
-
-  const totalAmount = filterDate.reduce(
+  const totalAmount = expenseData.reduce(
     (acc, cur) => acc + Number(cur.amount),
     0
   );
-  const year = new Date(selectedDate).getFullYear();
-  const prevMonth = new Date(selectedDate).getMonth();
-  const nextMonth = new Date(selectedDate).getMonth() + 1;
+
+  const year = new Date(selectedDateForGetData).getFullYear();
+  const prevMonth = new Date(selectedDateForGetData).getMonth();
+  const nextMonth = new Date(selectedDateForGetData).getMonth() + 1;
 
   const onChangeMonth = (date: Date) => {
-    setSelectedDate(date);
     setStartDate(new Date(date.getFullYear(), date.getMonth(), 1));
     setEndDate(new Date(date.getFullYear(), date.getMonth() + 1, 0));
   };
 
   const onClickPrev = () => {
-    setSelectedDate(new Date(year, prevMonth - 1));
+    setSelectedDateForGetData(new Date(year, prevMonth - 1));
     setStartDate(new Date(year, prevMonth - 1, 1));
     setEndDate(new Date(year, prevMonth, 0));
   };
   const onClickNext = () => {
-    setSelectedDate(new Date(year, nextMonth));
+    setSelectedDateForGetData(new Date(year, nextMonth));
     setStartDate(new Date(year, nextMonth, 1));
     setEndDate(new Date(year, nextMonth + 1, 0));
   };
   const handleFilterReset = () => {
     setStartDate(new Date(new Date().getFullYear(), new Date().getMonth(), 1));
     setEndDate(new Date());
+    setSelectedDateForGetData(new Date());
     setCategoryFilterList([]);
     setisFilterd(false);
   };
@@ -142,7 +141,7 @@ export default function Account() {
               onClick={onClickPrev}
             />
             <MonthPicker
-              selectedDate={selectedDate}
+              selectedDate={selectedDateForGetData}
               handleSelectedDate={onChangeMonth}
             />
             <SlArrowRight
@@ -221,8 +220,8 @@ export default function Account() {
                 ) : (
                   <></>
                 )}
-                {filterDate.length > 0 ? (
-                  filterDate.map((d, idx) => (
+                {expenseData.length > 0 ? (
+                  expenseData.map((d, idx) => (
                     <div key={idx} className="w-full border p-4 mb-2">
                       <div className="flex w-full justify-between mb-4 pb-2 border-b-4">
                         <div>{getDayFunc(d.useDate, 2)}</div>

@@ -11,7 +11,6 @@ import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useMutation, useQueryClient } from "react-query";
 import InformModal from "../Common/InformModal";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { BiWon } from "react-icons/Bi";
@@ -23,7 +22,11 @@ import { SHOW_MODAL_DELAY } from "../../constants/modalTime";
 import { postExpense, reviseExpense } from "../../api/expenseAPI";
 import { ExpenseFormProps } from "../../interface/interface";
 import { useRecoilState } from "recoil";
-import { expenseRecordAtom } from "../../Recoil/expenseRecord";
+import {
+  expenseRecordAtom,
+  selectedExpenseDateState,
+} from "../../Recoil/expenseRecord";
+import { startDateState, endDateState } from "../../Recoil";
 
 const Container = styled.div`
   ${tw`mx-auto w-11/12 pt-8 text-neutral-600 font-bold text-sm`}
@@ -44,7 +47,12 @@ const ExpensesForm = ({ formEditor }: ExpensesFormProps) => {
   );
   const [selectModal, setSelectModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [, setSelectedDateForGetData] = useRecoilState(
+    selectedExpenseDateState
+  );
   const [isRevision, setIsRevision] = useRecoilState(expenseRecordAtom);
+  const [, setStartDate] = useRecoilState(startDateState);
+  const [, setEndDate] = useRecoilState(endDateState);
   const expenseSchema = Yup.object({
     amount: Yup.string()
       .transform((value) => value.replace(/,/g, ""))
@@ -145,6 +153,15 @@ const ExpensesForm = ({ formEditor }: ExpensesFormProps) => {
     } else {
       updateAccountMutation.mutate(formdata);
     }
+    setSelectedDateForGetData(selectedDate);
+    setTimeout(() => {
+      setStartDate(
+        new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1)
+      );
+      setEndDate(
+        new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 0)
+      );
+    }, 100);
 
     if (!dialogRef.current) return;
     dialogRef.current.showModal();
