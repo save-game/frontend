@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 
 import { SlArrowLeft, SlArrowRight } from "react-icons/sl";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import {
   checkedListState,
   endDateState,
@@ -16,11 +16,10 @@ import { categoryList } from "../../constants/expenseCategory.js";
 import ExpenseFormButton from "../Expenses/ExpenseFormButton.js";
 import { MonthPickerWrapper } from "../../styles/DateRange.js";
 import { deleteExpense, getRecordedExpense } from "../../api/expenseAPI.js";
-import { ExpenseFormProps, ExpenseRecord } from "../../interface/interface.js";
+import { ExpenseRecord } from "../../interface/interface.js";
 import NoDisplayData from "../Common/NoDisplayData.js";
 import SubmitForm from "./Submit.js";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import LoadingSpinner from "../Common/LoadingSpinner.js";
 import { BsPencil, BsTrash } from "react-icons/Bs";
 import Dropdown from "../Common/Dropdown.js";
 import ConfirmModal from "../Common/ConfirmModal.js";

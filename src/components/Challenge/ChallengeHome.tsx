@@ -1,8 +1,7 @@
-import { useCallback, useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useEffect, useState } from "react";
+import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import styled from "styled-components";
 import tw from "twin.macro";
-import axios from "axios";
 
 import ChallengeForm from "../../components/Challenge/ChallengeForm";
 import ChallengeFilter from "./ChallengeFilter";
