@@ -9,7 +9,7 @@ import ChallengeFilter from "./ChallengeFilter";
 import ChallengeCard from "./ChallengeCard";
 import { ChallengeDataProps } from "../../interface/interface";
 import { openFormState } from "../../Recoil/challengeFormAtom";
-import { getSearchChallenge } from "../../api/challengeAPI";
+import { getChallengeList } from "../../api/challengeAPI";
 import { filterParameterSelector } from "../../Recoil/challengeHomeFilterAtom";
 
 const Container = styled.div`
@@ -19,38 +19,30 @@ const Container = styled.div`
 export default function ChallengeHome() {
   const [challengeData, setChallengeData] = useState<ChallengeDataProps[]>([]);
   const [, setOpenForm] = useRecoilState(openFormState);
-  const params = useRecoilValue(filterParameterSelector);
+  const filterValues = useRecoilValue(filterParameterSelector);
 
-  const getChallengeData = useCallback(async () => {
+  const handleGetFilteredChallengeData = async () => {
     try {
-      const response = await axios.get("/test/challengeHomeTest.json");
-      const result = response.data;
-      setChallengeData(result.challengeList);
+      const response = await getChallengeList(filterValues);
+      console.log(response.data.content);
+      setChallengeData(response.data.content);
     } catch (error) {
       console.error(
-        `getChallengeData Error: Time(${new Date()}) ERROR ${error}`
+        `handleGetFilteredChallengeData Error: Time(${new Date()}) ERROR ${error}`
       );
     }
-  }, []);
+  };
 
   useEffect(() => {
-    getChallengeData();
-  }, [getChallengeData]);
-  const page = 0;
-  const onApplyFilter = async () => {
-    await getSearchChallenge(
-      params.search_text,
-      params.text_category,
-      params.min_search_amount,
-      params.max_search_amount,
-      params.search_category,
-      page
-    );
-  };
+    handleGetFilteredChallengeData();
+  }, []);
+
   return (
     <>
       <Container>
-        <ChallengeFilter onClick={onApplyFilter} />
+        <ChallengeFilter
+          handleGetChallengeList={handleGetFilteredChallengeData}
+        />
         <ChallengeCardWarp>
           {challengeData.map((item) => (
             <div key={item.challengeId} className="mb-4">
