@@ -1,8 +1,7 @@
-import { useCallback, useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useEffect, useState } from "react";
+import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import styled from "styled-components";
 import tw from "twin.macro";
-import axios from "axios";
 
 import ChallengeForm from "../../components/Challenge/ChallengeForm";
 import ChallengeFilter from "./ChallengeFilter";
@@ -11,6 +10,7 @@ import { ChallengeDataProps } from "../../interface/interface";
 import { openFormState } from "../../Recoil/challengeFormAtom";
 import { getChallengeList } from "../../api/challengeAPI";
 import { filterParameterSelector } from "../../Recoil/challengeHomeFilterAtom";
+import { ChallengeFilterProps } from "../../interface/interface";
 
 const Container = styled.div`
   ${tw`mx-auto relative w-11/12 h-screen max-h-screen pt-8 text-neutral-600 font-bold text-sm overflow-hidden`}
@@ -20,11 +20,13 @@ export default function ChallengeHome() {
   const [challengeData, setChallengeData] = useState<ChallengeDataProps[]>([]);
   const [, setOpenForm] = useRecoilState(openFormState);
   const filterValues = useRecoilValue(filterParameterSelector);
+  const resetSaerchFilter = useResetRecoilState(filterParameterSelector);
 
-  const handleGetFilteredChallengeData = async () => {
+  const handleGetFilteredChallengeData = async (
+    value: ChallengeFilterProps
+  ) => {
     try {
-      const response = await getChallengeList(filterValues);
-      console.log(response.data.content);
+      const response = await getChallengeList(value);
       setChallengeData(response.data.content);
     } catch (error) {
       console.error(
@@ -33,8 +35,19 @@ export default function ChallengeHome() {
     }
   };
 
+  const handleResetFilter = () => {
+    resetSaerchFilter();
+    handleGetFilteredChallengeData({
+      searchType: "ALL",
+      keyword: "",
+      minAmount: 0,
+      maxAmount: 10000000,
+      category: null,
+    });
+  };
+
   useEffect(() => {
-    handleGetFilteredChallengeData();
+    handleGetFilteredChallengeData(filterValues);
   }, []);
 
   return (
@@ -42,6 +55,7 @@ export default function ChallengeHome() {
       <Container>
         <ChallengeFilter
           handleGetChallengeList={handleGetFilteredChallengeData}
+          handleResetFilter={handleResetFilter}
         />
         <ChallengeCardWarp>
           {challengeData.map((item) => (
