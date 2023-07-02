@@ -1,13 +1,10 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-
 import { useNavigate } from "react-router-dom";
 import { validate } from "./validate";
 import axios from "axios";
 import { MouseEventHandler, useRef, useState } from "react";
-
 import { SHOW_MODAL_DELAY } from "../../constants/modalTime";
-import { API } from "../../constants/api";
 import { ValidationFormProps } from "../../interface/interface";
 import { postMember } from "../../api/signupAPI";
 import InformModal from "../Common/InformModal";
@@ -79,7 +76,7 @@ export default function SignUp() {
 
   const OnCheckEmail: MouseEventHandler<HTMLButtonElement> = async () => {
     await axios
-      .get(`${API}/auth/checkemail`, {
+      .get(`/api/auth/checkemail`, {
         params: { value: onChangeEmail },
       })
       .then((response) => {
@@ -96,7 +93,7 @@ export default function SignUp() {
 
   const OnCheckNickName: MouseEventHandler<HTMLButtonElement> = async () => {
     await axios
-      .get(`${API}/auth/checknickname`, { params: { value: onChangeNickName } })
+      .get(`/api/auth/checknickname`, { params: { value: onChangeNickName } })
       .then((response) => {
         if (response.data.success === false) {
           setResultNickNameMsg(response.data.data);

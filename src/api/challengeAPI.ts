@@ -1,13 +1,10 @@
 import axios from "./axiosInterceptors";
-import { API } from "../constants/api";
 import { ChallengeFilterProps } from "../interface/interface";
 import { FieldValues } from "react-hook-form";
 
-//지우기
-
 export const postChallenge = async (data: FieldValues, memberCount: number) => {
   try {
-    const response = await axios.post(`${API}/challenges`, {
+    const response = await axios.post(`/api/challenges`, {
       title: data.title,
       content: data.content,
       startDate: data.start_date,
@@ -26,7 +23,7 @@ export const getChallengeList = async (
   filterParameter: ChallengeFilterProps
 ) => {
   try {
-    const response = await axios.get(`${API}/challenges/search`, {
+    const response = await axios.get(`/api/challenges/search`, {
       params: {
         keyword: filterParameter.keyword,
         searchType: filterParameter.searchType,
@@ -45,7 +42,7 @@ export const getChallengeList = async (
 export const postJoinChallenge = async (challengeId: number) => {
   try {
     const response = await axios.post(
-      `${API}/challenges/join?challengeId=${challengeId}`
+      `/api/challenges/join?challengeId=${challengeId}`
     );
     return response.data;
   } catch (error) {
@@ -57,7 +54,7 @@ export const postJoinChallenge = async (challengeId: number) => {
 
 export const deleteChallenge = async (challengeId: number) => {
   try {
-    const response = await axios.delete(`${API}/challenges/${challengeId}`);
+    const response = await axios.delete(`/api/challenges/${challengeId}`);
     return response.data;
   } catch (error) {
     console.error(`deleteChallenge Error : Time(${new Date()}) ERROR ${error}`);
@@ -66,7 +63,7 @@ export const deleteChallenge = async (challengeId: number) => {
 
 export const getChallengeStatus = async (challengeId: number) => {
   try {
-    const response = await axios.get(`${API}/challenges/${challengeId}`);
+    const response = await axios.get(`/api/challenges/${challengeId}`);
     return response.data;
   } catch (error) {
     console.error(
