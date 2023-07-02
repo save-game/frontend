@@ -39,8 +39,11 @@ const BoardItem = ({ post, confirmRef, dispatch }: BoardItemProps) => {
     if (isToday(date)) {
       const hoursDifference = differenceInHours(now, date);
       if (hoursDifference <= 0) {
-        const minutesDifference = differenceInMinutes(now, date);
-        setFormattedDate(`${minutesDifference}분 전`);
+        const minutesDifference =
+          differenceInMinutes(now, date) === 0
+            ? `방금 전`
+            : `${differenceInMinutes(now, date)}분 전`;
+        setFormattedDate(minutesDifference);
       } else {
         setFormattedDate(`${hoursDifference}시간 전`);
       }

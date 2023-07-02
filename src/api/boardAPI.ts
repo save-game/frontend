@@ -1,7 +1,7 @@
 import axios from "./axiosInterceptors";
 import { API } from "../constants/api";
 //지우기
-const challengeId = 1;
+const challengeId = 7;
 export const postBoard = async (text: string, showImage: string[]) => {
   try {
     const response = await axios.post(
@@ -17,10 +17,15 @@ export const postBoard = async (text: string, showImage: string[]) => {
   }
 };
 
-export const getPosts = async (challengeId: number, page: number) => {
+export const getPosts = async (
+  challengeId: string | undefined,
+  page: number
+) => {
+  if (!challengeId) return;
+
   try {
     const response = await axios.get(
-      `${API}/posts/challenges/${challengeId}?page=${page}&size=1`
+      `${API}/posts/challenges/${challengeId}?page=${page}&size=5`
     );
     return response.data.data;
   } catch (error) {

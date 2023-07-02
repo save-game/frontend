@@ -87,6 +87,11 @@ export interface ExpenseFormProps {
   readonly memo?: string | null;
 }
 
+export interface ExpenseRecord extends ExpenseFormProps {
+  readonly memo: string;
+  readonly recordId: number;
+}
+
 export interface ValidationFormProps {
   readonly email: string;
   readonly nickName: string;
