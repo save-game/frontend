@@ -1,11 +1,10 @@
 import { useQuery } from "react-query";
 import axios from "./axiosInterceptors";
-import { API } from "../constants/api";
 
 export const useUser = () => {
   const getUserInfo = async () => {
     try {
-      const { data } = await axios.get(`${API}/members/detail`);
+      const { data } = await axios.get(`/api/members/detail`);
       return data.data;
     } catch (error) {
       console.error(`getUserInfo Error: Time(${new Date()}) ERROR ${error}`);
@@ -16,7 +15,7 @@ export const useUser = () => {
 
 export const uploadProfileImage = async (url: string) => {
   try {
-    const { data } = await axios.put(`${API}/members/detail/image`, {
+    const { data } = await axios.put(`/api/members/detail/image`, {
       profileImageUrl: url,
     });
     return data;
@@ -29,7 +28,7 @@ export const uploadProfileImage = async (url: string) => {
 
 export const nicknameChange = async (nickname: string) => {
   try {
-    const { data } = await axios.put(`${API}/members/detail/nickname`, {
+    const { data } = await axios.put(`/api/members/detail/nickname`, {
       nickname: nickname,
     });
     return data;
@@ -45,7 +44,7 @@ interface PasswordData {
 
 export const passwordChange = async (password: PasswordData) => {
   try {
-    const { data } = await axios.put(`${API}/members/detail/password`, {
+    const { data } = await axios.put(`/api/members/detail/password`, {
       oldPassword: password.prevPassword,
       newPassword: password.newPassword,
     });
@@ -57,7 +56,7 @@ export const passwordChange = async (password: PasswordData) => {
 
 export const getMyChallenge = async () => {
   try {
-    const response = await axios.get(`${API}/members/challenges`);
+    const response = await axios.get(`/api/members/challenges`);
     return response.data;
   } catch (error) {
     console.error(

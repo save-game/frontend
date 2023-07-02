@@ -27,6 +27,7 @@ import {
   selectedExpenseDateState,
 } from "../../Recoil/expenseRecord";
 import { startDateState, endDateState } from "../../Recoil";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   ${tw`mx-auto w-11/12 pt-8 text-neutral-600 font-bold text-sm`}
@@ -42,6 +43,7 @@ interface ExpensesFormProps {
 
 const ExpensesForm = ({ formEditor }: ExpensesFormProps) => {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
     null
   );
@@ -169,7 +171,7 @@ const ExpensesForm = ({ formEditor }: ExpensesFormProps) => {
       if (!dialogRef.current) return;
       dialogRef.current.close();
 
-      formEditor(false);
+      navigate("/account");
     }, SHOW_MODAL_DELAY);
   };
 

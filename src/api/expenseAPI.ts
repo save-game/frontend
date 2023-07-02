@@ -1,11 +1,9 @@
 import axios from "./axiosInterceptors";
-
-import { API } from "../constants/api";
 import { ExpenseFormProps } from "../interface/interface";
 
 export const postExpense = async (data: ExpenseFormProps) => {
   try {
-    const response = await axios.post(`${API}/records`, {
+    const response = await axios.post(`/api/records`, {
       amount: Number(data.amount),
       category: data.category,
       memo: data.memo,
@@ -24,7 +22,7 @@ export const getRecordedExpense = async (
   endDate: string
 ) => {
   try {
-    const response = await axios.get(`${API}/records`, {
+    const response = await axios.get(`/api/records`, {
       params: { startDate: startDate, endDate: endDate },
     });
     return response.data;
@@ -38,7 +36,7 @@ export const getRecordedeExpenseForAnalyze = async (
   month: number
 ) => {
   try {
-    const response = await axios.get(`${API}/records/analysis`, {
+    const response = await axios.get(`/api/records/analysis`, {
       params: {
         year: year,
         month: month,
@@ -58,7 +56,7 @@ export const reviseExpense = async (data: {
 }) => {
   const record = { ...data.data, amount: Number(data.data.amount) };
   try {
-    const response = await axios.put(`${API}/records/${data.recordId}`, record);
+    const response = await axios.put(`/api/records/${data.recordId}`, record);
     return response.data;
   } catch (error) {
     console.error(`reviseExpense Error: Time(${new Date()}) ERROR ${error}`);
@@ -67,7 +65,7 @@ export const reviseExpense = async (data: {
 
 export const deleteExpense = async (recordId: number) => {
   try {
-    const response = await axios.delete(`${API}/records/${recordId}`);
+    const response = await axios.delete(`/api/records/${recordId}`);
     return response.data;
   } catch (error) {
     console.error(`deleteExpense Error: Time(${new Date()}) ERROR ${error}`);
