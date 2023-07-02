@@ -70,8 +70,8 @@ export interface SliderBarProps {
 export interface ChallengeDataProps {
   readonly challengeId: number;
   readonly title: string;
-  readonly content: string;
-  readonly goal_amount: number;
+  readonly challengeContent: string;
+  readonly goalAmount: number;
   readonly startDate: string;
   readonly endDate: string;
   readonly maxPeople: number;
