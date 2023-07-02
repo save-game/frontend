@@ -15,7 +15,7 @@ export default function SubmitForm() {
   const [, setEndDate] = useRecoilState(endDateState);
   const [, setList] = useRecoilState(checkedListState);
   const [, setisFiltered] = useRecoilState(isfilteredState);
-  const [s, setSelectedDateForGetData] = useRecoilState(
+  const [, setSelectedDateForGetData] = useRecoilState(
     selectedExpenseDateState
   );
 
