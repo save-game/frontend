@@ -1,6 +1,6 @@
 import axios from "./axiosInterceptors";
 import { API } from "../constants/api";
-
+import { ChallengeFilterProps } from "../interface/interface";
 import { FieldValues } from "react-hook-form";
 
 //지우기
@@ -22,30 +22,23 @@ export const postChallenge = async (data: FieldValues, memberCount: number) => {
   }
 };
 
-export const getSearchChallenge = async (
-  keyword: string,
-  searchType: string,
-  minAmount: number,
-  maxAmount: number,
-  category: string,
-  page: number
+export const getChallengeList = async (
+  filterParameter: ChallengeFilterProps
 ) => {
   try {
     const response = await axios.get(`${API}/challenges/search`, {
       params: {
-        keyword: keyword,
-        searchType: searchType,
-        minAmount: minAmount,
-        maxAmount: maxAmount,
-        category: category,
-        page: page,
+        keyword: filterParameter.keyword,
+        searchType: filterParameter.searchType,
+        minAmount: filterParameter.minAmount,
+        maxAmount: filterParameter.maxAmount,
+        category: filterParameter.category,
+        page: 0,
       },
     });
     return response.data;
   } catch (error) {
-    console.error(
-      `getSearchChallenge Error : Time(${new Date()}) ERROR ${error}`
-    );
+    console.error(`getChallengeList : Time(${new Date()}) ERROR ${error}`);
   }
 };
 
