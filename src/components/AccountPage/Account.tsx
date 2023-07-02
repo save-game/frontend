@@ -44,7 +44,9 @@ export default function Account() {
   const [analyze, setAnalyze] = useState(false);
   const [expenseData, setExpenseData] = useState<ExpenseRecord[]>([]);
   const confirmDialogRef = useRef<HTMLDialogElement>(null);
-  const [selectedRecord, setSelectedRecord] = useState<number | null>(null);
+  const [selectedRecord, setSelectedRecord] = useState<ExpenseRecord | null>(
+    null
+  );
   const [expenseForm, setExpenseForm] = useState(false);
   const [isRevision, setIsRevision] = useRecoilState(expenseRecordAtom);
 
@@ -116,15 +118,32 @@ export default function Account() {
     setExpenseForm(true);
   };
 
-  const confirmDelete = (id: number) => {
-    if (!confirmDialogRef.current || !id) return;
-    setSelectedRecord(id);
+  const confirmDelete = (record: ExpenseRecord) => {
+    if (!confirmDialogRef.current || !record) return;
+    setSelectedRecord(record);
     confirmDialogRef.current.showModal();
   };
 
   const handleExpenseDelete = () => {
     if (!selectedRecord) return;
-    expenseDeleteMutate(selectedRecord);
+    expenseDeleteMutate(selectedRecord.recordId);
+    setTimeout(() => {
+      setStartDate(
+        new Date(
+          new Date(selectedRecord.useDate).getFullYear(),
+          new Date(selectedRecord.useDate).getMonth(),
+          1
+        )
+      );
+      setEndDate(
+        new Date(
+          new Date(selectedRecord.useDate).getFullYear(),
+          new Date(selectedRecord.useDate).getMonth() + 1,
+          0
+        )
+      );
+    }, 100);
+    setSelectedDateForGetData(new Date(selectedRecord.useDate));
   };
 
   return (
@@ -237,7 +256,7 @@ export default function Account() {
                           </li>
                           <li className="text-error text-xs w-20 px-0">
                             <div
-                              onClick={() => confirmDelete(d.recordId)}
+                              onClick={() => confirmDelete(d)}
                               className="w-full mx-auto"
                             >
                               <BsTrash size="13" />
