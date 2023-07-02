@@ -1,8 +1,11 @@
 import axios from "./axiosInterceptors";
 import { API } from "../constants/api";
 //지우기
-const challengeId = 7;
-export const postBoard = async (text: string, showImage: string[]) => {
+export const postBoard = async (
+  text: string,
+  showImage: string[],
+  challengeId: number
+) => {
   try {
     const response = await axios.post(
       `${API}/posts?challengeId=${challengeId}`,
