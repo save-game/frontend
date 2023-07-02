@@ -1,13 +1,19 @@
+import { useState } from "react";
 import {
   Category,
   ChanllegeCategoryList,
 } from "../../constants/expenseCategory";
 
 export default function ChallengeCategoryFilter({
-  handleSelectCategory,
+  selected,
+  handleGetCategory,
 }: {
-  handleSelectCategory: (item: Category) => void;
+  selected: string;
+  handleGetCategory: (item: Category) => void;
 }) {
+  const handleGetCategoryFromList = (item: Category) => {
+    handleGetCategory(item);
+  };
   return (
     <>
       <div className="w-full grid grid-cols-5">
@@ -15,8 +21,10 @@ export default function ChallengeCategoryFilter({
           <button
             key={item.category}
             type="button"
-            onClick={() => handleSelectCategory(item)}
-            className="btn btn-ghost focus:border focus:bg-zinc-300 hover:bg-transparent w-full p-0 block col-span-1 h-20"
+            onClick={() => handleGetCategoryFromList(item)}
+            className={`btn btn-ghost w-full p-0 block col-span-1 h-20 ${
+              selected === item.category ? "bg-zinc-300" : "bg-white"
+            }`}
           >
             <div
               className={`${item.color} w-4/5 mx-auto text-base-100 mb-1 flex justify-center items-center h-10 rounded-full`}

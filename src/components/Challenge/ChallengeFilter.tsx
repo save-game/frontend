@@ -1,36 +1,34 @@
-import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
+import { useRecoilState, useResetRecoilState } from "recoil";
 
 import { FilterDropDown } from "../Common/Dropdown";
 import Slider from "../Common/Slider";
 import ChallengeCategoryFilter from "./ChallengeCategoryFilter";
 import {
-  textCategoryState,
   searchTextState,
-  minSearchAmountState,
-  maxSearchAmountState,
   searchCategoryState,
 } from "../../Recoil/challengeHomeFilterAtom";
 import { Category } from "../../constants/expenseCategory";
 
 const ChallengeFilterList = [
-  { value: "total", name: "전체" },
-  { value: "title", name: "제목" },
-  { value: "content", name: "부제" },
+  { value: "ALL", name: "전체" },
+  { value: "TITLE", name: "제목" },
+  { value: "CONTENT", name: "부제" },
 ];
-interface applyClickProps {
-  onClick: () => void;
-}
-export default function ChallengeFilter({ onClick }: applyClickProps) {
+export default function ChallengeFilter({
+  handleGetChallengeList,
+}: {
+  handleGetChallengeList: () => void;
+}) {
   const [searchText, setSearchText] = useRecoilState(searchTextState);
   const [searchCategory, setSearchCategory] =
     useRecoilState(searchCategoryState);
   const handleGetTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchText(e.target.value);
-    console.log(searchText);
   };
   const handleGetCategory = (item: Category) => {
     setSearchCategory(item.category);
   };
+
   const handleResetCategory = useResetRecoilState(searchCategoryState);
 
   return (
@@ -66,7 +64,8 @@ export default function ChallengeFilter({ onClick }: applyClickProps) {
           <div className="modal">
             <div className="modal-box">
               <ChallengeCategoryFilter
-                handleSelectCategory={handleGetCategory}
+                selected={searchCategory}
+                handleGetCategory={handleGetCategory}
               />
               <div className="w-full flex justify-center items-center mt-2">
                 <label
@@ -80,7 +79,7 @@ export default function ChallengeFilter({ onClick }: applyClickProps) {
                   htmlFor="category_filter"
                   onClick={handleResetCategory}
                 >
-                  닫기
+                  초기화
                 </label>
               </div>
             </div>
@@ -91,9 +90,8 @@ export default function ChallengeFilter({ onClick }: applyClickProps) {
             ></label>
           </div>
           <button
-            type="button"
-            onClick={onClick}
             className="btn btn-accent col-span-3 z-10"
+            onClick={handleGetChallengeList}
           >
             적용
           </button>

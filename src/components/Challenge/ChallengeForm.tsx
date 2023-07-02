@@ -25,6 +25,7 @@ export default function ChallengeForm() {
   const [endDate, setEndDate] = useState<Date>(addOneMonth(new Date()));
   const [openForm, setOpenForm] = useRecoilState(openFormState);
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
   const navigate = useNavigate();
 
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -37,7 +38,7 @@ export default function ChallengeForm() {
   const challengeSchema = Yup.object({
     title: Yup.string().required("필수 입력 항목입니다."),
     goal_amount: Yup.number()
-      .max(10000000, "10000000원 이하로 입력해주세요")
+      .max(10000000, "10,000,000원 이하로 입력해주세요")
       .required("필수 입력 항목입니다."),
     category: Yup.string().required(
       "필수 입력 항목입니다. 카테고리를 선택해주세요."
@@ -151,8 +152,10 @@ export default function ChallengeForm() {
     setStartDate(new Date());
     setEndDate(addOneMonth(new Date()));
     setMemberCount(2);
+    setSelectedCategory("");
   };
   const handleSelectCategory = (item: Category) => {
+    setSelectedCategory(item.category);
     setValue("category", item.category);
   };
 
@@ -304,7 +307,8 @@ export default function ChallengeForm() {
                   </span>
                 )}
                 <ChallengeCategoryFilter
-                  handleSelectCategory={handleSelectCategory}
+                  selected={selectedCategory}
+                  handleGetCategory={handleSelectCategory}
                 />
                 {errors.category && (
                   <span className="message text-xs text-error text-center">

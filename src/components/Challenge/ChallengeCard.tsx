@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router";
 import { dDayCalculator } from "../../helpers/helper";
 import { ChallengeDataProps } from "../../interface/interface";
 
@@ -6,18 +7,27 @@ export default function ChallengeCard({
 }: {
   challengeData: ChallengeDataProps;
 }) {
+  const navigate = useNavigate();
   const stardDDay = dDayCalculator(challengeData.startDate);
+  const handleClickCard = () => {
+    navigate(`/challenge/${challengeData.challengeId}`);
+  };
   return (
-    <div className="rounded-2xl border p-4 hover:bg-zinc-200 grid grid-cols-2 grid-rows-2 gap-y-1  items-center">
+    <div
+      onClick={handleClickCard}
+      className="rounded-2xl border p-4 hover:bg-zinc-200 grid grid-cols-2 grid-rows-2 gap-y-1  items-center"
+    >
       <div className="col-span-2">
         <p className="text-xl text-ellipsis overflow-hidden line-clamp-1 ">
           {challengeData.title}
         </p>
-        <p className="text-ellipsis overflow-hidden">{challengeData.content}</p>
+        <p className="text-ellipsis overflow-hidden">
+          {challengeData.challengeContent}
+        </p>
       </div>
       <div className=" col-span-1 h-full flex items-end">
         <p className="text-lg ">
-          {challengeData.goal_amount.toLocaleString("ko-KR")} 원
+          {challengeData.goalAmount.toLocaleString("ko-KR")} 원
         </p>
       </div>
       <div className=" col-span-1 text-right">
