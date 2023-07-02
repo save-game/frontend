@@ -8,18 +8,23 @@ import {
   checkedListState,
   isfilteredState,
 } from "../../Recoil";
+import { selectedExpenseDateState } from "../../Recoil/expenseRecord";
 
 export default function SubmitForm() {
   const [, setStartDate] = useRecoilState(startDateState);
   const [, setEndDate] = useRecoilState(endDateState);
   const [, setList] = useRecoilState(checkedListState);
   const [, setisFiltered] = useRecoilState(isfilteredState);
+  const [s, setSelectedDateForGetData] = useRecoilState(
+    selectedExpenseDateState
+  );
 
   const handleFilterReset = () => {
     setStartDate(new Date(new Date().getFullYear(), new Date().getMonth(), 1));
     setEndDate(new Date());
     setList([]);
     setisFiltered(false);
+    setSelectedDateForGetData(new Date());
   };
   const setFilter = () => {
     setisFiltered(true);
