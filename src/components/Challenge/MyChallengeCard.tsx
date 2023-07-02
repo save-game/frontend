@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { dDayCalculator } from "../../helpers/helper";
 import { deleteChallenge } from "../../api/challengeAPI";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { SHOW_MODAL_DELAY } from "../../constants/modalTime";
 import InformModal from "../Common/InformModal";
 
