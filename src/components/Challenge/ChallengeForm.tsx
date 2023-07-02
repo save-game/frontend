@@ -109,9 +109,10 @@ export default function ChallengeForm() {
   };
 
   const handleSubmitChallenge = async (data: FieldValues) => {
-    console.log(data, memberCount);
     try {
-      await postChallenge(data, memberCount);
+      const res = await postChallenge(data, memberCount);
+      const challengeId = res.data.id;
+
       setOpenForm(false);
       handleResetForm();
       if (dialogRef.current) {
@@ -125,7 +126,7 @@ export default function ChallengeForm() {
         if (dialogRef.current) {
           dialogRef.current.close();
         }
-        navigate("/challenge");
+        navigate(`/challenge/${challengeId}`);
       }, SHOW_MODAL_DELAY);
     } catch (error) {
       console.error(

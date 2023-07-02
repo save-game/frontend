@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { dDayCalculator } from "../../helpers/helper";
 import { deleteChallenge } from "../../api/challengeAPI";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SHOW_MODAL_DELAY } from "../../constants/modalTime";
 import InformModal from "../Common/InformModal";
 
@@ -10,18 +10,23 @@ export default function MyChallengeCard({
 }: {
   myChallenge: { challengeId: number; title: string; endDate: string };
 }) {
+  const [returnMsg, setReturnMsg] = useState("");
   const dialogRef = useRef<HTMLDialogElement>(null);
   const daysDiff = dDayCalculator(myChallenge.endDate);
   const navigate = useNavigate();
 
   const handleClickCard = () => {
-    console.log(myChallenge.challengeId);
     navigate(`/challenge/${myChallenge.challengeId}`);
   };
 
-  //challengeExit
   const handleExitButton = async () => {
-    // await deleteChallenge(myChallenge.challengeId);
+    const res = await deleteChallenge(myChallenge.challengeId);
+    if (res.success === true) {
+      setReturnMsg("나가기가 완료되었습니다.");
+      location.reload();
+    } else {
+      setReturnMsg(res.data);
+    }
     if (!dialogRef.current) return;
     dialogRef.current.showModal();
     setTimeout(() => {
@@ -49,11 +54,7 @@ export default function MyChallengeCard({
       >
         챌린지 나가기
       </button>
-      <InformModal
-        loading={false}
-        dialogRef={dialogRef}
-        inform="챌린지를 나갔습니다."
-      />
+      <InformModal loading={false} dialogRef={dialogRef} inform={returnMsg} />
     </div>
   );
 }

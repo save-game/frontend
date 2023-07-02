@@ -1,8 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChallengeData } from "../../interface/interface";
 import { BsPersonPlusFill } from "react-icons/Bs";
 import { MdPeople } from "react-icons/Md";
 import { postJoinChallenge } from "../../api/challengeAPI";
+import { useLocation } from "react-router-dom";
+import { SHOW_MODAL_DELAY } from "../../constants/modalTime";
+import InformModal from "../Common/InformModal";
 
 interface ChallengeDataProps {
   challengeData: ChallengeData;
@@ -10,7 +13,10 @@ interface ChallengeDataProps {
 
 const ChallengeRegistration = ({ challengeData }: ChallengeDataProps) => {
   const [isAvailable, setIsAvailable] = useState(true);
-
+  const [returnMsg, setReturnMsg] = useState("");
+  const location = useLocation();
+  const challengeId = Number(location.pathname.replace("/challenge/", ""));
+  const returnDialogRef = useRef<HTMLDialogElement>(null);
   useEffect(() => {
     if (challengeData.challengeMemberList.length >= 10) {
       setIsAvailable(false);
@@ -19,13 +25,21 @@ const ChallengeRegistration = ({ challengeData }: ChallengeDataProps) => {
     }
   }, [challengeData]);
 
-  //지우기
-  const challengeId = 8;
-
-  const handleChallengeRegister = () => {
+  const handleChallengeRegister = async () => {
     //서버에 참가 요청
-    postJoinChallenge(challengeId);
-    console.log("참가신청!");
+    const res = await postJoinChallenge(challengeId);
+    if (res.success === true) {
+      setReturnMsg("참가하기가 완료되었습니다.");
+    } else {
+      setReturnMsg(res.data);
+    }
+    if (!returnDialogRef.current) return;
+    returnDialogRef.current.showModal();
+    setTimeout(() => {
+      if (!returnDialogRef.current) return;
+      returnDialogRef.current.close();
+    }, SHOW_MODAL_DELAY);
+    return false;
   };
 
   return (
@@ -47,6 +61,11 @@ const ChallengeRegistration = ({ challengeData }: ChallengeDataProps) => {
           <span className="mt-0.5">참가하기</span>
         </button>
       ) : null}
+      <InformModal
+        loading={false}
+        dialogRef={returnDialogRef}
+        inform={returnMsg}
+      />
     </div>
   );
 };
