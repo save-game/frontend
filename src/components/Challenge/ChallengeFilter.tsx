@@ -6,10 +6,8 @@ import ChallengeCategoryFilter from "./ChallengeCategoryFilter";
 import {
   searchTextState,
   searchCategoryState,
-  filterParameterSelector,
 } from "../../Recoil/challengeHomeFilterAtom";
 import { Category } from "../../constants/expenseCategory";
-import { ChallengeFilterProps } from "../../interface/interface";
 
 const ChallengeFilterList = [
   { value: "ALL", name: "전체" },
@@ -17,16 +15,13 @@ const ChallengeFilterList = [
   { value: "CONTENT", name: "부제" },
 ];
 export default function ChallengeFilter({
-  handleGetChallengeList,
   handleResetFilter,
 }: {
-  handleGetChallengeList: (value: ChallengeFilterProps) => void;
   handleResetFilter: () => void;
 }) {
   const [searchText, setSearchText] = useRecoilState(searchTextState);
   const [searchCategory, setSearchCategory] =
     useRecoilState(searchCategoryState);
-  const filterValues = useRecoilValue(filterParameterSelector);
   const handleGetTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchText(e.target.value);
   };
@@ -94,17 +89,12 @@ export default function ChallengeFilter({
               onClick={handleResetCategory}
             ></label>
           </div>
-          <div className="flex justify-between col-span-3">
-            <button
-              className="btn btn-accent w-[48%] z-10"
-              onClick={() => handleGetChallengeList(filterValues)}
-            >
-              적용
-            </button>
-            <button className="btn w-[48%] z-10" onClick={handleResetFilter}>
-              초기화
-            </button>
-          </div>
+          <button
+            className="col-span-3 btn btn-accent text-white w-full z-10"
+            onClick={handleResetFilter}
+          >
+            초기화
+          </button>
         </div>
       </div>
     </>
