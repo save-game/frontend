@@ -18,6 +18,7 @@ import { postChallenge } from "../../api/challengeAPI";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { openFormState } from "../../Recoil/challengeFormAtom";
+import { useMutation, useQueryClient } from "react-query";
 
 export default function ChallengeForm() {
   const [memberCount, setMemberCount] = useState<number>(2);
@@ -26,6 +27,7 @@ export default function ChallengeForm() {
   const [openForm, setOpenForm] = useRecoilState(openFormState);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -108,12 +110,24 @@ export default function ChallengeForm() {
         break;
     }
   };
+  const setUpdateLog = async (data: FieldValues) => {
+    const response = await postChallenge(data, memberCount);
+    return response.data;
+  };
+
+  const { data: repsonseData, mutate: updateChallenge } = useMutation(
+    setUpdateLog,
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["getChallengeData"]);
+      },
+    }
+  );
 
   const handleSubmitChallenge = async (data: FieldValues) => {
     try {
-      const res = await postChallenge(data, memberCount);
-      const challengeId = res.data.id;
-
+      updateChallenge(data);
+      const challengeId = repsonseData.id;
       setOpenForm(false);
       handleResetForm();
       if (dialogRef.current) {
@@ -158,10 +172,6 @@ export default function ChallengeForm() {
     setSelectedCategory(item.category);
     setValue("category", item.category);
   };
-
-  // useEffect(() => {
-  //   setValue("member_count", memberCount);
-  // }, [memberCount, setValue]);
 
   return (
     <>
