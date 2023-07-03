@@ -170,7 +170,7 @@ const ExpensesForm = ({ formEditor }: ExpensesFormProps) => {
     setTimeout(() => {
       if (!dialogRef.current) return;
       dialogRef.current.close();
-
+      formEditor(false);
       navigate("/account");
     }, SHOW_MODAL_DELAY);
   };
