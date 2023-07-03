@@ -32,6 +32,17 @@ export const getPosts = async (
   }
 };
 
+export const editPosts = async (postId: number, text: string) => {
+  try {
+    const response = await axios.put(`/api/posts/${postId}`, {
+      content: text,
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`editPosts Error: Time(${new Date()}) ERROR ${error}`);
+  }
+};
+
 export const deletePost = async (postId: number) => {
   try {
     const response = await axios.delete(`/api/posts/${postId}`);
