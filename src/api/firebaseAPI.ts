@@ -25,3 +25,19 @@ export const getUrl = async (memberId: number, imgFile: Blob) => {
     throw new Error("error");
   }
 };
+
+export const getBoardUrl = async (
+  challengeId: string,
+  imgFile: Blob,
+  date: number
+) => {
+  if (!imgFile) return;
+  const imgRef = ref(storage, `user/${challengeId}/${date}`);
+  try {
+    const res = await uploadBytes(imgRef, imgFile);
+    const url = await getDownloadURL(res.ref);
+    return url;
+  } catch (error) {
+    throw new Error(`BoardImg error`);
+  }
+};

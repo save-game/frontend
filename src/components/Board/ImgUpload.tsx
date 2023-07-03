@@ -4,15 +4,25 @@ import { MdPhotoCamera } from "react-icons/Md";
 import { SHOW_WARNING_MODAL_DELAY } from "../../constants/modalTime";
 import { useRecoilState } from "recoil";
 import { showImgState } from "../../Recoil/boardAtom";
+import imageCompression from "browser-image-compression";
+import { getBoardUrl } from "../../api/firebaseAPI";
+import { useParams } from "react-router-dom";
 
 export default function ImgUpLoad() {
   const [showImage, setShowImage] = useRecoilState(showImgState);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const { challengeId } = useParams();
 
-  const uploadImg = (e: ChangeEvent<HTMLInputElement>) => {
-    const imgLists = e.target.files;
-    const imgUrlLists = [...showImage];
+  const uploadImg = async (e: ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    const file = e.target.files[0];
+    const reSize = await imageCompression(file, { maxSizeMB: 0.5 });
+    const imgUrlLists: string[] = [...showImage];
+    if (!challengeId) return;
+    const boardUrl = await getBoardUrl(challengeId, reSize, Date.now());
+    boardUrl ? imgUrlLists.push(boardUrl) : null;
+    setShowImage(imgUrlLists);
     if (imgUrlLists.length >= 3) {
       if (dialogRef.current) {
         dialogRef.current?.showModal();
@@ -26,13 +36,7 @@ export default function ImgUpLoad() {
       }, SHOW_WARNING_MODAL_DELAY);
       return;
     }
-    if (imgLists) {
-      for (let i = 0; i < imgLists?.length; i++) {
-        const currentImageUrl = URL.createObjectURL(imgLists[i]);
-        imgUrlLists.push(currentImageUrl);
-      }
-      setShowImage(imgUrlLists);
-    }
+    e.target.value = "";
   };
 
   const handleDeleteImg = (id: number) => {
@@ -43,7 +47,6 @@ export default function ImgUpLoad() {
     <>
       <input
         type="file"
-        multiple={true}
         id="photo"
         ref={fileInputRef}
         onChange={uploadImg}

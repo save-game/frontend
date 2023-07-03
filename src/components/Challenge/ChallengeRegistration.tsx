@@ -3,7 +3,7 @@ import { ChallengeData } from "../../interface/interface";
 import { BsPersonPlusFill } from "react-icons/Bs";
 import { MdPeople } from "react-icons/Md";
 import { postJoinChallenge } from "../../api/challengeAPI";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { SHOW_MODAL_DELAY } from "../../constants/modalTime";
 import InformModal from "../Common/InformModal";
 
@@ -14,8 +14,8 @@ interface ChallengeDataProps {
 const ChallengeRegistration = ({ challengeData }: ChallengeDataProps) => {
   const [isAvailable, setIsAvailable] = useState(true);
   const [returnMsg, setReturnMsg] = useState("");
-  const location = useLocation();
-  const challengeId = Number(location.pathname.replace("/challenge/", ""));
+  const challengeId = Number(useParams().challengeId);
+
   const returnDialogRef = useRef<HTMLDialogElement>(null);
   useEffect(() => {
     if (challengeData.challengeMemberList.length >= 10) {

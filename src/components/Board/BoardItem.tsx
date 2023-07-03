@@ -3,18 +3,25 @@ import {
   RefObject,
   SetStateAction,
   useEffect,
+  useRef,
   useState,
 } from "react";
 import Dropdown from "../Common/Dropdown";
-import { BoardContent } from "./BoardList";
+import BoardList, { BoardContent } from "./BoardList";
 import ImageCarousel from "./ImageCarousel";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/Ai";
 import { BsPencil, BsTrash, BsPersonFill } from "react-icons/Bs";
 import { UseQueryResult } from "react-query";
 import { UserData } from "../../interface/interface";
 import { useUser } from "../../api/membersAPI";
-import { heartDelete, heartPost } from "../../api/boardAPI";
+import { editPosts, heartDelete, heartPost } from "../../api/boardAPI";
 import { differenceInHours, differenceInMinutes, isToday } from "date-fns";
+import { useRecoilState } from "recoil";
+import { showImgState, textState } from "../../Recoil/boardAtom";
+import TextUpload from "./TextUpload";
+import { render } from "react-dom";
+import InformModal from "../Common/InformModal";
+import { SHOW_MODAL_DELAY } from "../../constants/modalTime";
 
 interface BoardItemProps {
   readonly post: BoardContent;
@@ -27,6 +34,11 @@ const BoardItem = ({ post, confirmRef, dispatch }: BoardItemProps) => {
   const [heartState, setHeartState] = useState(false);
   const [heartCount, setHeartCount] = useState(0);
   const [formattedDate, setFormattedDate] = useState("");
+  //edit
+  const [editForm, setEditForm] = useState(false);
+  const [text, setText] = useRecoilState(textState);
+  const [editMsg, setEditMsg] = useState("");
+  const editDialogRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
     setHeartState(post.hasHeart);
@@ -64,12 +76,29 @@ const BoardItem = ({ post, confirmRef, dispatch }: BoardItemProps) => {
       await heartPost(post.id);
     }
   };
+  const handleEditPosts = async () => {
+    const res = await editPosts(post.id, text);
+    setEditForm(false);
+    if (!editDialogRef.current) return;
+    editDialogRef.current.showModal();
+    if (res.success === true) {
+      setEditMsg("수정되었습니다.");
+    } else {
+      setEditMsg(res.data);
+    }
+    setTimeout(() => {
+      if (!editDialogRef.current) return;
+      editDialogRef.current.close();
+    }, SHOW_MODAL_DELAY);
+    // location.reload();
+  };
 
   const confirmDelete = (id: number) => {
     if (!confirmRef.current || !id) return;
     dispatch(id);
     confirmRef.current.showModal();
   };
+
   return (
     <>
       <div className="flex justify-between items-center mb-2">
@@ -96,7 +125,10 @@ const BoardItem = ({ post, confirmRef, dispatch }: BoardItemProps) => {
           <Dropdown>
             <li className="text-xs w-20 px-0 ">
               <div
-                // onClick={() =>)}
+                onClick={() => {
+                  setEditForm(true);
+                  setText(post.postContent);
+                }}
                 className=" w-full mx-auto"
               >
                 <BsPencil size="13" />
@@ -106,7 +138,7 @@ const BoardItem = ({ post, confirmRef, dispatch }: BoardItemProps) => {
             <li className="text-error text-xs w-20 px-0">
               <div
                 onClick={() => confirmDelete(post.id)}
-                className="w-full mx-auto"
+                className="w-full mx-auto "
               >
                 <BsTrash size="13" />
                 <p className="shrink-0">삭제</p>
@@ -119,10 +151,32 @@ const BoardItem = ({ post, confirmRef, dispatch }: BoardItemProps) => {
       {post.imageList.length !== 0 ? (
         <ImageCarousel imgList={post.imageList} />
       ) : null}
+      {editForm ? (
+        <div className="flex justify-center">
+          <div className="flex flex-col">
+            <button
+              type="button"
+              onClick={() => setEditForm(false)}
+              className="flex justify-end cursor-pointer"
+            >
+              X
+            </button>
+            <h1 className="flex justify-center mb-2">글 수정</h1>
+            <TextUpload />
+            <button
+              onClick={handleEditPosts}
+              className="w-full btn btn-accent btn-sm flex justify-center"
+            >
+              수정완료
+            </button>
+          </div>
+        </div>
+      ) : (
+        <p className="text-left font-normal p-2 py-3 mt-2 border-t border-accent-focus/60">
+          {post.postContent}
+        </p>
+      )}
 
-      <p className="text-left font-normal p-2 py-3 mt-2 border-t border-accent-focus/60">
-        {post.postContent}
-      </p>
       <div className="flex justify-between mb-1 px-2">
         <div className="mr-2 flex items-center">
           <button
@@ -142,6 +196,7 @@ const BoardItem = ({ post, confirmRef, dispatch }: BoardItemProps) => {
           {formattedDate}
         </div>
       </div>
+      <InformModal loading={false} inform={editMsg} dialogRef={editDialogRef} />
     </>
   );
 };
