@@ -2,7 +2,13 @@ import axios from "./axiosInterceptors";
 import { ChallengeFilterProps } from "../interface/interface";
 import { FieldValues } from "react-hook-form";
 
-export const postChallenge = async (data: FieldValues, memberCount: number) => {
+export const postChallenge = async ({
+  data,
+  memberCount,
+}: {
+  data: FieldValues;
+  memberCount: number;
+}) => {
   try {
     const response = await axios.post(`/api/challenges`, {
       title: data.title,

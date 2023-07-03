@@ -110,13 +110,9 @@ export default function ChallengeForm() {
         break;
     }
   };
-  const setUpdateLog = async (data: FieldValues) => {
-    const response = await postChallenge(data, memberCount);
-    return response.data;
-  };
 
   const { data: repsonseData, mutate: updateChallenge } = useMutation(
-    setUpdateLog,
+    postChallenge,
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["getChallengeData"]);
@@ -126,8 +122,8 @@ export default function ChallengeForm() {
 
   const handleSubmitChallenge = async (data: FieldValues) => {
     try {
-      updateChallenge(data);
-      const challengeId = repsonseData.id;
+      updateChallenge({ data, memberCount });
+      const challengeId = repsonseData.data.id;
       setOpenForm(false);
       handleResetForm();
       if (dialogRef.current) {
