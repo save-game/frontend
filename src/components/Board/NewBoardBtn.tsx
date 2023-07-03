@@ -23,6 +23,9 @@ export default function NewBoardBtn() {
 
   const Open = () => {
     boardDialogRef.current?.showModal();
+    setShowImg([]);
+    setText("");
+    setTextLength(0);
   };
   const OnAllClose = () => {
     boardDialogRef.current?.close();

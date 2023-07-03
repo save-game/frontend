@@ -1,6 +1,5 @@
 import { FormEvent, MouseEventHandler, useRef } from "react";
 import { GrClose } from "react-icons/gr";
-import axios from "../../api/axiosInterceptors";
 import ImgUpLoad from "./ImgUpload";
 import TextUpload from "./TextUpload";
 import { useRecoilState } from "recoil";
@@ -13,6 +12,7 @@ import DialogModal from "../Common/Dialog";
 import { SHOW_MODAL_DELAY } from "../../constants/modalTime";
 import { postBoard } from "../../api/boardAPI";
 import { useMutation, useQueryClient } from "react-query";
+import { useParams } from "react-router-dom";
 
 interface NewBoardFormProp {
   onClick: MouseEventHandler<HTMLButtonElement>;
@@ -24,13 +24,15 @@ export default function NewBoardForm({ onClick }: NewBoardFormProp) {
   const [, setTextLength] = useRecoilState(textLengthState);
   const contentsDialogRef = useRef<HTMLDialogElement>(null);
 
+  const challengeId = Number(useParams().challengeId);
+
   //게시판 구현위해 useMutation으로 변경함 아래 1은 실제 챌린지 id로 변경필요
   const queryClient = useQueryClient();
   const { mutate: postCreateMutate } = useMutation(
-    () => postBoard(text, showImg),
+    () => postBoard(text, showImg, challengeId),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(["challengeBoard", 1]);
+        queryClient.invalidateQueries(["challengeBoard", challengeId]);
       },
     }
   );
@@ -46,7 +48,6 @@ export default function NewBoardForm({ onClick }: NewBoardFormProp) {
       }, SHOW_MODAL_DELAY);
       return false;
     } else {
-      // postBoard(text, showImg);
       postCreateMutate();
       setShowImg([]);
       setText("");
