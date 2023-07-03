@@ -1,10 +1,5 @@
-import { useEffect, useState, useCallback } from "react";
-import {
-  useRecoilCallback,
-  useRecoilState,
-  useRecoilValue,
-  useResetRecoilState,
-} from "recoil";
+import { useEffect, useCallback } from "react";
+import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import styled from "styled-components";
 import tw from "twin.macro";
 
@@ -18,7 +13,7 @@ import { filterParameterSelector } from "../../Recoil/challengeHomeFilterAtom";
 import { ChallengeFilterProps } from "../../interface/interface";
 import { useInView } from "react-intersection-observer";
 import { CgSpinner } from "react-icons/Cg";
-import { useInfiniteQuery, useMutation, useQueryClient } from "react-query";
+import { useInfiniteQuery } from "react-query";
 
 const Container = styled.div`
   ${tw`mx-auto relative w-11/12 h-screen max-h-screen pt-8 text-neutral-600 font-bold text-sm overflow-hidden`}

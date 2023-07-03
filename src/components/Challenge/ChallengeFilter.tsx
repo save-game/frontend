@@ -1,4 +1,4 @@
-import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
+import { useRecoilState, useResetRecoilState } from "recoil";
 
 import { FilterDropDown } from "../Common/Dropdown";
 import Slider from "../Common/Slider";
