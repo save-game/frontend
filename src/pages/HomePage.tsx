@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
-import axios from "axios";
 import { useNavigate } from "react-router";
 
 import ExpenseGraphContainer from "../components/Expenses/ExpenseGraphContainer";
@@ -9,10 +8,12 @@ import MyChallengeCard from "../components/Challenge/MyChallengeCard";
 import ExpenseFormButton from "../components/Expenses/ExpenseFormButton";
 import { useUser } from "../api/membersAPI";
 import { UserData } from "../interface/interface";
-import { UseQueryResult } from "react-query";
+import { UseQueryResult, useInfiniteQuery } from "react-query";
 import { BsPersonFill } from "react-icons/Bs";
 import { getMyChallenge } from "../api/membersAPI";
 import LoadingSpinner from "../components/Common/LoadingSpinner";
+import { useInView } from "react-intersection-observer";
+import { CgSpinner } from "react-icons/Cg";
 
 interface MyChallengeList {
   challengeId: number;
@@ -22,8 +23,9 @@ interface MyChallengeList {
 
 export default function Home() {
   const { data: userInfo }: UseQueryResult<UserData> = useUser();
-  const [isLoading, setIsLoading] = useState(true);
-  const [myChallengeList, setMyChallengeList] = useState<MyChallengeList[]>([]);
+  const [isEmpty, setIsEmpty] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [observeTarget, inView] = useInView({ threshold: 0.9 });
 
   const navigate = useNavigate();
 
@@ -31,24 +33,46 @@ export default function Home() {
     navigate("/challenge");
   };
 
-  const getMyChallengeList = async () => {
+  const getMyChallengeList = async (pageParam: number) => {
     try {
-      const response = await getMyChallenge();
-      setMyChallengeList(response.data);
+      const response = await getMyChallenge(pageParam);
+      return response.data;
     } catch (error) {
       console.error(
         `getMyChallengeList Error: Time(${new Date()}) ERROR ${error}`
       );
     }
   };
+  const {
+    data: myChallengeList,
+    isFetchingNextPage,
+    fetchNextPage,
+  } = useInfiniteQuery(
+    ["getChallengeData"],
+    ({ pageParam = 0 }) => getMyChallengeList(pageParam),
+    {
+      getNextPageParam: (lastPage) => {
+        if (!lastPage.isLast) return lastPage.number + 1;
+      },
+    }
+  );
+  useEffect(() => {
+    if (myChallengeList?.pages[0].empty) {
+      setIsEmpty(true);
+    }
+  }, [myChallengeList?.pages]);
 
   useEffect(() => {
-    getMyChallengeList();
     setTimeout(() => {
       setIsLoading(false);
     }, 300);
   }, []);
 
+  useEffect(() => {
+    if (inView) {
+      fetchNextPage();
+    }
+  }, [inView, fetchNextPage]);
   return (
     <>
       {isLoading ? (
@@ -67,16 +91,18 @@ export default function Home() {
           </ProfileContainer>
           <ExpenseGraphContainer />
           <ExpenseFormButton size={"normal"} />
-          {myChallengeList?.length > 0 ? (
+          {!isEmpty ? (
             <div className="mt-6 w-full mb-16 text-black">
               도전 중인 챌린지
-              {myChallengeList.map((v, i) => {
-                return (
-                  <div key={i}>
-                    <MyChallengeCard myChallenge={v} />
-                  </div>
-                );
-              })}
+              {myChallengeList?.pages.map((page) =>
+                page.content.map((item: MyChallengeList, i: number) => {
+                  return (
+                    <div key={i}>
+                      <MyChallengeCard myChallenge={item} />
+                    </div>
+                  );
+                })
+              )}
             </div>
           ) : (
             <div className="text-black mt-10 w-full">
@@ -89,6 +115,14 @@ export default function Home() {
               </button>
             </div>
           )}
+          <div ref={observeTarget} className=" h-14">
+            {isFetchingNextPage ? (
+              <CgSpinner
+                size={25}
+                className="animate-spin mx-auto text-accent-focus"
+              />
+            ) : null}
+          </div>
         </Container>
       )}
     </>

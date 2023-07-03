@@ -2,7 +2,13 @@ import axios from "./axiosInterceptors";
 import { ChallengeFilterProps } from "../interface/interface";
 import { FieldValues } from "react-hook-form";
 
-export const postChallenge = async (data: FieldValues, memberCount: number) => {
+export const postChallenge = async ({
+  data,
+  memberCount,
+}: {
+  data: FieldValues;
+  memberCount: number;
+}) => {
   try {
     const response = await axios.post(`/api/challenges`, {
       title: data.title,
@@ -20,7 +26,8 @@ export const postChallenge = async (data: FieldValues, memberCount: number) => {
 };
 
 export const getChallengeList = async (
-  filterParameter: ChallengeFilterProps
+  filterParameter: ChallengeFilterProps,
+  pageParam: number
 ) => {
   try {
     const response = await axios.get(`/api/challenges/search`, {
@@ -30,7 +37,7 @@ export const getChallengeList = async (
         minAmount: filterParameter.minAmount,
         maxAmount: filterParameter.maxAmount,
         category: filterParameter.category,
-        page: 0,
+        page: pageParam,
       },
     });
     return response.data;
