@@ -54,9 +54,11 @@ export const passwordChange = async (password: PasswordData) => {
   }
 };
 
-export const getMyChallenge = async () => {
+export const getMyChallenge = async (pageParam: number) => {
   try {
-    const response = await axios.get(`/api/members/challenges`);
+    const response = await axios.get(`/api/members/challenges`, {
+      params: { page: pageParam },
+    });
     return response.data;
   } catch (error) {
     console.error(

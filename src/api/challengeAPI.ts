@@ -20,7 +20,8 @@ export const postChallenge = async (data: FieldValues, memberCount: number) => {
 };
 
 export const getChallengeList = async (
-  filterParameter: ChallengeFilterProps
+  filterParameter: ChallengeFilterProps,
+  pageParam: number
 ) => {
   try {
     const response = await axios.get(`/api/challenges/search`, {
@@ -30,7 +31,7 @@ export const getChallengeList = async (
         minAmount: filterParameter.minAmount,
         maxAmount: filterParameter.maxAmount,
         category: filterParameter.category,
-        page: 0,
+        page: pageParam,
       },
     });
     return response.data;
