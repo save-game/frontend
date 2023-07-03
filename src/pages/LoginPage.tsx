@@ -2,9 +2,12 @@ import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 
 import KakaoIcon from "../assets/kakao_login_large_wide.png";
 import Logo from "../assets/savegame_512x512.png";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { login, tokenRefresh } from "../api/authAPI";
 import { useEffect, useState } from "react";
+import { kakaoLogin } from "../api/kakaoAPI";
+import { KAKAO_LOGIN_URL } from "../constants/api";
+import { AxiosResponse } from "axios";
 
 export interface LoginData {
   email: string;
@@ -13,38 +16,11 @@ export interface LoginData {
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const { search: kakaoCode } = useLocation();
   const { register, handleSubmit } = useForm();
   const [errorMsg, setErrorMsg] = useState("");
 
-  const handleLogin: SubmitHandler<FieldValues> = async (
-    formData: FieldValues
-  ) => {
-    try {
-      const response = await login(formData);
-
-      if (response.data.success) {
-        const token = response.headers["authorization"];
-        const refreshToken = response.headers["refreshtoken"];
-        console.log(response.data);
-
-        localStorage.setItem("isLogin", "emailLogin");
-        localStorage.setItem("token", token);
-        localStorage.setItem("refreshToken", refreshToken);
-        navigate("/home");
-      } else if (!response.data.success) {
-        if (response.data.data === "이미 로그인되어 있습니다.") {
-          await tokenRefresh();
-          navigate("/home");
-        } else if (response.data.data === "틀린 비밀번호입니다.") {
-          setErrorMsg(response.data.data);
-        } else if (response.data.data === "사용자를 찾을 수 없습니다") {
-          setErrorMsg(response.data.data);
-        }
-      }
-    } catch (error) {
-      console.log(`handleLogin Error: Time(${new Date()}) ERROR ${error}`);
-    }
-  };
+  console.log("kakaoCode", kakaoCode);
 
   useEffect(() => {
     const loginCheck = localStorage.getItem("isLogin");
@@ -52,6 +28,60 @@ export default function LoginPage() {
       navigate("/home");
     }
   });
+
+  useEffect(() => {
+    if (kakaoCode === "") return;
+    const isCode = kakaoCode.slice(1, 5) === "code" ? true : false;
+    console.log(kakaoCode);
+    console.log(isCode);
+    if (isCode) {
+      const redirectToKakao = async () => {
+        const response = await kakaoLogin(kakaoCode);
+        console.log(response);
+        if (!response) return;
+        await handleToken(response, "kakao");
+        navigate("/");
+      };
+      redirectToKakao();
+    }
+  }, [kakaoCode]);
+
+  const handleToken = async (response: AxiosResponse, type: string) => {
+    if (response.data.success) {
+      const token = response.headers["authorization"];
+      const refreshToken = response.headers["refreshtoken"];
+      console.log(response.data);
+
+      localStorage.setItem("isLogin", type);
+      localStorage.setItem("token", token);
+      localStorage.setItem("refreshToken", refreshToken);
+      navigate("/home");
+    } else if (!response.data.success) {
+      if (response.data.data === "이미 로그인되어 있습니다.") {
+        await tokenRefresh();
+        navigate("/home");
+      } else if (response.data.data === "틀린 비밀번호입니다.") {
+        setErrorMsg(response.data.data);
+      } else if (response.data.data === "사용자를 찾을 수 없습니다") {
+        setErrorMsg(response.data.data);
+      }
+    }
+  };
+
+  const handleLogin: SubmitHandler<FieldValues> = async (
+    formData: FieldValues
+  ) => {
+    try {
+      const response = await login(formData);
+      await handleToken(response, "email");
+    } catch (error) {
+      console.log(`handleLogin Error: Time(${new Date()}) ERROR ${error}`);
+    }
+  };
+
+  const handleKakaoLogin = () => {
+    window.location.href = KAKAO_LOGIN_URL;
+  };
 
   return (
     <>
@@ -88,7 +118,7 @@ export default function LoginPage() {
           회원가입
         </button>
         <div className="flex w-full justify-around">
-          <button className=" shadow-sm rounded-md">
+          <button onClick={handleKakaoLogin} className=" shadow-sm rounded-md">
             <img src={KakaoIcon} />
           </button>
         </div>

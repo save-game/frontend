@@ -1,11 +1,11 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { BsPersonFill } from "react-icons/Bs";
 import ProfileImageEdit from "../components/MyPage/ProfileImageEdit";
 import NicknameForm from "../components/MyPage/NicknameForm";
 import PasswordForm from "../components/MyPage/PasswordForm";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import InformModal from "../components/Common/InformModal";
 import ConfirmModal from "../components/Common/ConfirmModal";
 import { SHOW_MODAL_DELAY } from "../constants/modalTime";
@@ -15,6 +15,8 @@ import { useUser } from "../api/membersAPI";
 import { UseQueryResult } from "react-query";
 import { useRecoilValue } from "recoil";
 import { loadingAtom } from "../Recoil/loading";
+import { kakaoLogout } from "../api/kakaoAPI";
+import { KAKAO_LOGIN_URL, KAKAO_LOGOUT_URL } from "../constants/api";
 
 const Container = styled.div`
   ${tw`mx-auto w-11/12 pt-8 text-neutral-600 font-bold text-sm`}
@@ -25,19 +27,56 @@ const MyPage = () => {
   const informWithdrawalRef = useRef<HTMLDialogElement>(null);
   const informChangeRef = useRef<HTMLDialogElement>(null);
   const navigate = useNavigate();
+  const { search: kakaoCode } = useLocation();
   const [nicknameForm, setNicknameForm] = useState(false);
   const [passwordForm, setPasswordForm] = useState(false);
   const { data: userInfo }: UseQueryResult<UserData> = useUser();
   const isLoading = useRecoilValue(loadingAtom);
 
-  const handleSignOut = async () => {
-    const res = await signOut();
+  // useEffect(() => {
+  //   const token =
+  //     "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxNCIsImF1dGgiOiJST0xFX01FTUJFUiIsImV4cCI6MTY4ODQ1NjM1Nn0.8w3Mv9y0UrKs07BJzFWI_2kPpBZSjzany_dWDxGU-_s";
+  //   const refreshToken =
+  //     "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg5NzQ3NTZ9.x_iPPlC2gTNSWnkdCLYUHYRamyZPYOVm844WqR-UsrQ";
 
-    if (res.success) {
-      localStorage.clear();
-      navigate("/");
+  //   localStorage.setItem("isLogin", "kako");
+  //   localStorage.setItem("token", token);
+  //   localStorage.setItem("refreshToken", refreshToken);
+  // }, []);
+
+  useEffect(() => {
+    if (kakaoCode === "") return;
+    const isCode = kakaoCode.slice(1, 5) === "code" ? true : false;
+    console.log(kakaoCode);
+    if (isCode) {
+      const redirectToKakaoLogout = async () => {
+        const res = await kakaoLogout(kakaoCode);
+        console.log(res);
+        if (res.success) {
+          localStorage.clear();
+          navigate("/");
+        }
+      };
+      redirectToKakaoLogout();
+    }
+  }, [kakaoCode]);
+
+  const handleSignOut = async () => {
+    const signOutType = localStorage.getItem("isLogin");
+    if (signOutType === "email") {
+      const res = await signOut();
+      if (res.success) {
+        localStorage.clear();
+        navigate("/");
+      }
+    } else if (signOutType === "kakao") {
+      window.location.href = KAKAO_LOGOUT_URL;
     }
   };
+
+  // const handleKakaoSignOut = () => {
+  //   window.location.href = KAKAO_LOGOUT_URL;
+  // };
 
   const confirmWithdrawal = () => {
     if (confirmDialogRef.current) {
@@ -124,6 +163,12 @@ const MyPage = () => {
                 비밀번호 변경
               </button>
               <div className="absolute bottom-0 w-11/12 my-4 space-y-4">
+                {/* <button
+                  onClick={handleKakaoSignOut}
+                  className="btn btn-neutral w-full shadow-md"
+                >
+                  kakao 로그아웃
+                </button> */}
                 <button
                   onClick={handleSignOut}
                   className="btn btn-neutral w-full shadow-md"
