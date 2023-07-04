@@ -36,7 +36,7 @@ const MemberListContainer = styled.div<{
   ${(props) =>
     props.mine
       ? css`
-          ${tw`bg-teal-50`}
+          ${tw`bg-amber-50`}
         `
       : ``}
 `;
@@ -57,11 +57,9 @@ const MembersStatus = ({ data, top }: Props) => {
   const [isOpen, setIsOpen] = useState<boolean | null>(null);
   const [isFirst, setIsFirst] = useState<boolean | null>(null);
   const [myStatus, setMyStatus] = useState<boolean>(false);
-  const ttlAmount = data.total_amount.toLocaleString("ko-KR");
+  const ttlAmount = data.totalAmount.toLocaleString("ko-KR");
 
-  //실제로는 로그인 정보에서 memberId받기
-  const memberId = 5;
-  // memberId로 정보 서버에서 받아오기
+  const memberId = data.memberId;
   const getMemberData = async () => {
     try {
       const { data } = await axios.get("/test/memberInfo.json");
@@ -98,12 +96,9 @@ const MembersStatus = ({ data, top }: Props) => {
         mine={myStatus}
       >
         <div className="relative w-7 flex justify-center items-center text-neutral-400 mr-1">
-          {isFirst ? (
+          {isFirst && !top ? (
             <div className="relative text-amber-400">
-              <AiTwotoneCrown size={24} />
-              <div className="absolute top-2 left-2.5 text-[9px] font-semibold text-base-100 bg-amber-400 leading-tight ">
-                1
-              </div>
+              <AiTwotoneCrown size={20} />
             </div>
           ) : null}
           {top ? (
@@ -118,9 +113,9 @@ const MembersStatus = ({ data, top }: Props) => {
             top ? `w-16 h-16` : ` w-10 h-10`
           } rounded-full overflow-hidden bg-[#f0f8f6] text-accent shadow-md shadow-slate-300`}
         >
-          {memberInfo?.imageUrl ? (
+          {data.profileImageUrl ? (
             <img
-              src={memberInfo.imageUrl}
+              src={data.profileImageUrl}
               className="w-full"
               alt="프로필이미지"
             />
@@ -131,7 +126,7 @@ const MembersStatus = ({ data, top }: Props) => {
 
         <ColoredTextContainer top={top}>
           <div className={`${top ? `w-3/5` : `w-2/5 `} truncate mx-1`}>
-            {data.nickName}
+            {data.nickname}
           </div>
           <div className="mr-1">님</div>
           {data.status === 1 || !isOpen ? (

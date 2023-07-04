@@ -29,15 +29,15 @@ const ChallengeResult = ({ data }: ChallengeDataProps) => {
 
   useEffect(() => {
     let minAmount = 0;
-    const topRecord = data.filter((record) => {
+    const topRecord = data?.filter((record) => {
       if (data[0].status !== 1) return;
-      minAmount = data[0].total_amount;
-      return record.total_amount === minAmount;
+      minAmount = data[0].totalAmount;
+      return record.totalAmount === minAmount;
     });
-    const successGroup = data.filter(
-      (record) => record.total_amount !== minAmount && record.status === 1
+    const successGroup = data?.filter(
+      (record) => record.totalAmount !== minAmount && record.status === 1
     );
-    const failureGroup = data.filter((record) => record.status === 0);
+    const failureGroup = data?.filter((record) => record.status === 0);
     const dataGroup = {
       topRecord: topRecord,
       successGroup: successGroup,
@@ -50,7 +50,7 @@ const ChallengeResult = ({ data }: ChallengeDataProps) => {
   return (
     <ArticleContainer>
       <div className="w-11/12 mx-auto">
-        <div className="flex items-center justify-center bg-base-100  rounded-lg h-12 shadow mb-3 ">
+        <div className="flex items-center justify-center bg-teal-50  rounded-lg h-12 shadow mb-3 ">
           <div className="mx-2 mt-1 text-cyan-950 text-base leading-6">
             도전 종료!!
           </div>
@@ -66,7 +66,7 @@ const ChallengeResult = ({ data }: ChallengeDataProps) => {
             ))}
           </ListContainer>
         ) : null}
-        {sortedData?.successGroup ? (
+        {sortedData?.successGroup && sortedData.successGroup.length > 0 ? (
           <ListContainer>
             <p className="mb-1.5">성공 하셨어요!</p>
             {sortedData?.successGroup.map((record) => (
@@ -76,7 +76,7 @@ const ChallengeResult = ({ data }: ChallengeDataProps) => {
             ))}
           </ListContainer>
         ) : null}
-        {sortedData?.failureGroup ? (
+        {sortedData?.failureGroup && sortedData.failureGroup.length > 0 ? (
           <ListContainer>
             <p className="mb-1.5">다음에는 꼭 성공해봐요!</p>
             {sortedData?.failureGroup.map((record) => (

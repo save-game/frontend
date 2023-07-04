@@ -57,7 +57,7 @@ const BoardList = ({ challengeId }: BoardListProps) => {
     isFetchingNextPage,
     fetchNextPage,
   } = useInfiniteQuery<BoardListData>(
-    ["challengeBoard", challengeId],
+    ["challengeBoard", Number(challengeId)],
     ({ pageParam = 0 }) => getPosts(challengeId, pageParam),
     {
       getNextPageParam: (lastPage) => {
@@ -72,7 +72,7 @@ const BoardList = ({ challengeId }: BoardListProps) => {
 
   const { mutate: postDeleteMutate } = useMutation(deletePost, {
     onSuccess: () => {
-      queryClient.invalidateQueries(["challengeBoard", challengeId]);
+      queryClient.invalidateQueries(["challengeBoard", Number(challengeId)]);
       console.log("삭제되었다!!");
     },
   });

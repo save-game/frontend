@@ -15,7 +15,12 @@ import { UseQueryResult } from "react-query";
 import { UserData } from "../../interface/interface";
 import { useUser } from "../../api/membersAPI";
 import { editPosts, heartDelete, heartPost } from "../../api/boardAPI";
-import { differenceInHours, differenceInMinutes, isToday } from "date-fns";
+import {
+  differenceInHours,
+  differenceInMinutes,
+  isSameYear,
+  isToday,
+} from "date-fns";
 import { useRecoilState } from "recoil";
 import { showImgState, textState } from "../../Recoil/boardAtom";
 import TextUpload from "./TextUpload";
@@ -48,16 +53,25 @@ const BoardItem = ({ post, confirmRef, dispatch }: BoardItemProps) => {
   useEffect(() => {
     const date = new Date(post.createdAt);
     const now = new Date();
-    if (isToday(date)) {
-      const hoursDifference = differenceInHours(now, date);
-      if (hoursDifference <= 0) {
-        const minutesDifference =
-          differenceInMinutes(now, date) === 0
-            ? `방금 전`
-            : `${differenceInMinutes(now, date)}분 전`;
-        setFormattedDate(minutesDifference);
+    const isThisYear = isSameYear(now, date);
+    console.log(isThisYear);
+
+    if (isThisYear) {
+      if (isToday(date)) {
+        const hoursDifference = differenceInHours(now, date);
+        if (hoursDifference <= 0) {
+          const minutesDifference =
+            differenceInMinutes(now, date) === 0
+              ? `방금 전`
+              : `${differenceInMinutes(now, date)}분 전`;
+          setFormattedDate(minutesDifference);
+        } else {
+          setFormattedDate(`${hoursDifference}시간 전`);
+        }
       } else {
-        setFormattedDate(`${hoursDifference}시간 전`);
+        const createdDate = date.toLocaleDateString("en-US").split("");
+        createdDate.splice(-5);
+        setFormattedDate(createdDate.join(""));
       }
     } else {
       const createdDate = date.toLocaleDateString("en-US");

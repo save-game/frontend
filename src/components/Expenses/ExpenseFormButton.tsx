@@ -7,12 +7,12 @@ interface ButtonProps {
 
 const ExpenseFormButton = ({ size }: ButtonProps) => {
   const [expensesForm, setExpensesForm] = useState(false);
-  const buttonSize = size === "small" ? "btn-sm" : "";
+  const buttonSize = size === "small" ? "btn-sm" : "btn-sm h-10";
   return (
     <>
       <button
         onClick={() => setExpensesForm(true)}
-        className={`btn btn-accent w-full text-base-100 ${buttonSize}`}
+        className={`btn btn-neutral w-full text-base-100 shadow ${buttonSize} `}
       >
         지출등록
       </button>

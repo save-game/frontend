@@ -1,3 +1,5 @@
+import { CategoryType } from "../constants/expenseCategory";
+
 export interface ExpenseRecord {
   readonly date: string;
   readonly amount: number;
@@ -5,10 +7,11 @@ export interface ExpenseRecord {
 
 export interface ChallengeMemberResultData {
   readonly memberId: number;
-  readonly nickName: string;
+  readonly nickname: string;
   readonly color: string;
   readonly status: 0 | 1;
-  readonly total_amount: number;
+  readonly totalAmount: number;
+  readonly profileImageUrl: string;
 }
 
 export interface ChallengeMemberData extends ChallengeMemberResultData {
@@ -19,10 +22,10 @@ export interface ChallengeMemberData extends ChallengeMemberResultData {
 export interface ChallengeData {
   readonly title: string;
   readonly content: string;
-  readonly challenge_status: 0 | 1;
-  readonly start_date: string;
-  readonly end_date: string;
-  readonly goal_amount: number;
+  readonly challengeStatus: 0 | 1;
+  readonly startDate: string;
+  readonly endDate: string;
+  readonly goalAmount: number;
   readonly category: string;
   readonly d_day: number;
   readonly challengeMemberList: ChallengeMemberData[];
@@ -30,10 +33,10 @@ export interface ChallengeData {
 export interface ChallengeResultData {
   readonly title: string;
   readonly content: string;
-  readonly challenge_status: 0 | 1;
-  readonly start_date: string;
-  readonly end_date: string;
-  readonly goal_amount: number;
+  readonly challengeStatus: 0 | 1;
+  readonly startDate: string;
+  readonly endDate: string;
+  readonly goalAmount: number;
   readonly category: string;
   readonly challengeMemberList: ChallengeMemberResultData[];
 }
@@ -101,8 +104,9 @@ export interface ValidationFormProps {
 }
 
 export interface ExpenseDataForAnalyze {
-  readonly category: string;
+  readonly category: CategoryType;
   readonly total: number;
+  readonly bgColor: string;
 }
 
 export interface ChallengeFilterProps {

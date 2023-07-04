@@ -136,11 +136,13 @@ const ExpensesForm = ({ formEditor }: ExpensesFormProps) => {
   const updateAccountMutation = useMutation(postExpense, {
     onSuccess: () => {
       queryClient.invalidateQueries(["getExpenseData"]);
+      queryClient.invalidateQueries(["challengeStatus"]);
     },
   });
   const reviseAccountMutation = useMutation(reviseExpense, {
     onSuccess: () => {
       queryClient.invalidateQueries(["getExpenseData"]);
+      queryClient.invalidateQueries(["challengeStatus"]);
     },
   });
 
