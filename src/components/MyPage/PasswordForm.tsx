@@ -70,7 +70,10 @@ const PasswordForm = ({ formEditor, informChangeRef }: Props) => {
 
   return (
     <>
-      <form onSubmit={onSubmit(handlePasswordChange)} className="text-xs">
+      <form
+        onSubmit={onSubmit(handlePasswordChange)}
+        className="text-xs bg-base-100 px-1 pb-4 rounded-lg"
+      >
         <div className="flex flex-col items-start w-full h-16 px-2 border-b border-accent-focus/60">
           <div className="leading-6">
             비밀번호 <span className="text-error text-sm align-middle">*</span>{" "}

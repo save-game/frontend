@@ -1,13 +1,15 @@
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 
-import KakaoIcon from "../assets/kakao_login_large_wide.png";
-import Logo from "../assets/savegame_512x512.png";
+import KakaoIcon from "../assets/kakao_icon.png";
+import Logo from "../assets/save_game_512x512.png";
 import { useLocation, useNavigate } from "react-router-dom";
 import { login, tokenRefresh } from "../api/authAPI";
 import { useEffect, useState } from "react";
 import { kakaoLogin } from "../api/kakaoAPI";
 import { KAKAO_LOGIN_URL } from "../constants/api";
 import { AxiosResponse } from "axios";
+import { IoIosClose } from "react-icons/Io";
+import { BiSolidErrorCircle } from "react-icons/Bi";
 
 export interface LoginData {
   email: string;
@@ -17,10 +19,15 @@ export interface LoginData {
 export default function LoginPage() {
   const navigate = useNavigate();
   const { search: kakaoCode } = useLocation();
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, watch, setValue } = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
   const [errorMsg, setErrorMsg] = useState("");
-
-  console.log("kakaoCode", kakaoCode);
+  const emailInput = watch("email");
+  const passwordInput = watch("password");
 
   useEffect(() => {
     const loginCheck = localStorage.getItem("isLogin");
@@ -84,45 +91,80 @@ export default function LoginPage() {
   };
 
   return (
-    <>
-      <div className=" w-11/12 ml-auto mr-auto flex flex-col justify-center items-center mt-10">
-        <img className="w-9/12 rounded-lg" src={Logo} />
+    <main className="h-screen bg-base-color text-neutral-600 pt-10">
+      <div className=" w-11/12 ml-auto mr-auto flex flex-col justify-center items-center">
+        <img className="w-52 rounded-lg" src={Logo} />
         <form
           onSubmit={handleSubmit(handleLogin)}
-          className="w-full flex flex-col justify-center items-center mt-10 mb-4"
+          className="w-full flex flex-col justify-center items-center mt-7 mb-3"
         >
-          <input
-            type="email"
-            placeholder="이메일을 입력해주세요."
-            className=" w-full h-10 text-sm pl-1 rounded-lg mb-4 shadow-lg"
-            {...register("email")}
-          />
-          <input
-            type="password"
-            placeholder="비밀번호를 입력해주세요."
-            className=" w-full h-10 text-sm pl-1 rounded-lg mb-4 shadow-lg"
-            {...register("password")}
-          />
-          <p className="w-full h-5 text-xs text-right text-error">{errorMsg}</p>
+          <div className="relative w-full mb-2">
+            <input
+              type="email"
+              placeholder="이메일을 입력해주세요."
+              className="input w-full text-sm placeholder:text-xs rounded-lg   shadow"
+              {...register("email")}
+            />
+            {emailInput === "" ? null : (
+              <button
+                type="button"
+                onClick={() => setValue("email", "")}
+                className="w-3 h-3 border rounded-full text-xs flex justify-center items-center bg-neutral-400 text-base-100 absolute top-1/2 -translate-y-1/2 right-4"
+              >
+                <IoIosClose />
+              </button>
+            )}
+          </div>
+          <div className="relative w-full mb-1">
+            <input
+              type="password"
+              placeholder="비밀번호를 입력해주세요."
+              className=" input w-full text-sm placeholder:text-xs rounded-lg shadow"
+              {...register("password")}
+            />
+            {passwordInput === "" ? null : (
+              <button
+                type="button"
+                onClick={() => setValue("password", "")}
+                className="w-3 h-3 border rounded-full text-xs flex justify-center items-center bg-neutral-400 text-base-100 absolute top-1/2 -translate-y-1/2 right-4"
+              >
+                <IoIosClose />
+              </button>
+            )}
+          </div>
+
+          <div className="w-full flex justify-end items-center h-5 text-[11px] mb-1 pr-1 text-right text-red-500">
+            {errorMsg ? (
+              <>
+                <BiSolidErrorCircle size={12} className="mr-1 " />
+                <p className="pt-1">{errorMsg}</p>
+              </>
+            ) : null}
+          </div>
           <button
             type="submit"
-            className="h-10 rounded-lg btn-accent w-full text-xl shadow-lg"
+            className="btn  btn-ghost bg-teal-500 hover:bg-teal-500 text-base-100 w-full shadow"
           >
             로그인
           </button>
         </form>
         <button
-          className="h-10 rounded-lg border border-accent w-full text-xl shadow-lg focus:bg-accent mb-4"
+          className="btn btn-outline btn-neutral bg-base-100 text-accent-focus  w-full shadow"
           onClick={() => navigate("/signup")}
         >
           회원가입
         </button>
-        <div className="flex w-full justify-around">
-          <button onClick={handleKakaoLogin} className=" shadow-sm rounded-md">
-            <img src={KakaoIcon} />
+        <div className="divider my-2 text-[10px]">OR</div>
+        <div className="flex w-full justify-center mt-1">
+          <button
+            onClick={handleKakaoLogin}
+            className="btn btn-ghost bg-[#FEE500] hover:bg-[#FEE500] w-full shadow"
+          >
+            <img src={KakaoIcon} className="w-10" />
+            <span className="-translate-x-3">카카오 로그인</span>
           </button>
         </div>
       </div>
-    </>
+    </main>
   );
 }

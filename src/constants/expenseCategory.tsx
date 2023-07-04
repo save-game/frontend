@@ -96,6 +96,24 @@ export const categoryList: Category[] = [
   },
 ];
 
+export type CategoryType = (typeof categoryList)[number]["name"];
+
+export const categoryColorList: { [key in CategoryType]: string } = {
+  식비: "#bef264",
+  교통: "#86efac",
+  생활: "#6ee7b7",
+  주거: "#5eead4",
+  문화: "#2dd4bf",
+  의류: "#67e8f9",
+  뷰티: "#22d3ee",
+  의료: "#38bdf8",
+  통신: "#0ea5e9",
+  금융: "#60a5fa",
+  경조사: "#818cf8",
+  교육: "#6366f1",
+  반려동물: "#7c3aed",
+};
+
 export const ChanllegeCategoryList: Category[] = [
   {
     category: "all",
@@ -182,3 +200,7 @@ export const ChanllegeCategoryList: Category[] = [
     color: "bg-violet-600",
   },
 ];
+
+const categoryColor = {
+  식비: "#bef264",
+};

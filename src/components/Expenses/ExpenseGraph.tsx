@@ -22,12 +22,20 @@ export default function ExpenseGraph({
     setMonthlyTotalAmount(total);
   }, [list, total]);
 
+  const categoryColor = monthlyExpenseData.map((data) => data.bgColor);
+
   const data = {
     datasets: [
       {
-        data: monthlyExpenseData,
-        backgroundColor: bgColor,
-        borderColor: bgColor,
+        data: monthlyExpenseData.map((data) => {
+          const record = {
+            category: data.category,
+            total: data.total,
+          };
+          return record;
+        }),
+        backgroundColor: categoryColor,
+        borderColor: categoryColor,
         borderWidth: 1,
         hoverOffset: 10,
       },
@@ -38,11 +46,13 @@ export default function ExpenseGraph({
     plugins: {
       tooltip: {
         titleFont: {
-          size: 16,
+          size: 14,
         },
         bodyFont: {
           size: 14,
         },
+        backgroundColor: "rgba(66, 84, 82, 0.7)",
+        usePointStyle: true,
         callbacks: {
           title: (tooltipItems: TooltipItem<"pie">[]) => {
             const dataIndex = tooltipItems[0].dataIndex;
@@ -75,21 +85,9 @@ export default function ExpenseGraph({
     responsive: false,
   };
 
-  return <Pie data={data} options={options} width={300} height={300} />;
+  return (
+    <div className="-mt-2">
+      <Pie data={data} options={options} width={300} height={300} />
+    </div>
+  );
 }
-
-const bgColor = [
-  "#1f77b4",
-  "#ff7f0e",
-  "#2ca02c",
-  "#d62728",
-  "#9467bd",
-  "#8c564b",
-  "#e377c2",
-  "#7f7f7f",
-  "#bcbd22",
-  "#17becf",
-  "#aec7e8",
-  "#ffbb78",
-  "#98df8a",
-];
