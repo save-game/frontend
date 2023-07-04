@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { useNavigate } from "react-router";
@@ -49,6 +49,7 @@ export default function Home() {
     data: myChallengeList,
     isFetchingNextPage,
     fetchNextPage,
+    remove,
   } = useInfiniteQuery(
     ["getChallengeData"],
     ({ pageParam = 0 }) => getMyChallengeList(pageParam),
@@ -58,9 +59,21 @@ export default function Home() {
       },
     }
   );
+
+  const updateData = useCallback(() => {
+    fetchNextPage();
+  }, [fetchNextPage]);
+
+  useEffect(() => {
+    remove();
+    updateData();
+  }, [isIng]);
+
   useEffect(() => {
     if (myChallengeList?.pages[0].empty) {
-      setIsEmpty(true);
+      setIsHavingChallenge(false);
+    } else {
+      setIsHavingChallenge(true);
     }
   }, [myChallengeList?.pages]);
 
