@@ -24,10 +24,10 @@ interface MyChallengeList {
 
 export default function Home() {
   const { data: userInfo }: UseQueryResult<UserData> = useUser();
-  const [isEmpty, setIsEmpty] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [observeTarget, inView] = useInView({ threshold: 0.9 });
-  const [ingTab, setIngTab] = useState(true);
+  const [isIng, setIsIng] = useState(true);
+  const [ishavingChallenge, setIsHavingChallenge] = useState(true);
 
   const navigate = useNavigate();
 
@@ -37,7 +37,7 @@ export default function Home() {
 
   const getMyChallengeList = async (pageParam: number) => {
     try {
-      const response = await getMyChallenge(pageParam);
+      const response = await getMyChallenge(pageParam, isIng);
       return response.data;
     } catch (error) {
       console.error(
