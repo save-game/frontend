@@ -70,7 +70,7 @@ const ChallengeChart = ({ challengeData }: ChallengeDataProps) => {
         },
 
         afterDataLimits: (scale: { max: number }) => {
-          scale.max = challengeData.goal_amount;
+          scale.max = challengeData.goalAmount;
         },
         afterTickToLabelConversion: (
           scaleinstance: Scale<CoreScaleOptions>
@@ -94,15 +94,14 @@ const ChallengeChart = ({ challengeData }: ChallengeDataProps) => {
   };
 
   const labels = dateRangeCalculator(
-    challengeData.start_date,
-    challengeData.end_date
+    challengeData.startDate,
+    challengeData.endDate
   );
 
-  //컬러 배정하는걸로 변경필요
   const expenseData = challengeData.challengeMemberList.map((data) => {
     let accumulatedAmount = 0;
     const dataset = {
-      label: data.nickName,
+      label: data.nickname,
       data: data.recordList.map((record) => {
         accumulatedAmount += record.amount;
         const dailyAmount = {
@@ -136,7 +135,6 @@ const ChallengeChart = ({ challengeData }: ChallengeDataProps) => {
       </div>
       <div className="flex items-center bg-base-100 shadow rounded-lg mt-2 text-xs p-2 font-light">
         <MdPeople size={15} className="mr-1 text-neutral-500" />
-        <div className="mr-1 pt-0.5">참가자 : </div>
         <div className="pt-0.5">{expenseData.length} 명</div>
       </div>
       <ul className="bg-base-100 rounded-lg shadow mt-2 text-xs p-2 font-light">

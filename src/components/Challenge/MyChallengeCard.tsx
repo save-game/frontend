@@ -4,6 +4,8 @@ import { deleteChallenge } from "../../api/challengeAPI";
 import { useRef, useState } from "react";
 import { SHOW_MODAL_DELAY } from "../../constants/modalTime";
 import InformModal from "../Common/InformModal";
+import { AiTwotoneFire } from "react-icons/Ai";
+import { FcClock } from "react-icons/Fc";
 
 export default function MyChallengeCard({
   myChallenge,
@@ -36,24 +38,29 @@ export default function MyChallengeCard({
   };
 
   return (
-    <div className="shadow-md w-full p-4 rounded-lg h-28 mb-4 flex flex-col justify-between">
+    <div className="bg-base-100 border   shadow w-full p-4 rounded-lg h-24 mb-2 flex flex-col justify-between">
       <div
         className=" w-full rounded-lg h-24  flex flex-col justify-between"
         onClick={handleClickCard}
       >
-        <p>{myChallenge.title}</p>
-        <div className="flex justify-end mb-4"></div>
-        <p className=" text-right text-accent text-100">
-          D-{daysDiff} 도전은 순항 중!
-        </p>
+        <div className="flex justify-start items-center">
+          <AiTwotoneFire size={16} className="text-amber-400 mr-1" />
+          <p className="pt-1 text-[15px] text-cyan-900">{myChallenge.title}</p>
+        </div>
+        <div className="flex justify-end ">
+          <FcClock size={17} className="mr-1" />
+          <p className=" text-right text-[13px] text-content">
+            종료까지 D-{daysDiff}
+          </p>
+        </div>
       </div>
-      <button
+      {/* <button
         type="button"
         onClick={handleExitButton}
         className="btn btn-accent btn-outline btn-sm text-white w-28 text-xs "
       >
         챌린지 나가기
-      </button>
+      </button> */}
       <InformModal loading={false} dialogRef={dialogRef} inform={returnMsg} />
     </div>
   );
