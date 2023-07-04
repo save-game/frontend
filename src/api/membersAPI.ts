@@ -54,10 +54,10 @@ export const passwordChange = async (password: PasswordData) => {
   }
 };
 
-export const getMyChallenge = async (pageParam: number) => {
+export const getMyChallenge = async (pageParam: number, isIng: boolean) => {
   try {
     const response = await axios.get(`/api/members/challenges`, {
-      params: { page: pageParam },
+      params: { page: pageParam, status: isIng ? "ONGOING" : "ENDED" },
     });
     return response.data;
   } catch (error) {
