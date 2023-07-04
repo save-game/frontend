@@ -110,7 +110,7 @@ export default function Home() {
         </ProfileContainer>
         <ExpenseGraphContainer />
         <ExpenseFormButton size={"normal"} />
-        {!isEmpty ? (
+        {ishavingChallenge || !isIng ? (
           <div className="mt-4 w-full mb-16 pb-3 overflow-hidden text-cyan-950 bg-slate-100 rounded-lg shadow">
             <div className="bg-base-100">
               <div className="flex justify-center items-center bg-base-100 text-[15px] pt-4 pb-2  ">
@@ -120,19 +120,19 @@ export default function Home() {
               <div className=" w-full flex justify-end items-center pr-3">
                 <label className="label cursor-pointer">
                   <span className="label-text font-semibold text-cyan-950 text-xs mr-1 pt-0.5">
-                    {ingTab ? "진행 중" : "종료"}
+                    {isIng ? "진행 중" : "종료"}
                   </span>
                   <input
                     type="checkbox"
                     className="toggle toggle-sm"
                     defaultChecked
-                    onChange={() => setIngTab(!ingTab)}
-                    value={ingTab ? "진행 중" : "종료"}
+                    onChange={() => setIsIng(!isIng)}
+                    value={isIng ? "진행 중" : "종료"}
                   />
                 </label>
               </div>
             </div>
-            {ingTab ? (
+            {isIng ? (
               <div className="w-full p-2 ">
                 {myChallengeList?.pages.map((page) =>
                   page.content.map((item: MyChallengeList, i: number) => {
@@ -145,7 +145,17 @@ export default function Home() {
                 )}
               </div>
             ) : (
-              <div>종료된거</div>
+              <div className="w-full p-2 ">
+                {myChallengeList?.pages.map((page) =>
+                  page.content.map((item: MyChallengeList, i: number) => {
+                    return (
+                      <div key={i}>
+                        <MyChallengeCard myChallenge={item} />
+                      </div>
+                    );
+                  })
+                )}
+              </div>
             )}
           </div>
         ) : (
