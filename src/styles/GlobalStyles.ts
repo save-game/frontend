@@ -9,12 +9,12 @@ main{
 }
 
 /* iOS only */
-@supports (-webkit-touch-callout: none) {
+/* @supports (-webkit-touch-callout: none) {
   main{
-   min-height: -webkit-fill-available;
+   height: -webkit-fill-available;
    
   }
-}
+} */
 `;
 
 export default GlobalStyles;

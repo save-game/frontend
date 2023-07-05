@@ -40,7 +40,7 @@ const App = () => {
               </Route>
             </Routes>
           </Suspense>
-          <Footer />
+          {/* <Footer /> */}
           <Header />
         </RecoilRoot>
       </QueryClientProvider>
