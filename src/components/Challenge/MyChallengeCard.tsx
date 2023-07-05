@@ -21,22 +21,6 @@ export default function MyChallengeCard({
     navigate(`/challenge/${myChallenge.challengeId}`);
   };
 
-  const handleExitButton = async () => {
-    const res = await deleteChallenge(myChallenge.challengeId);
-    if (res.success === true) {
-      setReturnMsg("나가기가 완료되었습니다.");
-      location.reload();
-    } else {
-      setReturnMsg(res.data);
-    }
-    if (!dialogRef.current) return;
-    dialogRef.current.showModal();
-    setTimeout(() => {
-      if (!dialogRef.current) return;
-      dialogRef.current.close();
-    }, SHOW_MODAL_DELAY);
-  };
-
   return (
     <div className="bg-base-100 border   shadow w-full p-4 rounded-lg h-24 mb-2 flex flex-col justify-between">
       <div
@@ -54,13 +38,7 @@ export default function MyChallengeCard({
           </p>
         </div>
       </div>
-      {/* <button
-        type="button"
-        onClick={handleExitButton}
-        className="btn btn-accent btn-outline btn-sm text-white w-28 text-xs "
-      >
-        챌린지 나가기
-      </button> */}
+
       <InformModal loading={false} dialogRef={dialogRef} inform={returnMsg} />
     </div>
   );

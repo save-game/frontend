@@ -8,6 +8,7 @@ import {
   categoryColorList,
 } from "../../constants/expenseCategory";
 import { FcCalendar } from "react-icons/Fc";
+import { IoChatbubbleEllipsesOutline } from "react-icons/Io5";
 
 export default function ExpenseGraphContainer() {
   const [monthlyExpenseData, setMonthlyExpenseData] = useState<
@@ -53,18 +54,22 @@ export default function ExpenseGraphContainer() {
     <>
       <div className="relative w-full text-cyan-950">
         {!monthlyExpenseData ? (
-          <div className=" h-56 flex flex-col justify-center items-center text-xl">
+          <div className=" h-36 flex flex-col justify-center items-center text-[15px] bg-base-100 rounded-lg shadow my-2">
+            <IoChatbubbleEllipsesOutline
+              size={23}
+              className="mb-2 text-accent-focus"
+            />
             <p>{currentMonth}월 지출 내역이 없습니다.</p>
             <p>지출등록을 해주세요.</p>
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center mt-2 ">
-            <div className="w-full flex bg-base-100 p-1 rounded-lg shadow">
-              <div className="flex w-1/3 mr-1 justify-center items-center text-left p-2 rounded-lg bg-gray-100 ">
+            <div className="w-full flex rounded-lg ">
+              <div className="flex w-1/3 mr-1 justify-center items-center text-left p-2 rounded-lg bg-base-100 shadow">
                 <FcCalendar size={17} className="mr-1 text-accent-focus" />
                 <p className="text-[16px]  pt-1 ">{currentMonth}월</p>
               </div>
-              <div className="flex w-2/3 justify-center items-center text-left  p-2 rounded-lg bg-gray-100 ">
+              <div className="flex w-2/3 justify-center items-center text-left  p-2 rounded-lg bg-base-100 shadow">
                 <p className="text-[16px] pt-1">
                   {monthlyTotalAmount.toLocaleString()}원
                 </p>

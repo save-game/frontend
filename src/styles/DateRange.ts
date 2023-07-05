@@ -43,7 +43,7 @@ export const DateRangePickerWrapper = styled.div`
     ${tw`w-36 text-center`}
   }
   .react-datepicker__input-container {
-    ${tw` w-32 border rounded-full`}
+    ${tw` w-32 border rounded-full bg-slate-100 py-1 shadow`}
   }
 `;
 
@@ -79,6 +79,6 @@ export const MonthPickerWrapper = styled.div`
     ${tw`text-neutral-300`}
   }
   .react-datepicker-wrapper {
-    ${tw`w-36 text-center`}
+    ${tw`w-28 text-center`}
   }
 `;

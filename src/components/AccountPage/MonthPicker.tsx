@@ -9,17 +9,17 @@ import { selectedExpenseDateState } from "../../Recoil/expenseRecord";
 const StyledDatePicker = styled(DatePicker)`
   color: transparent;
   text-shadow: 0 0 0 black;
-  ${tw`rounded-lg text-center focus:outline-none`};
+  ${tw`rounded-lg text-center focus:outline-none bg-base-color text-cyan-900 font-bold text-[16px]`};
 `;
 
 const MonthPicker = ({ handleSelectedDate }: Props) => {
   const selectedDateForGetData = useRecoilValue(selectedExpenseDateState);
   registerLocale("ko", ko);
   return (
-    <div className=" flex items-center">
+    <div className=" flex items-center pt-1">
       <StyledDatePicker
         id="dp"
-        className="w-32 h-6 ml-1 text-center cursor-pointer"
+        className="w-28 h-6 text-center cursor-pointer"
         selected={selectedDateForGetData}
         locale="ko"
         shouldCloseOnSelect
@@ -27,6 +27,7 @@ const MonthPicker = ({ handleSelectedDate }: Props) => {
         dateFormat="yyyy년 MM월"
         showMonthYearPicker
         onChangeRaw={(e) => e.preventDefault()}
+        showPopperArrow={false}
       />
     </div>
   );

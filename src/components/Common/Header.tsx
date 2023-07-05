@@ -8,11 +8,11 @@ import { GiSevenPointedStar } from "react-icons/Gi";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const HeaderContainer = styled.header`
-  ${tw`btm-nav h-20 bg-base-100 border rounded-t-2xl z-50 shadow-[0_-1px_3px_1px_rgba(8, 110, 118, 0.105)]`}
+  ${tw`btm-nav h-20 bg-base-100 border rounded-t-2xl z-50 shadow-[0_-1px_10px_1px_rgba(102, 113, 113, 0.105)]`}
 `;
 
 const NavBtn = styled.button<{ selected: boolean }>`
-  ${tw`text-[10px] text-gray-400 -translate-y-3`}
+  ${tw`text-[10px] text-gray-400/80 -translate-y-3 font-light`}
   ${({ selected }) => selected && tw`text-accent-focus font-bold `}
 `;
 const icons = {

@@ -149,7 +149,7 @@ export default function LoginPage() {
           </button>
         </form>
         <button
-          className="btn btn-outline btn-neutral bg-base-100 text-accent-focus  w-full shadow"
+          className="btn btn-neutral w-full shadow"
           onClick={() => navigate("/signup")}
         >
           회원가입

@@ -335,7 +335,7 @@ const ExpensesForm = ({ formEditor }: ExpensesFormProps) => {
             />
             <ErrorNotice>{errors?.memo?.message ?? null}</ErrorNotice>
           </div>
-          <button className="btn btn-accent text-base-100 w-full">
+          <button className="btn btn-neutral text-base-100 w-full">
             지출 등록
           </button>
         </form>

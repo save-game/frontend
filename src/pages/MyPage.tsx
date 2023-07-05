@@ -157,7 +157,7 @@ const MyPage = () => {
                 </div>
                 <button
                   onClick={() => setPasswordForm(true)}
-                  className="btn btn-ghost bg-teal-500 hover:bg-teal-500 btn-md mt-4 w-full text-base-100 shadow"
+                  className="btn btn-sm h-10 btn-ghost bg-teal-500 hover:bg-teal-500 mt-4 w-full text-base-100 shadow"
                 >
                   비밀번호 변경
                 </button>
@@ -165,13 +165,13 @@ const MyPage = () => {
               <div>
                 <button
                   onClick={handleSignOut}
-                  className="btn btn-neutral w-full shadow mt-4 mb-4"
+                  className="btn btn-sm h-10 btn-neutral w-full shadow mt-10 mb-4"
                 >
                   로그아웃
                 </button>
                 <button
                   onClick={confirmWithdrawal}
-                  className="btn btn-outline w-full shadow"
+                  className="btn btn-sm h-10 btn-outline bg-base-100 w-full shadow"
                 >
                   서비스 탈퇴
                 </button>

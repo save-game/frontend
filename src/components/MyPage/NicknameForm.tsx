@@ -151,7 +151,7 @@ const NicknameForm = ({ formEditor, informChangeRef }: Props) => {
           >
             중복확인
           </button>
-          <button className="btn btn-xs btn-accent text-base-100 text-xs px-1  shadow">
+          <button className="btn btn-xs btn-ghost bg-teal-500 hover:bg-teal-500 text-base-100 text-xs px-1  shadow">
             수정완료
           </button>
         </div>
