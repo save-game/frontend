@@ -7,11 +7,11 @@ import {
   useState,
 } from "react";
 import Dropdown from "../Common/Dropdown";
-import { BoardContent } from "./BoardList";
+import BoardList, { BoardContent } from "./BoardList";
 import ImageCarousel from "./ImageCarousel";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/Ai";
 import { BsPencil, BsTrash, BsPersonFill } from "react-icons/Bs";
-import { UseQueryResult, useMutation, useQueryClient } from "react-query";
+import { UseQueryResult } from "react-query";
 import { UserData } from "../../interface/interface";
 import { useUser } from "../../api/membersAPI";
 import { editPosts, heartDelete, heartPost } from "../../api/boardAPI";
@@ -22,11 +22,11 @@ import {
   isToday,
 } from "date-fns";
 import { useRecoilState } from "recoil";
-import { textState } from "../../Recoil/boardAtom";
+import { showImgState, textState } from "../../Recoil/boardAtom";
 import TextUpload from "./TextUpload";
+import { render } from "react-dom";
 import InformModal from "../Common/InformModal";
 import { SHOW_MODAL_DELAY } from "../../constants/modalTime";
-import { useParams } from "react-router-dom";
 
 interface BoardItemProps {
   readonly post: BoardContent;
@@ -44,21 +44,6 @@ const BoardItem = ({ post, confirmRef, dispatch }: BoardItemProps) => {
   const [text, setText] = useRecoilState(textState);
   const [editMsg, setEditMsg] = useState("");
   const editDialogRef = useRef<HTMLDialogElement>(null);
-  const { challengeId } = useParams();
-  const queryClient = useQueryClient();
-
-  const { mutate: reviseTextMutate } = useMutation(editPosts, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(["challengeBoard", challengeId]);
-      setEditMsg("수정이 완료 되었습니다.");
-      if (!editDialogRef.current) return;
-      editDialogRef.current.showModal();
-      setTimeout(() => {
-        if (!editDialogRef.current) return;
-        editDialogRef.current.close();
-      }, SHOW_MODAL_DELAY);
-    },
-  });
 
   useEffect(() => {
     setHeartState(post.hasHeart);
@@ -106,8 +91,20 @@ const BoardItem = ({ post, confirmRef, dispatch }: BoardItemProps) => {
     }
   };
   const handleEditPosts = async () => {
-    reviseTextMutate({ postId: post.id, text: text });
+    const res = await editPosts(post.id, text);
     setEditForm(false);
+    if (!editDialogRef.current) return;
+    editDialogRef.current.showModal();
+    if (res.success === true) {
+      setEditMsg("수정되었습니다.");
+    } else {
+      setEditMsg(res.data);
+    }
+    setTimeout(() => {
+      if (!editDialogRef.current) return;
+      editDialogRef.current.close();
+    }, SHOW_MODAL_DELAY);
+    // location.reload();
   };
 
   const confirmDelete = (id: number) => {
