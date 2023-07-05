@@ -1,30 +1,24 @@
-import { ChangeEvent, useRef } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { TiPlus } from "react-icons/ti";
 import { MdPhotoCamera } from "react-icons/Md";
 import { SHOW_WARNING_MODAL_DELAY } from "../../constants/modalTime";
 import { useRecoilState } from "recoil";
-import { showImgState } from "../../Recoil/boardAtom";
+import { showImgState, thumbImgState } from "../../Recoil/boardAtom";
 import imageCompression from "browser-image-compression";
 import { getBoardUrl } from "../../api/firebaseAPI";
 import { useParams } from "react-router-dom";
+import { AiFillCloseCircle } from "react-icons/Ai";
+import { uploadBytes } from "firebase/storage";
 
 export default function ImgUpLoad() {
   const [showImage, setShowImage] = useRecoilState(showImgState);
+  const [thumbnail, setThumbnail] = useRecoilState(thumbImgState);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const { challengeId } = useParams();
 
   const uploadImg = async (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
-    const file = e.target.files[0];
-    const reSize = await imageCompression(file, { maxSizeMB: 0.5 });
-    const imgUrlLists: string[] = [...showImage];
-    if (!challengeId) return;
-    const boardUrl = await getBoardUrl(challengeId, reSize, Date.now());
-    console.log(boardUrl, "hi");
-    boardUrl ? imgUrlLists.push(boardUrl) : null;
-    setShowImage(imgUrlLists);
-    if (imgUrlLists.length >= 3) {
+    if (e.target.files.length > 3) {
       if (dialogRef.current) {
         dialogRef.current?.showModal();
       } else {
@@ -37,11 +31,16 @@ export default function ImgUpLoad() {
       }, SHOW_WARNING_MODAL_DELAY);
       return;
     }
+    const imgList = Array.from(e.target.files);
+    const thumbnailList = imgList.map((img) => URL.createObjectURL(img));
+    setShowImage(imgList);
+    setThumbnail(thumbnailList);
+
     e.target.value = "";
   };
 
   const handleDeleteImg = (id: number) => {
-    setShowImage(showImage.filter((_, index) => index !== id));
+    setThumbnail(thumbnail.filter((_, index) => index !== id));
   };
 
   return (
@@ -52,33 +51,37 @@ export default function ImgUpLoad() {
         ref={fileInputRef}
         onChange={uploadImg}
         className="hidden"
+        multiple
         placeholder="hi"
       ></input>
       <div className="flex flex-wrap justify-start mb-12">
         <label
           htmlFor="photo"
-          className="relative w-20 h-20 cursor-pointer border ml-1 mr-1"
+          className="relative w-16 h-16 cursor-pointer border rounded-lg ml-1 mr-1"
         >
-          <div className="relative w-20 h-20 flex items-center justify-center border">
-            <MdPhotoCamera size={32} />
+          <div className="relative w-16 h-16 flex items-center justify-center">
+            <MdPhotoCamera size={22} />
             <TiPlus
-              className="border rounded-full absolute top-10 left-12 bg-red-600 text-white"
-              size={16}
+              className="border rounded-full absolute top-5 left-9 bg-teal-500 text-white"
+              size={12}
             />
           </div>
-          <span className="absolute top-2/3 text-xs left-1/3 right-1/3">
+          <span className="absolute top-2/3 text-[10px] -translate-x-2">
             {showImage.length}/3
           </span>
         </label>
-        {showImage.map((image, id) => (
-          <div className="w-20 h-20 border relative ml-1 mr-1" key={id}>
-            <img src={image} alt={`${image} - ${id}`} className="p-2" />
+        {thumbnail?.map((image, id) => (
+          <div
+            className="w-16 h-16 ml-2 border rounded-lg relative  overflow-hidden"
+            key={id}
+          >
+            <img src={image} alt={`${image} - ${id}`} className="" />
             <button
               type="button"
               onClick={() => handleDeleteImg(id)}
-              className="absolute top-1 right-1 hover:text-lg"
+              className="absolute top-1 right-1 "
             >
-              X
+              <AiFillCloseCircle size={17} className="text-base-100 " />
             </button>
           </div>
         ))}
