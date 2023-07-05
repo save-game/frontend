@@ -13,6 +13,7 @@ import {
   minSearchAmountState,
   maxSearchAmountState,
 } from "../../Recoil/challengeHomeFilterAtom";
+import { BiWon } from "react-icons/Bi";
 
 export default function Slider() {
   const [rangeMinValue, setRangeMinValue] =
@@ -75,19 +76,25 @@ export default function Slider() {
       </FilterSlider>
       <div className="flex items-center justify-center">
         {/* 추후에 Input에 입력 가능하도록 변경 예정. */}
-        <input
-          disabled
-          type="text"
-          className="text-xs w-1/3 text-center rounded-lg h-8 max-w-xs border border-l-[0.4px] border-neutral-400"
-          value={rangeMinValue.toLocaleString("ko-KR")}
-        />
-        <span className="text-lg px-4">-</span>
-        <input
-          disabled
-          type="text"
-          className="text-xs w-1/3 text-center rounded-lg h-8 max-w-xs border border-l-[0.4px] border-neutral-400"
-          value={rangeMaxValue.toLocaleString("ko-KR")}
-        />
+        <div className="w-1/2 relative">
+          <BiWon className="absolute top-1/2 -translate-y-1/2 left-2" />
+          <input
+            disabled
+            type="text"
+            className="text-xs w-full text-center rounded-lg h-8 max-w-xs border bg-base-100 border-gray-300"
+            value={rangeMinValue.toLocaleString("ko-KR")}
+          />
+        </div>
+        <span className="text-lg px-2">-</span>
+        <div className="w-1/2 relative">
+          <BiWon className="absolute top-1/2 -translate-y-1/2 left-2" />
+          <input
+            disabled
+            type="text"
+            className="text-xs w-full text-center rounded-lg h-8 max-w-xs border bg-base-100 border-gray-300"
+            value={rangeMaxValue.toLocaleString("ko-KR")}
+          />
+        </div>
       </div>
     </div>
   );
@@ -107,7 +114,7 @@ const FilterSliderInner = styled.div.attrs<SliderBarProps>((props) => ({
 }))<SliderBarProps>`
   position: absolute;
   height: 4px;
-  ${tw`bg-accent`};
+  ${tw`bg-slate-800`};
 `;
 
 const FilterSliderRangeWarp = styled.div`
@@ -122,14 +129,14 @@ const FilterSliderRangeMin = styled.input`
   ${tw`absolute w-full`}
 
   &::-webkit-slider-thumb {
-    height: 25px;
-    width: 25px;
+    height: 19px;
+    width: 19px;
     border-radius: 50%;
     border: 2px solid;
     background-color: white;
     -webkit-appearance: none;
     pointer-events: auto;
-    ${tw`border-accent`}
+    ${tw`border-slate-800`}
   }
 `;
 const FilterSliderRangeMax = styled(FilterSliderRangeMin)``;

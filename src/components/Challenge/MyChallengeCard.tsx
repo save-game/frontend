@@ -22,9 +22,9 @@ export default function MyChallengeCard({
   };
 
   return (
-    <div className="bg-base-100 border   shadow w-full p-4 rounded-lg h-24 mb-2 flex flex-col justify-between">
+    <div className="bg-base-100 border shadow w-full p-4 rounded-lg mb-2 flex flex-col justify-start">
       <div
-        className=" w-full rounded-lg h-24  flex flex-col justify-between"
+        className=" w-full rounded-lg flex flex-col justify-between"
         onClick={handleClickCard}
       >
         <div className="flex justify-start items-center">

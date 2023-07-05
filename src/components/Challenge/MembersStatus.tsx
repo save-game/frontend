@@ -53,24 +53,14 @@ const ColoredTextContainer = styled.div<{ top: boolean }>`
 `;
 
 const MembersStatus = ({ data, top }: Props) => {
-  const [memberInfo, setMemberInfo] = useState<UserInfo | null>(null);
   const [isOpen, setIsOpen] = useState<boolean | null>(null);
   const [isFirst, setIsFirst] = useState<boolean | null>(null);
   const [myStatus, setMyStatus] = useState<boolean>(false);
   const ttlAmount = data.totalAmount.toLocaleString("ko-KR");
 
   const memberId = data.memberId;
-  const getMemberData = async () => {
-    try {
-      const { data } = await axios.get("/test/memberInfo.json");
-      setMemberInfo(data);
-    } catch (error) {
-      console.error(`MemberInfo Error : TIME(${new Date()}) ERRROR(${error})`);
-    }
-  };
 
   useEffect(() => {
-    getMemberData();
     if (data.memberId === memberId) {
       setMyStatus(true);
     } else {

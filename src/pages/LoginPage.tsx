@@ -10,6 +10,7 @@ import { KAKAO_LOGIN_URL } from "../constants/api";
 import { AxiosResponse } from "axios";
 import { IoIosClose } from "react-icons/Io";
 import { BiSolidErrorCircle } from "react-icons/Bi";
+import { useQueryClient } from "react-query";
 
 export interface LoginData {
   email: string;
@@ -18,6 +19,7 @@ export interface LoginData {
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { search: kakaoCode } = useLocation();
   const { register, handleSubmit, watch, setValue } = useForm({
     defaultValues: {
@@ -78,6 +80,7 @@ export default function LoginPage() {
   const handleLogin: SubmitHandler<FieldValues> = async (
     formData: FieldValues
   ) => {
+    queryClient.invalidateQueries(["userInfo"]);
     try {
       const response = await login(formData);
       await handleToken(response, "email");

@@ -1,5 +1,5 @@
 import { useRecoilState, useResetRecoilState } from "recoil";
-
+import Logo from "../../assets/save_game_300x300.png";
 import { FilterDropDown } from "../Common/Dropdown";
 import Slider from "../Common/Slider";
 import ChallengeCategoryFilter from "./ChallengeCategoryFilter";
@@ -33,28 +33,33 @@ export default function ChallengeFilter({
 
   return (
     <>
-      <div className="collapse collapse-plus shadow-xl bg-white">
+      <div className="collapse collapse-plus shadow  border bg-teal-50">
         <input type="checkbox" />
-        <div className="collapse-title text-xl font-medium">챌린지 검색</div>
-        <div className="collapse-content rounded-md shadow-xl grid grid-cols-3 grid-rows-5 items-center px-2 gap-y-2">
-          <div className="col-span-1 mx-auto">
-            <FilterDropDown optionList={ChallengeFilterList} />
+        <div className="collapse-title text-[16px] flex items-center font-bold text-cyan-950 px-4 after:pt-1.5">
+          <img src={Logo} alt="mainLogo" className="w-7 mr-2" />
+          <p className="pt-0.5">챌린지 검색</p>
+        </div>
+        <div className="collapse-content rounded-lg items-center px-2 mx-2 pt-2">
+          <div className="flex gap-1">
+            <div className="w-1/4">
+              <FilterDropDown optionList={ChallengeFilterList} />
+            </div>
+            <input
+              type="text"
+              className="text-xs input h-8 w-3/4 max-w-xs border bg-base-100 pt-1 border-gray-300"
+              value={searchText}
+              onChange={handleGetTitle}
+            />
           </div>
-          <input
-            type="text"
-            className="text-lg input col-span-2 h-8 w-full max-w-xs border border-l-[0.4px] border-neutral-400 mx-auto"
-            value={searchText}
-            onChange={handleGetTitle}
-          />
-          <span className="col-span-1 row-span-2 mx-auto">금액</span>
-          <div className="w-full col-span-2 row-span-2">
+          <div className="text-xs pt-3 pb-2 w-full text-center">금액 범위</div>
+          <div className="w-full ">
             <Slider />
           </div>
           <label
             htmlFor="category_filter"
-            className="btn h-8 btn-outline col-span-3"
+            className="btn btn-sm text-xs my-3 h-9 w-full btn-neutral text-base-100"
           >
-            카테고리
+            카테고리 선택하기
           </label>
           <input
             type="checkbox"
@@ -67,19 +72,19 @@ export default function ChallengeFilter({
                 selected={searchCategory}
                 handleGetCategory={handleGetCategory}
               />
-              <div className="w-full flex justify-center items-center mt-2">
+              <div className="w-full flex justify-center items-center mt-7">
                 <label
-                  className="btn btn-accent mr-4 z-10"
-                  htmlFor="category_filter"
-                >
-                  적용
-                </label>
-                <label
-                  className="btn z-10"
+                  className="btn btn-sm w-1/2 z-10 mr-0.5"
                   htmlFor="category_filter"
                   onClick={handleResetCategory}
                 >
                   취소
+                </label>
+                <label
+                  className="btn btn-sm w-1/2 btn-neutral text-base-100 z-10 ml-0.5"
+                  htmlFor="category_filter"
+                >
+                  적용
                 </label>
               </div>
             </div>
@@ -90,7 +95,7 @@ export default function ChallengeFilter({
             ></label>
           </div>
           <button
-            className="col-span-3 btn btn-accent text-white w-full z-10"
+            className=" btn btn-sm h-9 w-full z-10 btn-outline bg-base-100 "
             onClick={handleResetFilter}
           >
             초기화

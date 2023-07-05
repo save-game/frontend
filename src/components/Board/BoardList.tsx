@@ -11,7 +11,7 @@ import BoardItem from "./BoardItem";
 import { useInView } from "react-intersection-observer";
 
 const ArticleContainer = styled.article`
-  ${tw`pt-1 pb-20 bg-base-color`};
+  ${tw`pt-1 pb-5 bg-base-color`};
   min-height: calc(100vh - 168px);
 `;
 
@@ -78,8 +78,10 @@ const BoardList = ({ challengeId }: BoardListProps) => {
   });
 
   useEffect(() => {
-    if (boardList?.pages[0].empty) {
+    if (boardList?.pages[boardList?.pages.length - 1].empty) {
       setIsEmpty(true);
+    } else {
+      setIsEmpty(false);
     }
   }, [boardList]);
 

@@ -148,7 +148,7 @@ export default function Account() {
 
   return (
     <main>
-      <div className=" w-11/12 ml-auto mr-auto flex flex-col items-center pt-4 mb-20">
+      <div className=" w-11/12 ml-auto mr-auto flex flex-col items-center pt-4 pb-20">
         <div className=" w-full ml-auto mr-auto flex flex-col items-center mt-4 mb-4">
           <div className="w-full flex flex-col items-center ">
             <div className="w-full flex justify-start items-center my-4 mt-5">
@@ -188,7 +188,7 @@ export default function Account() {
                       onClick={() => {
                         setAnalyze(true);
                       }}
-                      className="w-1/4 ml-2 flex justify-center btn btn-ghost bg-emerald-50 hover:bg-teal-100  shadow"
+                      className="w-1/4 ml-2 p-0 shrink-0 flex justify-center btn btn-ghost bg-emerald-50 hover:bg-teal-100  shadow"
                     >
                       <FcPieChart size={18} className="-mr-1" />
                       <p className="pt-0.5">분석</p>

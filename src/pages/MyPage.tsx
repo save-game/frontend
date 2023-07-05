@@ -12,7 +12,7 @@ import { SHOW_MODAL_DELAY } from "../constants/modalTime";
 import { UserData } from "../interface/interface";
 import { signOut, withdrawal } from "../api/authAPI";
 import { useUser } from "../api/membersAPI";
-import { UseQueryResult } from "react-query";
+import { UseQueryResult, useMutation, useQueryClient } from "react-query";
 import { useRecoilValue } from "recoil";
 import { loadingAtom } from "../Recoil/loading";
 import { kakaoLogout } from "../api/kakaoAPI";
@@ -32,17 +32,6 @@ const MyPage = () => {
   const [passwordForm, setPasswordForm] = useState(false);
   const { data: userInfo }: UseQueryResult<UserData> = useUser();
   const isLoading = useRecoilValue(loadingAtom);
-
-  // useEffect(() => {
-  //   const token =
-  //     "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxNCIsImF1dGgiOiJST0xFX01FTUJFUiIsImV4cCI6MTY4ODQ1NjM1Nn0.8w3Mv9y0UrKs07BJzFWI_2kPpBZSjzany_dWDxGU-_s";
-  //   const refreshToken =
-  //     "eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODg5NzQ3NTZ9.x_iPPlC2gTNSWnkdCLYUHYRamyZPYOVm844WqR-UsrQ";
-
-  //   localStorage.setItem("isLogin", "kako");
-  //   localStorage.setItem("token", token);
-  //   localStorage.setItem("refreshToken", refreshToken);
-  // }, []);
 
   useEffect(() => {
     if (kakaoCode === "") return;

@@ -15,16 +15,17 @@ export default function TextUpload() {
   };
 
   return (
-    <div className="w-full flex flex-col justify-center items-center mb-10 border p-4">
+    <div className="w-full bg-slate-50 flex flex-col justify-center items-center rounded-lg mb-5 border p-3">
       <textarea
         onChange={onChange}
         value={text}
         maxLength={MAX_LENGTH}
         rows={10}
         placeholder="내용을 입력하세요"
-        className="w-full p-4 text-center"
+        spellCheck={false}
+        className="w-full bg-slate-50 font-light placeholder:font-light outline-none"
       />
-      <p className="w-full text-end">
+      <p className="w-full text-end text-xs font-light">
         <span>{textLength} / 200</span>
       </p>
     </div>
