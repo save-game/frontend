@@ -78,21 +78,27 @@ const ChallengeRegistration = ({ challengeData }: ChallengeDataProps) => {
   };
 
   return (
-    <div className="bg-base-100 rounded-lg my-3 p-10 pb-20 shadow">
+    <div className="bg-base-100 rounded-lg my-3 p-10 shadow">
       <div className="mb-2 text-cyan-950 text-base">현재 모집인원</div>
       <div className="mb-2 text-base flex justify-center items-center">
         <MdPeople size={20} className="mr-1.5 pt-0.5 text-neutral-500" />
         <p className="text-accent-focus mt-1 mr-1">{memberCount}</p>
-        <p className="mt-1"> /10 명</p>
+        <p className="mt-1"> /{challengeData.maxPeople} 명</p>
       </div>
       {isAvailable && !participated ? (
-        <button
-          onClick={handleChallengeRegister}
-          className="btn w-full btn-neutral text-base-100 flex items-center mt-4"
-        >
-          <BsPersonPlusFill size={16} className="mr-2" />
-          <span className="mt-0.5">참가하기</span>
-        </button>
+        challengeData.maxPeople === challengeData.challengeMemberList.length ? (
+          <div className="w-full flex justify-center items-center mt-4 text--800">
+            <span>인원 모집 완료</span>
+          </div>
+        ) : (
+          <button
+            onClick={handleChallengeRegister}
+            className="btn w-full btn-neutral text-base-100 flex items-center mt-4"
+          >
+            <BsPersonPlusFill size={16} className="mr-2" />
+            <span className="mt-0.5">참가하기</span>
+          </button>
+        )
       ) : null}
       {participated ? (
         <button

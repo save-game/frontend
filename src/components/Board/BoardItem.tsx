@@ -49,7 +49,7 @@ const BoardItem = ({ post, confirmRef, dispatch }: BoardItemProps) => {
 
   const { mutate: reviseTextMutate } = useMutation(editPosts, {
     onSuccess: () => {
-      queryClient.invalidateQueries(["challengeBoard", challengeId]);
+      queryClient.invalidateQueries(["challengeBoard", Number(challengeId)]);
       setEditMsg("수정이 완료 되었습니다.");
       if (!editDialogRef.current) return;
       editDialogRef.current.showModal();

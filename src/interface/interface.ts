@@ -29,6 +29,7 @@ export interface ChallengeData {
   readonly category: string;
   readonly d_day: number;
   readonly challengeMemberList: ChallengeMemberData[];
+  readonly maxPeople: number;
 }
 export interface ChallengeResultData {
   readonly title: string;
