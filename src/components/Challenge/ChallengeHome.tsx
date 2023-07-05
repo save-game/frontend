@@ -44,6 +44,7 @@ export default function ChallengeHome() {
     data: challengeData,
     isFetchingNextPage,
     fetchNextPage,
+    remove,
   } = useInfiniteQuery(
     ["getChallengeData", filterValues],
     ({ pageParam = 0 }) =>
@@ -68,6 +69,9 @@ export default function ChallengeHome() {
       0
     );
   };
+  useEffect(() => {
+    remove();
+  }, []);
 
   useEffect(() => {
     if (inView) {
