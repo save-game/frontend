@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { useNavigate } from "react-router";
@@ -24,10 +24,10 @@ interface MyChallengeList {
 
 export default function Home() {
   const { data: userInfo }: UseQueryResult<UserData> = useUser();
-  const [isEmpty, setIsEmpty] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [observeTarget, inView] = useInView({ threshold: 0.9 });
-  const [ingTab, setIngTab] = useState(true);
+  const [isIng, setIsIng] = useState(true);
+  const [ishavingChallenge, setIsHavingChallenge] = useState(true);
 
   const navigate = useNavigate();
 
@@ -37,7 +37,7 @@ export default function Home() {
 
   const getMyChallengeList = async (pageParam: number) => {
     try {
-      const response = await getMyChallenge(pageParam);
+      const response = await getMyChallenge(pageParam, isIng);
       return response.data;
     } catch (error) {
       console.error(
@@ -49,6 +49,7 @@ export default function Home() {
     data: myChallengeList,
     isFetchingNextPage,
     fetchNextPage,
+    remove,
   } = useInfiniteQuery(
     ["getChallengeData"],
     ({ pageParam = 0 }) => getMyChallengeList(pageParam),
@@ -58,9 +59,21 @@ export default function Home() {
       },
     }
   );
+
+  const updateData = useCallback(() => {
+    fetchNextPage();
+  }, [fetchNextPage]);
+
+  useEffect(() => {
+    remove();
+    updateData();
+  }, [isIng]);
+
   useEffect(() => {
     if (myChallengeList?.pages[0].empty) {
-      setIsEmpty(true);
+      setIsHavingChallenge(false);
+    } else {
+      setIsHavingChallenge(true);
     }
   }, [myChallengeList?.pages]);
 
@@ -97,7 +110,7 @@ export default function Home() {
         </ProfileContainer>
         <ExpenseGraphContainer />
         <ExpenseFormButton size={"normal"} />
-        {!isEmpty ? (
+        {ishavingChallenge || !isIng ? (
           <div className="mt-4 w-full mb-16 pb-3 overflow-hidden text-cyan-950 bg-slate-100 rounded-lg shadow">
             <div className="bg-base-100">
               <div className="flex justify-center items-center bg-base-100 text-[15px] pt-4 pb-2  ">
@@ -107,19 +120,19 @@ export default function Home() {
               <div className=" w-full flex justify-end items-center pr-3">
                 <label className="label cursor-pointer">
                   <span className="label-text font-semibold text-cyan-950 text-xs mr-1 pt-0.5">
-                    {ingTab ? "진행 중" : "종료"}
+                    {isIng ? "진행 중" : "종료"}
                   </span>
                   <input
                     type="checkbox"
                     className="toggle toggle-sm"
                     defaultChecked
-                    onChange={() => setIngTab(!ingTab)}
-                    value={ingTab ? "진행 중" : "종료"}
+                    onChange={() => setIsIng(!isIng)}
+                    value={isIng ? "진행 중" : "종료"}
                   />
                 </label>
               </div>
             </div>
-            {ingTab ? (
+            {isIng ? (
               <div className="w-full p-2 ">
                 {myChallengeList?.pages.map((page) =>
                   page.content.map((item: MyChallengeList, i: number) => {
@@ -132,7 +145,17 @@ export default function Home() {
                 )}
               </div>
             ) : (
-              <div>종료된거</div>
+              <div className="w-full p-2 ">
+                {myChallengeList?.pages.map((page) =>
+                  page.content.map((item: MyChallengeList, i: number) => {
+                    return (
+                      <div key={i}>
+                        <MyChallengeCard myChallenge={item} />
+                      </div>
+                    );
+                  })
+                )}
+              </div>
             )}
           </div>
         ) : (
