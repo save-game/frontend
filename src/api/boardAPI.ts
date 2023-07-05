@@ -32,7 +32,12 @@ export const getPosts = async (
   }
 };
 
-export const editPosts = async (postId: number, text: string) => {
+interface editProps {
+  postId: number;
+  text: string;
+}
+
+export const editPosts = async ({ postId, text }: editProps) => {
   try {
     const response = await axios.put(`/api/posts/${postId}`, {
       content: text,
