@@ -111,19 +111,17 @@ export default function ChallengeForm() {
     }
   };
 
-  const { data: repsonseData, mutate: updateChallenge } = useMutation(
-    postChallenge,
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(["getChallengeData"]);
-      },
-    }
-  );
+  const { mutate: updateChallenge } = useMutation(postChallenge, {
+    onSuccess: (response) => {
+      queryClient.invalidateQueries(["getChallengeData"]);
+      navigate(`${response.data.id}`);
+    },
+  });
 
   const handleSubmitChallenge = async (data: FieldValues) => {
     try {
       updateChallenge({ data, memberCount });
-      const challengeId = repsonseData.data.id;
+
       setOpenForm(false);
       handleResetForm();
       if (dialogRef.current) {
@@ -137,7 +135,6 @@ export default function ChallengeForm() {
         if (dialogRef.current) {
           dialogRef.current.close();
         }
-        navigate(`/challenge/${challengeId}`);
       }, SHOW_MODAL_DELAY);
     } catch (error) {
       console.error(
