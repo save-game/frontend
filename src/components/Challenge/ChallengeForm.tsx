@@ -39,6 +39,7 @@ export default function ChallengeForm() {
 
   const challengeSchema = Yup.object({
     title: Yup.string().required("필수 입력 항목입니다."),
+    content: Yup.string().required("필수 입력 항목입니다."),
     goal_amount: Yup.number()
       .max(10000000, "10,000,000원 이하로 입력해주세요")
       .required("필수 입력 항목입니다."),
@@ -112,16 +113,8 @@ export default function ChallengeForm() {
   };
 
   const { mutate: updateChallenge } = useMutation(postChallenge, {
-    onSuccess: (response) => {
-      queryClient.invalidateQueries(["getChallengeData"]);
-      navigate(`${response.data.id}`);
-    },
-  });
-
-  const handleSubmitChallenge = async (data: FieldValues) => {
-    try {
-      updateChallenge({ data, memberCount });
-
+    onSuccess: (repsonseData) => {
+      const challengeId = repsonseData.data.id;
       setOpenForm(false);
       handleResetForm();
       if (dialogRef.current) {
@@ -135,7 +128,15 @@ export default function ChallengeForm() {
         if (dialogRef.current) {
           dialogRef.current.close();
         }
+        navigate(`/challenge/${challengeId}`);
       }, SHOW_MODAL_DELAY);
+      queryClient.invalidateQueries(["getChallengeData"]);
+    },
+  });
+
+  const handleSubmitChallenge = async (data: FieldValues) => {
+    try {
+      updateChallenge({ data, memberCount });
     } catch (error) {
       console.error(
         `handleSubmitChallenge Error: Time(${new Date()}) ERROR ${error}`
@@ -239,6 +240,11 @@ export default function ChallengeForm() {
                     </div>
                   )}
                 />
+                {errors.content && (
+                  <span className="message text-xs text-error text-center">
+                    {`${errors.content.message}`}
+                  </span>
+                )}
                 <div className="relative flex w-full justify-between items-center">
                   <label htmlFor="title" className="label-text text-lg w-14">
                     기간
