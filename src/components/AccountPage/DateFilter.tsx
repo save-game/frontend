@@ -4,6 +4,8 @@ import { DateRangePickerWrapper } from "../../styles/DateRange";
 import { ko } from "date-fns/esm/locale";
 import { useRecoilState } from "recoil";
 import { endDateState, startDateState } from "../../Recoil";
+import { GoTriangleDown } from "react-icons/Go";
+import { FcCalendar } from "react-icons/Fc";
 
 const DateFilter = () => {
   const [startDate, setStartDate] = useRecoilState(startDateState);
@@ -37,15 +39,23 @@ const DateFilter = () => {
   };
 
   return (
-    <div className="m-20 h-16">
-      <div>
+    <div className="mt-16 mb-14 h-16">
+      <div className="relative">
         <div
           id="period"
-          className="flex flex-col text-center cursor-pointer"
+          className="flex flex-col text-center cursor-pointer "
           onClick={() => setDatePick(!datePick)}
         >
-          <button className="btn btn-outline  w-full shadow-md">
-            {period}
+          <button className="relative btn btn-outline text-cyan-950 w-full shadow-md">
+            <FcCalendar
+              size={17}
+              className="absolute top-1/2 -translate-y-1/2 left-5 "
+            />
+            <p>{period}</p>
+            <GoTriangleDown
+              size={20}
+              className="absolute top-1/2 -translate-y-1/2 right-5"
+            />
           </button>
         </div>
         <div
@@ -54,16 +64,16 @@ const DateFilter = () => {
           }}
           className={`${
             datePick ? "" : "hidden"
-          } fixed flex flex-col justify-center items-center z-50 bg-white border w-64 right-1/4 mt-1`}
+          } absolute flex flex-col justify-center items-center text-sm z-50 bg-slate-100 rounded-lg border w-full py-2 shadow`}
         >
           <input
             id="thisMonth"
             type="radio"
             name="radio-date"
-            className="radio hidden peer/thisMonth"
+            className="radio hidden peer/thisMonth "
           />
           <label
-            className="pt-1 w-full text-center peer-checked/thisMonth:text-white peer-checked/thisMonth:bg-accent hover:bg-accent hover:opacity-50"
+            className="pt-1 w-11/12 rounded-lg text-center peer-checked/thisMonth:text-white peer-checked/thisMonth:bg-accent-focus hover:bg-accent hover:opacity-50"
             htmlFor="thisMonth"
             onClick={onClickMonth}
           >
@@ -76,7 +86,7 @@ const DateFilter = () => {
             className="radio hidden peer/threeMonth"
           />
           <label
-            className="pt-1 w-full text-center peer-checked/threeMonth:text-white peer-checked/threeMonth:bg-accent hover:bg-accent hover:opacity-50"
+            className="pt-1  w-11/12 rounded-lg text-center peer-checked/threeMonth:text-white peer-checked/threeMonth:bg-accent-focus hover:bg-accent hover:opacity-50"
             htmlFor="threeMonth"
             onClick={onClickThreeMonth}
           >
@@ -89,7 +99,7 @@ const DateFilter = () => {
             className="radio hidden peer/sixMonth"
           />
           <label
-            className=" pt-1 w-full text-center peer-checked/sixMonth:text-white peer-checked/sixMonth:bg-accent hover:bg-accent hover:opacity-50"
+            className=" pt-1  w-11/12 rounded-lg text-center peer-checked/sixMonth:text-white peer-checked/sixMonth:bg-accent-focus hover:bg-accent hover:opacity-50"
             htmlFor="sixMonth"
             onClick={onClickSixMonth}
           >
@@ -102,7 +112,7 @@ const DateFilter = () => {
             className="radio hidden peer/myPick"
           />
           <label
-            className="pt-1 w-full text-center peer-checked/myPick:text-white peer-checked/myPick:bg-accent hover:bg-accent hover:opacity-50"
+            className="pt-1  w-11/12 rounded-lg text-center peer-checked/myPick:text-white peer-checked/myPick:bg-accent-focus hover:bg-accent hover:opacity-50"
             htmlFor="myPick"
             onClick={onClickMyPick}
           >
@@ -110,9 +120,9 @@ const DateFilter = () => {
           </label>
         </div>
       </div>
-      <DateRangePickerWrapper className="flex justify-center items-center pt-10 w-full ">
+      <DateRangePickerWrapper className="flex justify-center items-center pt-5 w-full ">
         <DatePicker
-          className="w-28 text-center"
+          className="w-28 text-center text-sm text-cyan-900 bg-slate-100"
           dateFormat="yyyy.MM.dd"
           selected={startDate}
           onChange={(date: Date) => setStartDate(date)}
@@ -124,7 +134,7 @@ const DateFilter = () => {
         />
         <div className="mr-2 ml-2"> - </div>
         <DatePicker
-          className="w-28 text-center"
+          className="w-28 text-center text-sm text-cyan-900 bg-slate-100"
           dateFormat="yyyy.MM.dd"
           selected={endDate}
           onChange={(date: Date) => setEndDate(date)}

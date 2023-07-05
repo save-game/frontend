@@ -2,6 +2,8 @@ import { ChangeEvent } from "react";
 import { categoryList } from "../../constants/expenseCategory";
 import { useRecoilState } from "recoil";
 import { checkedListState, isCheckedState } from "../../Recoil/index";
+import { MdCategory } from "react-icons/Md";
+import { FcFolder } from "react-icons/Fc";
 
 const CategoryFilter = () => {
   const [checkedList, setCheckedList] = useRecoilState(checkedListState);
@@ -24,8 +26,14 @@ const CategoryFilter = () => {
 
   return (
     <div className=" w-11/12">
-      <div className="text-center m-2">카테고리 선택</div>
-      <div className="grid grid-cols-4 border">
+      <div className="relative w-full text-center mb-2 text-sm text-cyan-950 font-bold">
+        <FcFolder
+          size={19}
+          className="absolute top-1/2 -translate-y-1/2 left-5"
+        />
+        <p className="pt-0.5 ml-1">카테고리 선택</p>
+      </div>
+      <div className="grid grid-cols-4 p-3 border border-cyan-950 rounded-lg shadow-md ">
         {categoryList.map((list) => (
           <div className="flex w-full justify-center" key={list.name}>
             <input
@@ -37,8 +45,10 @@ const CategoryFilter = () => {
             />
             <label className="w-full" htmlFor={list.name}>
               <div
-                className={` m-2 p-1 text-xs border text-center rounded-full ${
-                  checkedList.includes(list.name) ? "text-white bg-accent" : ""
+                className={` m-1 py-2 text-xs border text-center rounded-full text-cyan-950 bg-slate-100 ${
+                  checkedList.includes(list.name)
+                    ? "text-base-100 bg-accent-focus"
+                    : ""
                 }`}
               >
                 {list.name}

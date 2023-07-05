@@ -9,12 +9,15 @@ import ExpenseFormButton from "../components/Expenses/ExpenseFormButton";
 import { useUser } from "../api/membersAPI";
 import { UserData } from "../interface/interface";
 import { UseQueryResult, useInfiniteQuery } from "react-query";
-import { BsPersonFill } from "react-icons/Bs";
+import { BsPersonFill, BsSearch } from "react-icons/Bs";
 import { getMyChallenge } from "../api/membersAPI";
 import LoadingSpinner from "../components/Common/LoadingSpinner";
 import { useInView } from "react-intersection-observer";
 import { CgSpinner } from "react-icons/Cg";
 import Logo from "../assets/save_game_300x300.png";
+import { FcSearch } from "react-icons/Fc";
+import { BiSearch, BiSearchAlt } from "react-icons/Bi";
+import { FaSearch } from "react-icons/Fa";
 
 interface MyChallengeList {
   challengeId: number;
@@ -113,11 +116,11 @@ export default function Home() {
         {ishavingChallenge || !isIng ? (
           <div className="mt-4 w-full mb-16 pb-3 overflow-hidden text-cyan-950 bg-slate-100 rounded-lg shadow">
             <div className="bg-base-100">
-              <div className="flex justify-center items-center bg-base-100 text-[15px] pt-4 pb-2  ">
+              <div className="flex justify-start items-center bg-base-100 text-[15px] px-5 pt-3 ">
                 <img src={Logo} alt="mainLogo" className="w-5 mr-1" />
                 <p className="pt-1 text-cyan-800">나의 챌린지</p>
               </div>
-              <div className=" w-full flex justify-end items-center pr-3">
+              <div className=" w-full h-7 flex justify-end items-center pr-3">
                 <label className="label cursor-pointer">
                   <span className="label-text font-semibold text-cyan-950 text-xs mr-1 pt-0.5">
                     {isIng ? "진행 중" : "종료"}
@@ -159,14 +162,20 @@ export default function Home() {
             )}
           </div>
         ) : (
-          <div className="text-black mt-10 w-full">
-            <p className="mb-4">새로운 챌린지에 도전해 보세요!</p>
-            <button
-              className="btn btn-accent text-white w-full h-20 "
-              onClick={handleMoveChallengeHome}
-            >
-              챌린지 둘러보러 가기
-            </button>
+          <div className="text-cyan-950 mt-2 p-2 py-5 w-full rounded-lg bg-base-100">
+            <div className="flex justify-start items-center mb-4 px-3">
+              <img src={Logo} alt="mainLogo" className="w-5 mr-1" />
+              <p className="">새로운 챌린지에 도전해 보세요!</p>
+            </div>
+            <div className="flex justify-center ">
+              <button
+                className="btn  w-full shadow"
+                onClick={handleMoveChallengeHome}
+              >
+                <p className="pt-0.5">챌린지 둘러보러 가기</p>
+                <FcSearch size={17} />
+              </button>
+            </div>
           </div>
         )}
         <div ref={observeTarget} className=" h-14">
