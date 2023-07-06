@@ -4,7 +4,6 @@ import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import styled from "styled-components";
 import tw from "twin.macro";
-
 import { RangeCalendarStart, RangeCalendarEnd } from "../Common/Calendar";
 import InformModal from "../Common/InformModal";
 import { addOneMonth } from "../../helpers/helper";
@@ -19,6 +18,10 @@ import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { openFormState } from "../../Recoil/challengeFormAtom";
 import { useMutation, useQueryClient } from "react-query";
+import { IoCloseOutline } from "react-icons/Io5";
+import { AiOutlineMinus } from "react-icons/Ai";
+import { BiMinus } from "react-icons/Bi";
+import { FiMinus, FiPlus } from "react-icons/fi";
 
 export default function ChallengeForm() {
   const [memberCount, setMemberCount] = useState<number>(2);
@@ -184,23 +187,25 @@ export default function ChallengeForm() {
               className="btn btn-ghost absolute top-4 right-2"
               onClick={handleResetForm}
             >
-              X
+              <IoCloseOutline size={26} />
             </label>
-            <h3 className="font-bold text-2xl mt-4 mb-4">챌린지 등록하기</h3>
+            <h3 className="font-bold text-[16px] text-cyan-950 mt-1 mb-4">
+              챌린지 등록
+            </h3>
             <form
-              className="w-full h-full flex flex-col justify-around items-center"
+              className="w-full h-full flex flex-col items-center"
               onSubmit={handleSubmit(handleSubmitChallenge)}
               onSubmitCapture={(e) => {
                 e.preventDefault();
               }}
             >
-              <div className="form-control w-full h-3/4 justify-between items-center">
+              <div className="form-control w-full items-center">
                 <Controller
                   name="title"
                   control={control}
                   render={({ field }) => (
                     <div className=" flex w-full justify-between items-center">
-                      <label htmlFor="title" className="label-text text-lg">
+                      <label htmlFor="title" className="text-cyan-950">
                         제목
                       </label>
                       <input
@@ -208,24 +213,22 @@ export default function ChallengeForm() {
                         type="text"
                         defaultValue={field.value}
                         placeholder="제목을 입력해주세요."
-                        className="text-sm input h-8 w-9/12 max-w-xs border border-l-[0.4px] border-neutral-400"
+                        className="text-sm placeholder:text-xs placeholder:font-light input h-8 w-10/12 max-w-xs border border-l-[0.4px] border-neutral-400"
                         onChange={(e) => field.onChange(e.target.value)}
                         ref={titleInputRef}
                       />
                     </div>
                   )}
                 />
-                {errors.title && (
-                  <span className="message text-xs text-error text-center">
-                    {`${errors.title.message}`}
-                  </span>
-                )}
+                <span className="w-full h-4  p-0 font-light text-[11px] text-error text-right">
+                  {errors.title && `${errors.title.message}`}
+                </span>
                 <Controller
                   name="content"
                   control={control}
                   render={({ field }) => (
                     <div className=" flex w-full justify-between items-center">
-                      <label htmlFor="content" className="label-text text-lg">
+                      <label htmlFor="content" className="text-cyan-950">
                         부제
                       </label>
                       <input
@@ -233,23 +236,22 @@ export default function ChallengeForm() {
                         type="text"
                         defaultValue={field.value}
                         placeholder="부제를 입력해주세요."
-                        className="text-sm input h-8 w-9/12 max-w-xs border border-l-[0.4px] border-neutral-400"
+                        className="text-sm placeholder:text-xs placeholder:font-light input h-8 w-10/12 max-w-xs border border-l-[0.4px] border-neutral-400"
                         onChange={(e) => field.onChange(e.target.value)}
                         ref={contentInputRef}
                       />
                     </div>
                   )}
                 />
-                {errors.content && (
-                  <span className="message text-xs text-error text-center">
-                    {`${errors.content.message}`}
-                  </span>
-                )}
-                <div className="relative flex w-full justify-between items-center">
-                  <label htmlFor="title" className="label-text text-lg w-14">
+                <span className="w-full h-4 my-0 p-0 font-light text-[11px] text-error text-right">
+                  {errors.content && `${errors.content.message}`}
+                </span>
+
+                <div className="relative  flex w-full mb-4 justify-between items-center">
+                  <label htmlFor="title" className="text-cyan-950">
                     기간
                   </label>
-                  <div className="w-9/12 flex">
+                  <div className="w-10/12 flex text-xs">
                     <Controller
                       name="start_date"
                       control={control}
@@ -265,6 +267,7 @@ export default function ChallengeForm() {
                         />
                       )}
                     />
+                    <span className="mx-1 pt-2">-</span>
                     <Controller
                       name="end_date"
                       control={control}
@@ -287,10 +290,7 @@ export default function ChallengeForm() {
                   control={control}
                   render={({ field }) => (
                     <div className=" flex w-full justify-between items-center">
-                      <label
-                        htmlFor="goal_amount"
-                        className="label-text text-lg"
-                      >
+                      <label htmlFor="goal_amount" className="text-cyan-950">
                         금액
                       </label>
                       <input
@@ -298,7 +298,7 @@ export default function ChallengeForm() {
                         type="text"
                         defaultValue={field.value}
                         placeholder="목표 금액을 입력해주세요."
-                        className="text-sm input h-8 w-9/12 max-w-xs border border-l-[0.4px] border-neutral-400 pr-10"
+                        className="text-sm placeholder:text-xs placeholder:font-light input h-8 w-10/12 max-w-xs border border-l-[0.4px] border-neutral-400 pr-10"
                         onChange={(e) =>
                           field.onChange(e.target.value.replace(/[^0-9]/g, ""))
                         }
@@ -306,61 +306,59 @@ export default function ChallengeForm() {
                         onFocus={handleOnFocusCount}
                         ref={goalAmountInputRef}
                       />
-                      <span className="absolute text-lg right-12">원</span>
+                      <span className="absolute  right-12">원</span>
                     </div>
                   )}
                 />
-                {errors.goal_amount && (
-                  <span className="message text-xs text-error text-center">
-                    {`${errors.goal_amount.message}`}
-                  </span>
-                )}
-                <ChallengeCategoryFilter
-                  selected={selectedCategory}
-                  handleGetCategory={handleSelectCategory}
-                />
-                {errors.category && (
-                  <span className="message text-xs text-error text-center">
-                    {`${errors.category.message}`}
-                  </span>
-                )}
-                <div className=" flex w-full justify-between items-center">
-                  <label htmlFor="member_count" className="label-text text-lg">
+                <span className="w-full h-4 my-0 p-0 font-light text-[11px] text-error text-right">
+                  {errors.goal_amount && `${errors.goal_amount.message}`}
+                </span>
+                <div className="w-11/12 mt-3 mb-1">
+                  <ChallengeCategoryFilter
+                    selected={selectedCategory}
+                    handleGetCategory={handleSelectCategory}
+                  />
+                </div>
+                <span className="w-full h-4 mb-3 p-0 font-light text-[11px] text-error text-right">
+                  {errors.category && `${errors.category.message}`}
+                </span>
+                <div className=" flex w-ful justify-between items-center">
+                  <label htmlFor="member_count" className="text-cyan-950">
                     모집인원
                   </label>
-                  <div className="w-9/12 flex items-center justify-center">
+                  <div className="w-7/12 flex items-center justify-center">
                     <button
-                      className="btn btn-ghost h-10"
+                      className="btn btn-ghost btn-sm px-1 hover:text-accent-focus hover:bg-transparent h-10"
                       onClick={(e) => {
                         e.preventDefault();
                         handleMemberCount("down");
                       }}
                     >
-                      {"<"}
+                      <FiMinus />
                     </button>
                     <input
                       id="member_count"
                       type="text"
                       value={memberCount}
                       disabled
-                      className="text-md h-8 w-20 text-center border border-l-[0.4px] border-neutral-400"
+                      className="text-md h-8 w-2/5 text-xs text-center rounded-lg border border-l-[0.4px] border-neutral-400"
                     />
-                    <span className="text-lg ml-2">명</span>
                     <button
-                      className="btn btn-ghost"
+                      className="btn btn-ghost btn-sm px-1 hover:text-accent-focus hover:bg-transparent"
                       onClick={(e) => {
                         e.preventDefault();
                         handleMemberCount("up");
                       }}
                     >
-                      {">"}
+                      <FiPlus />
                     </button>
                   </div>
+                  <span className="text-cyan-950 pr-2">명</span>
                 </div>
+                <button className="btn btn-neutral text-base-100 btn-sm h-10 w-full mt-7">
+                  챌린지 등록
+                </button>
               </div>
-              <button className="btn btn-accent w-full mb-4">
-                챌린지 등록
-              </button>
             </form>
             <InformModal
               dialogRef={dialogRef}

@@ -7,6 +7,8 @@ import { queryClient } from "./constants/queryClient";
 import ProtectedRoute from "./components/Common/ProtectedRoute";
 import { Suspense, lazy } from "react";
 import LoadingSpinner from "./components/Common/LoadingSpinner";
+import Footer from "./components/Common/Footer";
+import ScrollToTop from "./components/Common/ScrollToTop";
 
 const Header = lazy(() => import("./components/Common/Header"));
 const Home = lazy(() => import("./pages/HomePage"));
@@ -21,6 +23,7 @@ const App = () => {
     <>
       <QueryClientProvider client={queryClient}>
         <RecoilRoot>
+          <ScrollToTop />
           <Suspense fallback={<LoadingSpinner />}>
             <Routes>
               <Route path="/" element={<LoginPage />} />
@@ -37,6 +40,7 @@ const App = () => {
               </Route>
             </Routes>
           </Suspense>
+          {/* <Footer /> */}
           <Header />
         </RecoilRoot>
       </QueryClientProvider>

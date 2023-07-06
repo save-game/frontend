@@ -47,7 +47,7 @@ const CategoryFilter = () => {
               <div
                 className={` m-1 py-2 text-xs border text-center rounded-full text-cyan-950 bg-slate-100 ${
                   checkedList.includes(list.name)
-                    ? "text-base-100 bg-accent-focus"
+                    ? "text-base-100 bg-slate-300"
                     : ""
                 }`}
               >

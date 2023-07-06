@@ -2,22 +2,19 @@ import { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import tw from "twin.macro";
 import { useNavigate } from "react-router";
-
 import ExpenseGraphContainer from "../components/Expenses/ExpenseGraphContainer";
 import MyChallengeCard from "../components/Challenge/MyChallengeCard";
 import ExpenseFormButton from "../components/Expenses/ExpenseFormButton";
 import { useUser } from "../api/membersAPI";
 import { UserData } from "../interface/interface";
 import { UseQueryResult, useInfiniteQuery } from "react-query";
-import { BsPersonFill, BsSearch } from "react-icons/Bs";
+import { BsPersonFill } from "react-icons/Bs";
 import { getMyChallenge } from "../api/membersAPI";
 import LoadingSpinner from "../components/Common/LoadingSpinner";
 import { useInView } from "react-intersection-observer";
 import { CgSpinner } from "react-icons/Cg";
 import Logo from "../assets/save_game_300x300.png";
 import { FcSearch } from "react-icons/Fc";
-import { BiSearch, BiSearchAlt } from "react-icons/Bi";
-import { FaSearch } from "react-icons/Fa";
 
 interface MyChallengeList {
   challengeId: number;
@@ -98,7 +95,7 @@ export default function Home() {
 
   return (
     <Container>
-      <div className="w-11/12">
+      <div className="w-11/12 mx-auto">
         <ProfileContainer>
           <ProfileImgContainer>
             {userInfo?.profileImageUrl ? (
@@ -114,7 +111,7 @@ export default function Home() {
         <ExpenseGraphContainer />
         <ExpenseFormButton size={"normal"} />
         {ishavingChallenge || !isIng ? (
-          <div className="mt-4 w-full mb-16 pb-3 overflow-hidden text-cyan-950 bg-slate-100 rounded-lg shadow">
+          <div className="mt-4 w-full mb-4 pb-3 overflow-hidden text-cyan-950 bg-slate-100 rounded-lg shadow">
             <div className="bg-base-100">
               <div className="flex justify-start items-center bg-base-100 text-[15px] px-5 pt-3 ">
                 <img src={Logo} alt="mainLogo" className="w-5 mr-1" />
@@ -192,7 +189,7 @@ export default function Home() {
 }
 
 const Container = styled.main`
-  ${tw`mx-auto bg-base-color pt-7 text-neutral-500 font-bold text-sm flex flex-col justify-center items-center`}
+  ${tw` bg-base-color pt-7 text-neutral-500 font-bold text-sm`}
 `;
 
 const ProfileContainer = styled.div`

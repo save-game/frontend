@@ -12,7 +12,7 @@ const HeaderContainer = styled.header`
 `;
 
 const NavBtn = styled.button<{ selected: boolean }>`
-  ${tw`text-[10px] text-gray-400/80 -translate-y-3 font-light`}
+  ${tw`text-[10px] text-gray-400/80 translate-y-2 font-light`}
   ${({ selected }) => selected && tw`text-accent-focus font-bold `}
 `;
 const icons = {

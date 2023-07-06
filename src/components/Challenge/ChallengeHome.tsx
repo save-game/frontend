@@ -14,9 +14,11 @@ import { ChallengeFilterProps } from "../../interface/interface";
 import { useInView } from "react-intersection-observer";
 import { CgSpinner } from "react-icons/Cg";
 import { useInfiniteQuery } from "react-query";
+import { IoCreateOutline } from "react-icons/Io5";
+import { TiPlus } from "react-icons/ti";
 
 const Container = styled.div`
-  ${tw`mx-auto relative w-11/12 h-screen max-h-screen pt-8 text-neutral-600 font-bold text-sm overflow-hidden`}
+  ${tw`mx-auto relative w-11/12  pt-8 text-neutral-600 font-bold text-sm overflow-hidden`}
 `;
 
 export default function ChallengeHome() {
@@ -80,13 +82,13 @@ export default function ChallengeHome() {
   }, [inView, fetchNextPage]);
 
   return (
-    <>
+    <main>
       <Container>
         <ChallengeFilter handleResetFilter={handleResetFilter} />
         <ChallengeCardWarp>
           {challengeData?.pages.map((page) =>
             page.content.map((item: ChallengeDataProps) => (
-              <div key={item.challengeId} className="mb-4">
+              <div key={item.challengeId} className="mb-1">
                 <ChallengeCard challengeData={item} />
               </div>
             ))
@@ -101,15 +103,16 @@ export default function ChallengeHome() {
             ) : null}
           </div>
         </ChallengeCardWarp>
-        <label
-          onClick={() => setOpenForm(true)}
-          className="btn btn-circle absolute btn-accent bottom-20 mb-2 right-2"
-        >
-          +
-        </label>
         <ChallengeForm />
       </Container>
-    </>
+      <label
+        onClick={() => setOpenForm(true)}
+        className="btn btn-circle flex justify-center items-center fixed btn-neutral text-base-100 bottom-20 mb-2 right-5 shadow"
+      >
+        {/* <IoCreateOutline size={23} className="ml-1 -mt-1" /> */}
+        <TiPlus size={25} />
+      </label>
+    </main>
   );
 }
 

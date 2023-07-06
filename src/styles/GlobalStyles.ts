@@ -5,17 +5,16 @@ const GlobalStyles = createGlobalStyle`
 
 main{
   min-height: calc(100vh - 65px);
-  padding-bottom: 80px;
   ${tw`bg-base-color`}
 }
 
 /* iOS only */
-@supports (-webkit-touch-callout: none) {
+/* @supports (-webkit-touch-callout: none) {
   main{
-   min-height: -webkit-fill-available;
-   padding-bottom: 80px;
+   height: -webkit-fill-available;
+   
   }
-}
+} */
 `;
 
 export default GlobalStyles;

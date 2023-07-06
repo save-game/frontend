@@ -6,12 +6,14 @@ import {
   showImgState,
   textLengthState,
   textState,
+  thumbImgState,
 } from "../../Recoil/boardAtom";
 
 export default function NewBoardBtn() {
   const [, setText] = useRecoilState(textState);
   const [, setTextLength] = useRecoilState(textLengthState);
   const [, setShowImg] = useRecoilState(showImgState);
+  const [, setThumbnail] = useRecoilState(thumbImgState);
   const boardDialogRef = useRef<HTMLDialogElement>(null);
   const confirmDialogRef = useRef<HTMLDialogElement>(null);
 
@@ -32,6 +34,8 @@ export default function NewBoardBtn() {
     setText("");
     setTextLength(0);
     setShowImg([]);
+    setThumbnail([]);
+
     confirmDialogRef.current?.close();
   };
   const OnConfirmModalClose = () => {
@@ -44,7 +48,7 @@ export default function NewBoardBtn() {
         onClick={Open}
         className="fixed bottom-20 right-6 border-4 rounded-full hover:bg-accent hover:text-white hover:border-accent p-2 bg-base-100"
       >
-        <TiPlus size={32} />
+        <TiPlus size={25} />
       </button>
       <dialog ref={boardDialogRef} className="w-full p-0 rounded-lg shadow-lg">
         <NewBoardForm onClick={confirmWithdrawal} />
@@ -61,7 +65,10 @@ export default function NewBoardBtn() {
           >
             취소
           </button>
-          <button onClick={OnAllClose} className="btn btn-sm w-1/3">
+          <button
+            onClick={OnAllClose}
+            className="btn text-base-100 btn-sm btn-ghost bg-accent-focus hover:bg-accent-focus w-1/3"
+          >
             확인
           </button>
         </div>

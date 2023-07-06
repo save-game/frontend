@@ -21,8 +21,8 @@ export default function ChallengeCategoryFilter({
             key={item.category}
             type="button"
             onClick={() => handleGetCategoryFromList(item)}
-            className={`btn btn-ghost w-full p-0 block col-span-1 h-20 ${
-              selected === item.category ? "bg-zinc-300" : "bg-white"
+            className={`btn btn-ghost w-full p-0 block col-span-1 h-16 rounded-xl ${
+              selected === item.category ? "bg-gray-200/70" : "bg-white"
             }`}
           >
             <div

@@ -21,7 +21,7 @@ const ConfirmModal = ({ dialogRef, confirm, onConfirm }: Props) => {
           <button className="btn btn-sm btn-outline w-1/3">취소</button>
           <button
             onClick={onConfirm}
-            className="btn btn-sm btn-accent text-base-100 w-1/3"
+            className="btn btn-sm btn-ghost bg-accent-focus hover:bg-accent-focus text-base-100 w-1/3"
           >
             확인
           </button>

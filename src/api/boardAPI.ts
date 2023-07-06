@@ -1,14 +1,15 @@
 import axios from "./axiosInterceptors";
 
-export const postBoard = async (
-  text: string,
-  showImage: string[],
-  challengeId: number
-) => {
+interface PostData {
+  text: string;
+  showImg: string[];
+  challengeId: number;
+}
+export const postBoard = async ({ text, showImg, challengeId }: PostData) => {
   try {
     const response = await axios.post(`/api/posts?challengeId=${challengeId}`, {
       content: text,
-      imageUrlList: showImage,
+      imageUrlList: showImg,
     });
     return response.data;
   } catch (error) {

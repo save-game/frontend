@@ -48,7 +48,7 @@ export function FilterDropDown({
 
   return (
     <select
-      className={`p-2 h-8 w-16 rounded-lg text-sm border border-l-[0.4px] border-neutral-400 `}
+      className={`select select-sm  w-full text-xs bg-base-100 pt-1 border-gray-300`}
       value={option}
       onChange={handleGetOption}
     >

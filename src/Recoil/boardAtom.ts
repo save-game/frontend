@@ -10,7 +10,11 @@ export const textLengthState = atom<number>({
   default: 0,
 });
 
-export const showImgState = atom<string[]>({
+export const showImgState = atom<File[]>({
   key: "showImage",
+  default: [],
+});
+export const thumbImgState = atom<string[]>({
+  key: "thumbImage",
   default: [],
 });

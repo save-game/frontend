@@ -1,5 +1,12 @@
+import imageCompression from "browser-image-compression";
 import { initializeApp } from "firebase/app";
-import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import {
+  getDownloadURL,
+  getStorage,
+  list,
+  ref,
+  uploadBytes,
+} from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCxKF8_dJfgnn3oxDUe6ba_oDDM1d7UUeU",
@@ -26,17 +33,34 @@ export const getUrl = async (memberId: number, imgFile: Blob) => {
   }
 };
 
-export const getBoardUrl = async (
-  challengeId: string,
-  imgFile: Blob,
-  date: number
-) => {
-  if (!imgFile) return;
-  const imgRef = ref(storage, `user/${challengeId}/${date}`);
+export const getBoardUrl = async (challengeId: number, imgFile: File[]) => {
+  if (imgFile.length === 0) return [];
   try {
-    const res = await uploadBytes(imgRef, imgFile);
-    const url = await getDownloadURL(res.ref);
-    return url;
+    const resizedList = await Promise.all(
+      imgFile.map(async (img) => {
+        const reSize = await imageCompression(img, { maxSizeMB: 0.5 });
+        return reSize;
+      })
+    );
+    console.log(resizedList);
+
+    if (!challengeId) return;
+    const id = Date.now();
+    const imgRef = ref(storage, `post/${challengeId}/${id}`);
+
+    const uploadPromise = imgFile.map((blob, idx) => {
+      const childRef = ref(imgRef, `/${idx}`);
+      return uploadBytes(childRef, blob);
+    });
+
+    const urlList = await Promise.all(uploadPromise)
+      .then(() => {
+        return Promise.all(
+          imgFile.map((_, idx) => getDownloadURL(ref(imgRef, `/${idx}`)))
+        );
+      })
+      .then((downloadURLs) => downloadURLs);
+    return urlList;
   } catch (error) {
     throw new Error(`BoardImg error`);
   }
