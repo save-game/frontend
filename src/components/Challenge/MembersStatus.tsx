@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {
   ChallengeMemberData,
   ChallengeMemberResultData,
+  UserData,
   UserInfo,
 } from "../../interface/interface";
 import axios from "axios";
@@ -11,6 +12,8 @@ import tw from "twin.macro";
 import { BiWon } from "react-icons/Bi";
 import { FaHeartBroken } from "react-icons/Fa";
 import { AiTwotoneCrown } from "react-icons/Ai";
+import { useUser } from "../../api/membersAPI";
+import { UseQueryResult } from "react-query";
 
 interface Props {
   readonly data: ChallengeMemberData | ChallengeMemberResultData;
@@ -56,12 +59,12 @@ const MembersStatus = ({ data, top }: Props) => {
   const [isOpen, setIsOpen] = useState<boolean | null>(null);
   const [isFirst, setIsFirst] = useState<boolean | null>(null);
   const [myStatus, setMyStatus] = useState<boolean>(false);
+  const { data: userInfo }: UseQueryResult<UserData> = useUser();
   const ttlAmount = data.totalAmount.toLocaleString("ko-KR");
 
-  const memberId = data.memberId;
-
   useEffect(() => {
-    if (data.memberId === memberId) {
+    console.log(data);
+    if (data.memberId === userInfo?.memberId) {
       setMyStatus(true);
     } else {
       setMyStatus(false);
