@@ -12,7 +12,7 @@ import { SHOW_MODAL_DELAY } from "../constants/modalTime";
 import { UserData } from "../interface/interface";
 import { signOut, withdrawal } from "../api/authAPI";
 import { useUser } from "../api/membersAPI";
-import { UseQueryResult, useMutation, useQueryClient } from "react-query";
+import { UseQueryResult } from "react-query";
 import { useRecoilValue } from "recoil";
 import { loadingAtom } from "../Recoil/loading";
 import { kakaoLogout } from "../api/kakaoAPI";
@@ -89,7 +89,7 @@ const MyPage = () => {
         <Container>
           <div className="p-1 pt-3 rounded-t-lg">
             <div className="flex items-center justify-between w-full  pb-4  border-b border-accent-focus/60">
-              <div className="relative">
+              <div className="relative w-1/4">
                 <div className="w-20 h-20  rounded-full overflow-hidden bg-[#f0f8f6] text-accent shadow-lg">
                   {userInfo?.profileImageUrl ? (
                     <img

@@ -106,7 +106,10 @@ const NicknameForm = ({ formEditor, informChangeRef }: Props) => {
   };
   return (
     <>
-      <form onSubmit={onSubmit(handleNicknameChange)} className="flex">
+      <form
+        onSubmit={onSubmit(handleNicknameChange)}
+        className="flex w-3/4 ml-2 justify-around"
+      >
         <div className="relative">
           <input
             type="text"
@@ -114,24 +117,24 @@ const NicknameForm = ({ formEditor, informChangeRef }: Props) => {
             maxLength={11}
             spellCheck={false}
             autoFocus
-            className="outline-none rounded-lg w-full indent-2 h-10 mt-5 placeholder:text-xs placeholder:font-light"
+            className="outline-none rounded-lg border w-full indent-2 h-10 mt-5 placeholder:text-xs placeholder:font-light"
             {...register("nickname")}
           />
           {duplicationCheck.check ? (
             <div>
               {duplicationCheck.result === true ? (
-                <p className="absolute right-3 bottom-0.5 text-[11px] font-light text-success text-center bg-base-100">
+                <p className="absolute right-3 bottom-0.5 text-[11px] font-light text-success text-center ">
                   사용가능한 닉네임입니다.
                 </p>
               ) : (
-                <p className="absolute right-3 bottom-0.5 text-[11px] font-light text-error text-center bg-base-100">
+                <p className="absolute right-3 bottom-0.5 text-[11px] font-light text-error text-center ">
                   {duplicationCheck.result}
                 </p>
               )}
             </div>
           ) : null}
           {errors ? (
-            <p className="absolute right-3 bottom-0.5 text-[11px] font-light text-error text-center bg-base-100">
+            <p className="absolute right-3 bottom-0.5 text-[11px] font-light text-error text-center ">
               {errors.nickname?.message}
             </p>
           ) : null}

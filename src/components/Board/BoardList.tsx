@@ -98,7 +98,7 @@ const BoardList = ({ challengeId }: BoardListProps) => {
 
   return (
     <ArticleContainer>
-      <ul className="p-1">
+      <ul className="p-1 pb-10">
         {boardList?.pages.map((page) =>
           page.content?.map((item) => (
             <li

@@ -142,7 +142,7 @@ export default function SignUp() {
                 id="email"
                 type="email"
                 placeholder="이메일을 입력해주세요."
-                className=" input h-8 placeholder:text-xs text-sm mr-4 mb-2 max-w-xs"
+                className=" input w-4/5 h-8 placeholder:text-xs text-sm mr-4 mb-2"
                 {...register("email", {
                   onChange: (e) => {
                     setOnChangeEmail(e.target.value);
@@ -156,7 +156,7 @@ export default function SignUp() {
                 onClick={OnCheckEmail}
                 id="usableEmail"
                 type="button"
-                className="btn join-item text-xs  shadow mr-2 mb-2 btn-sm"
+                className="btn  text-xs  shadow mr-2 mb-2 btn-sm"
               >
                 중복확인
               </button>
@@ -231,7 +231,7 @@ export default function SignUp() {
                 id="nickName"
                 type="text"
                 placeholder="닉네임을 입력해주세요"
-                className=" input placeholder:text-xs h-8 text-sm mr-4 mb-2 max-w-xs"
+                className=" input w-4/5 placeholder:text-xs h-8 text-sm mr-4 mb-2"
                 {...register("nickName", {
                   onChange: (e) => {
                     setOnChangeNickName(e.target.value);
@@ -243,7 +243,7 @@ export default function SignUp() {
               <button
                 onClick={OnCheckNickName}
                 type="button"
-                className=" btn join-item text-xs  shadow mr-2 mb-2 btn-sm"
+                className=" btn text-xs  shadow mr-2 mb-2 btn-sm"
               >
                 중복확인
               </button>

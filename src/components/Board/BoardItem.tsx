@@ -18,6 +18,7 @@ import { editPosts, heartDelete, heartPost } from "../../api/boardAPI";
 import {
   differenceInHours,
   differenceInMinutes,
+  format,
   isSameYear,
   isToday,
 } from "date-fns";
@@ -27,6 +28,7 @@ import TextUpload from "./TextUpload";
 import InformModal from "../Common/InformModal";
 import { SHOW_MODAL_DELAY } from "../../constants/modalTime";
 import { useParams } from "react-router-dom";
+import { IoCloseOutline } from "react-icons/Io5";
 
 interface BoardItemProps {
   readonly post: BoardContent;
@@ -69,7 +71,6 @@ const BoardItem = ({ post, confirmRef, dispatch }: BoardItemProps) => {
     const date = new Date(post.createdAt);
     const now = new Date();
     const isThisYear = isSameYear(now, date);
-    console.log(isThisYear);
 
     if (isThisYear) {
       if (isToday(date)) {
@@ -84,12 +85,11 @@ const BoardItem = ({ post, confirmRef, dispatch }: BoardItemProps) => {
           setFormattedDate(`${hoursDifference}시간 전`);
         }
       } else {
-        const createdDate = date.toLocaleDateString("en-US").split("");
-        createdDate.splice(-5);
-        setFormattedDate(createdDate.join(""));
+        const createdDate = format(date, "M월 d일");
+        setFormattedDate(createdDate);
       }
     } else {
-      const createdDate = date.toLocaleDateString("en-US");
+      const createdDate = format(date, "yyyy년 M월 d일");
       setFormattedDate(createdDate);
     }
   }, [post]);
@@ -170,19 +170,18 @@ const BoardItem = ({ post, confirmRef, dispatch }: BoardItemProps) => {
       ) : null}
       {editForm ? (
         <div className="flex justify-center">
-          <div className="flex flex-col">
+          <div className="w-4/5 flex flex-col">
             <button
               type="button"
               onClick={() => setEditForm(false)}
               className="flex justify-end cursor-pointer"
             >
-              X
+              <IoCloseOutline size={26} />
             </button>
-            <h1 className="flex justify-center mb-2">글 수정</h1>
             <TextUpload />
             <button
               onClick={handleEditPosts}
-              className="w-full btn btn-accent btn-sm flex justify-center"
+              className="w-full mb-3 btn btn-sm flex justify-center"
             >
               수정완료
             </button>

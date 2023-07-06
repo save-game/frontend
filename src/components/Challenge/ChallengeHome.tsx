@@ -2,7 +2,6 @@ import { useEffect, useCallback } from "react";
 import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import styled from "styled-components";
 import tw from "twin.macro";
-
 import ChallengeForm from "../../components/Challenge/ChallengeForm";
 import ChallengeFilter from "./ChallengeFilter";
 import ChallengeCard from "./ChallengeCard";
@@ -14,7 +13,6 @@ import { ChallengeFilterProps } from "../../interface/interface";
 import { useInView } from "react-intersection-observer";
 import { CgSpinner } from "react-icons/Cg";
 import { useInfiniteQuery } from "react-query";
-import { IoCreateOutline } from "react-icons/Io5";
 import { TiPlus } from "react-icons/ti";
 
 const Container = styled.div`
@@ -118,5 +116,5 @@ export default function ChallengeHome() {
 
 const ChallengeCardWarp = styled.div`
   height: 70%;
-  ${tw`mt-4 overflow-scroll overscroll-contain`};
+  ${tw`mt-4 pb-20 overflow-scroll overscroll-contain`};
 `;

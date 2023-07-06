@@ -67,7 +67,7 @@ export default function ImgUpLoad() {
             />
           </div>
           <span className="absolute top-2/3 text-[10px] -translate-x-2">
-            {showImage.length}/3
+            {thumbnail.length}/3
           </span>
         </label>
         {thumbnail?.map((image, id) => (

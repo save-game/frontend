@@ -3,9 +3,7 @@ import {
   ChallengeMemberData,
   ChallengeMemberResultData,
   UserData,
-  UserInfo,
 } from "../../interface/interface";
-import axios from "axios";
 import { BsPersonFill } from "react-icons/Bs";
 import styled, { css } from "styled-components";
 import tw from "twin.macro";
