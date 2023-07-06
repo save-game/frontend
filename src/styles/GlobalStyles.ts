@@ -5,7 +5,7 @@ const GlobalStyles = createGlobalStyle`
 
 main{
   min-height: calc(100vh - 65px);
-  ${tw`bg-base-color`}
+  ${tw`bg-base-color/70`}
 }
 
 /* iOS only */

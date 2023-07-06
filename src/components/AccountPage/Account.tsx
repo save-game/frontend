@@ -148,8 +148,8 @@ export default function Account() {
 
   return (
     <main>
-      <div className=" w-11/12 ml-auto mr-auto flex flex-col items-center  pb-20">
-        <div className=" w-full ml-auto mr-auto flex flex-col items-center mt-4 mb-4">
+      <div className=" w-full px-2 ml-auto mr-auto flex flex-col items-center pt-4 pb-20">
+        <div className=" w-full ml-auto mr-auto flex flex-col items-center mb-4">
           <div className="w-full flex flex-col items-center ">
             <div className="w-full flex justify-start items-center my-4 mt-5">
               <MonthPickerWrapper className="w-full flex items-center justify-start text-cyan-950">

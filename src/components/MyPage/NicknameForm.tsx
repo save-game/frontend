@@ -114,7 +114,7 @@ const NicknameForm = ({ formEditor, informChangeRef }: Props) => {
             maxLength={11}
             spellCheck={false}
             autoFocus
-            className="outline-none pl-2 h-10 mt-5 placeholder:text-xs placeholder:font-light"
+            className="outline-none rounded-lg w-full indent-2 h-10 mt-5 placeholder:text-xs placeholder:font-light"
             {...register("nickname")}
           />
           {duplicationCheck.check ? (

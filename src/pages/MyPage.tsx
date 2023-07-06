@@ -19,7 +19,7 @@ import { kakaoLogout } from "../api/kakaoAPI";
 import { KAKAO_LOGOUT_URL } from "../constants/api";
 
 const Container = styled.div`
-  ${tw`mx-auto w-11/12 pt-8 text-neutral-600 font-bold text-sm`}
+  ${tw`mx-auto w-full pt-4 px-2 text-neutral-600 font-bold text-sm`}
 `;
 
 const MyPage = () => {
@@ -87,7 +87,7 @@ const MyPage = () => {
     <>
       <main>
         <Container>
-          <div className="p-1 pt-3 bg-base-100 rounded-t-lg">
+          <div className="p-1 pt-3 rounded-t-lg">
             <div className="flex items-center justify-between w-full  pb-4  border-b border-accent-focus/60">
               <div className="relative">
                 <div className="w-20 h-20  rounded-full overflow-hidden bg-[#f0f8f6] text-accent shadow-lg">
@@ -119,7 +119,7 @@ const MyPage = () => {
                       onClick={() => {
                         setNicknameForm(true);
                       }}
-                      className="btn btn-sm btn-ghost bg-base-color hover:bg-base-color shadow mr-2"
+                      className="btn btn-sm btn-ghost bg-base-100 hover:bg-base-color shadow mr-2"
                     >
                       수정
                     </button>
@@ -135,7 +135,7 @@ const MyPage = () => {
             />
           ) : (
             <div>
-              <div className="bg-base-100 rounded-b-lg px-1 pb-2 mb-2">
+              <div className=" rounded-b-lg px-1 pb-2 mb-2">
                 <div className="flex items-center w-full h-16 p-2 border-b border-accent-focus/60">
                   <div className="w-1/4">이메일</div>
                   <div className="font-normal ">{userInfo?.email}</div>

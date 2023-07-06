@@ -18,7 +18,7 @@ import { IoCreateOutline } from "react-icons/Io5";
 import { TiPlus } from "react-icons/ti";
 
 const Container = styled.div`
-  ${tw`mx-auto relative w-11/12  pt-8 text-neutral-600 font-bold text-sm overflow-hidden`}
+  ${tw`mx-auto relative w-full px-2  pt-4 text-neutral-600 font-bold text-sm overflow-hidden`}
 `;
 
 export default function ChallengeHome() {

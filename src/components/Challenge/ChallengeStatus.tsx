@@ -39,7 +39,7 @@ const ChallengeStatus = ({ data, category }: ChallengeDataProps) => {
 
   return (
     <ArticleContainer>
-      <div className="w-11/12 mx-auto">
+      <div className="w-full px-2 mx-auto">
         <div className="text-cyan-950 text-sm flex justify-center items-center bg-teal-50  rounded-lg  shadow py-3 mb-2">
           <GiTwoCoins size={17} className="text-yellow-400 mr-1" />
           <div className="mr-2">목표금액</div>

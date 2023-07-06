@@ -95,7 +95,7 @@ export default function Home() {
 
   return (
     <Container>
-      <div className="w-11/12 mx-auto">
+      <div className="w-full px-2 mx-auto">
         <ProfileContainer>
           <ProfileImgContainer>
             {userInfo?.profileImageUrl ? (
@@ -189,7 +189,7 @@ export default function Home() {
 }
 
 const Container = styled.main`
-  ${tw` bg-base-color pt-7 text-neutral-500 font-bold text-sm`}
+  ${tw` bg-base-color pt-4 text-neutral-500 font-bold text-sm`}
 `;
 
 const ProfileContainer = styled.div`
