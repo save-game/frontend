@@ -111,7 +111,7 @@ export default function SignUp() {
 
   return (
     <>
-      <div className=" w-11/12 ml-auto mr-auto flex flex-col justify-center items-center mt-5">
+      <div className="mx-auto h-screen w-11/12 text-neutral-500 text-sm flex flex-col justify-center items-center py-15 overflow-y-auto">
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="w-full text-cyan-950 flex flex-col justify-center items-center mt-10 mb-4"

@@ -34,6 +34,13 @@ axios.interceptors.response.use(
         originalRequest.headers.Refreshtoken = refreshToken;
         return axios(originalRequest);
       }
+      if (
+        response.data.errorCode === "MISMATCH_REFRESH_TOKEN" ||
+        response.data.errorCode === "NOT_EXIST_REFRESH_TOKEN"
+      ) {
+        localStorage.clear();
+        return;
+      }
     }
     return Promise.reject(error);
   }

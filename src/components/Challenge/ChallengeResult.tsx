@@ -49,7 +49,7 @@ const ChallengeResult = ({ data }: ChallengeDataProps) => {
 
   return (
     <ArticleContainer>
-      <div className="w-11/12 mx-auto">
+      <div className="w-full px-2 mx-auto">
         <div className="flex items-center justify-center bg-teal-50  rounded-lg h-12 shadow mb-3 ">
           <div className="mx-2 mt-1 text-cyan-950 text-base leading-6">
             도전 종료!!
