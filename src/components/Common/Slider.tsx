@@ -106,10 +106,11 @@ const FilterSlider = styled.div`
   ${tw`relative w-full rounded-lg mb-3`}
 `;
 
+//범위 선이 슬라이더 핸들 밖으로 삐져나오지 않도록 임의로 길이를 조정함
 const FilterSliderInner = styled.div.attrs<SliderBarProps>((props) => ({
   style: {
-    left: `${props.rangeMinPercent}%`,
-    width: `${props.rangeMaxPercent - props.rangeMinPercent}%`,
+    left: `${props.rangeMinPercent + 4}%`,
+    width: `${props.rangeMaxPercent - props.rangeMinPercent - 8}%`,
   },
 }))<SliderBarProps>`
   position: absolute;

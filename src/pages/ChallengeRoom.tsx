@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
@@ -20,10 +19,7 @@ import BoardList from "../components/Board/BoardList";
 import { useQuery } from "react-query";
 import { getChallengeStatus } from "../api/challengeAPI";
 import LoadingSpinner from "../components/Common/LoadingSpinner";
-import {
-  ChanllegeCategoryList,
-  categoryList,
-} from "../constants/expenseCategory";
+import { ChanllegeCategoryList } from "../constants/expenseCategory";
 
 const Container = styled.div`
   ${tw`mx-auto pt-8 text-neutral-600 font-bold text-sm text-center`}
